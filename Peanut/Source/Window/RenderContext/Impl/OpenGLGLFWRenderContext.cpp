@@ -18,16 +18,25 @@ OpenGLGLFWRenderContext::~OpenGLGLFWRenderContext()
     
 }
 
-void OpenGLGLFWRenderContext::SetWindow(Window& window)
+void OpenGLGLFWRenderContext::Setup()
 {
-    GLFWWindow& w = reinterpret_cast<GLFWWindow&>(window);
-    glfwMakeContextCurrent(w.GetGLFWHandle());
+    int major = 4, minor = 4;
+    spdlog::info("Requesting OpenGL {}.{}", major, minor);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+}
+
+void OpenGLGLFWRenderContext::SetCurrentContext(Window& window)
+{
+    GLFWwindow* handle = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
+    glfwMakeContextCurrent(handle);
 }
 
 void OpenGLGLFWRenderContext::SwapBuffers(Window& window)
 {
-    GLFWWindow& w = reinterpret_cast<GLFWWindow&>(window);
-    glfwSwapBuffers(w.GetGLFWHandle());
+    GLFWwindow* handle = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
+    glfwSwapBuffers(handle);
 }
 
 }

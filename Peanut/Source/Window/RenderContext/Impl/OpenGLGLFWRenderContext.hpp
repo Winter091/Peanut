@@ -13,7 +13,8 @@ public:
     OpenGLGLFWRenderContext& operator=(const OpenGLGLFWRenderContext&) = delete;
     virtual ~OpenGLGLFWRenderContext() override;
 
-    virtual void SetWindow(Window& window) override;
+    virtual void Setup() override;
+    virtual void SetCurrentContext(Window& window) override;
     virtual void SwapBuffers(Window& window) override;
 };
 

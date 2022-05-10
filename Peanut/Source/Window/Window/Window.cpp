@@ -9,7 +9,7 @@ namespace pn {
 
 // Static members
 EWindowProvider Window::s_windowProvider;
-const bool Window::s_initted = false;
+bool Window::s_initted = false;
 
 
 Window::Window(int width, int height, const std::string& title)
@@ -18,15 +18,20 @@ Window::Window(int width, int height, const std::string& title)
     , m_title(title)
     , m_renderContext(RenderContext::Create())
 {
-    m_renderContext->SetWindow(*this);
+
 }
 
 void Window::Init()
 {
+    assert(!s_initted && "You can init window only once");
+    s_initted = true;
+
 #if defined(PN_PLATFORM_WINDOWS)
     s_windowProvider = EWindowProvider::GLFW;
+    glfwInit();
 #elif defined(PN_PLATFORM_LINUX)
     s_windowProvider = EWindowProvider::GLFW;
+    glfwInit();
 #endif
 }
 

@@ -15,11 +15,11 @@ public:
     GLFWWindow& operator=(const GLFWWindow&) = delete;
     virtual ~GLFWWindow() override;
 
+    virtual void MakeContextCurrent() override;
     virtual void SetEventCallbackFunc() override;
     virtual void Update() override;
     virtual bool ShouldClose() const override;
-
-    inline GLFWwindow* GetGLFWHandle() { return m_glfwHandle; }
+    virtual void* GetNativeHandle() const override;
 
 private:
     GLFWwindow* m_glfwHandle;
