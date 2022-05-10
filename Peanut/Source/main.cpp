@@ -21,22 +21,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 int main()
 {
     pn::Window::Init();
-    auto myWindow = pn::Window::Create();
+    auto window = pn::Window::Create(800, 600, "My window");
 
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    GLFWwindow* window = glfwCreateWindow(800, 600, "GLFW Window", NULL, NULL);
-    if (window == NULL) {
-        spdlog::critical("Unable to create GLFW window!\n");
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    // glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         spdlog::critical("Failed to initialize GLAD!\n");
@@ -52,18 +39,11 @@ int main()
         spdlog::info("Renderer: {} ({})", vendor, renderer);
     }
 
-    while (!glfwWindowShouldClose(window))
+    while (true)
     {
-        processInput(window);
-
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        window->Update();
     }
 
-    glfwTerminate();
     return 0;
 }
 

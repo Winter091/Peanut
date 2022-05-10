@@ -4,6 +4,7 @@
 #include <Window/RenderContext/RenderContext.hpp>
 #include <Window/Window/EWindowProvider.hpp>
 #include <memory>
+#include <string>
 
 namespace pn {
 
@@ -15,16 +16,20 @@ public:
     virtual ~Window() {}
 
     static void Init();
-    static std::unique_ptr<Window> Create();
+    static std::unique_ptr<Window> Create(int width, int height, const char* title);
     static EWindowProvider GetWindowProvider();
 
     virtual void SetEventCallbackFunc() = 0;
     virtual void Update() = 0;
 
 protected:
-    Window();
+    Window(int width, int height, const std::string& title);
 
 protected:
+    int m_width;
+    int m_height;
+    std::string m_title;
+
     std::unique_ptr<RenderContext> m_renderContext;
 
 private:
