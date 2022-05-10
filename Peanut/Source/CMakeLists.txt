@@ -3,4 +3,5 @@ target_sources(
     main.cpp
 )
 
+add_subdirectory(Core)
 add_subdirectory(Window)

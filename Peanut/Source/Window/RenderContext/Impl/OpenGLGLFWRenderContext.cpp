@@ -2,7 +2,7 @@
 
 #include <Window/Window/Impl/GLFWWindow.hpp>
 
-#include <spdlog/spdlog.h>
+#include <Core/Log.hpp>
 #include <GLFW/glfw3.h>
 
 namespace pn
@@ -10,7 +10,7 @@ namespace pn
 
 OpenGLGLFWRenderContext::OpenGLGLFWRenderContext()
 {
-    spdlog::info("Using OpenGL-GLFW Render Context");
+    PN_CORE_INFO("Using OpenGL-GLFW Render Context");
 }
 
 OpenGLGLFWRenderContext::~OpenGLGLFWRenderContext()
@@ -21,7 +21,7 @@ OpenGLGLFWRenderContext::~OpenGLGLFWRenderContext()
 void OpenGLGLFWRenderContext::Setup()
 {
     int major = 4, minor = 4;
-    spdlog::info("Requesting OpenGL {}.{}", major, minor);
+    PN_CORE_INFO("Requesting OpenGL {}.{}", major, minor);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
