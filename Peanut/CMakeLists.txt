@@ -12,6 +12,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+if (NOT CMAKE_BUILD_TYPE)
+    message(STATUS "No build type was specified, building Release")
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
+
 # Build GLFW alongside with Peanut
 set(GLFW_BUILD_DOCS     OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
@@ -21,6 +26,20 @@ add_subdirectory(Deps/glfw)
 add_executable(Peanut)
 add_subdirectory(Deps)
 add_subdirectory(Source)
+
+# Useful Warnings
+if(MSVC)
+    target_compile_options(
+        Peanut PRIVATE 
+        /W4 /WX
+    )
+else()
+    target_compile_options(
+        Peanut PRIVATE 
+        -Wall -Wextra -Wnon-virtual-dtor -Wsign-promo 
+        -Wduplicated-branches -Wduplicated-cond -Wconversion
+    )
+endif()
 
 target_include_directories(
     Peanut PRIVATE 
