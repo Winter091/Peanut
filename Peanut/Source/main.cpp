@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include <Window/Window/Window.hpp>
+
 void processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -18,6 +20,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 int main()
 {
+    pn::Window::Init();
+    auto myWindow = pn::Window::Create();
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
