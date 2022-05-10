@@ -17,6 +17,7 @@ public:
 
     virtual void SetEventCallbackFunc() override;
     virtual void Update() override;
+    virtual bool ShouldClose() const override;
 
     inline GLFWwindow* GetGLFWHandle() { return m_glfwHandle; }
 

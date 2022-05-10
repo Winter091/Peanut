@@ -21,6 +21,10 @@ public:
 
     virtual void SetEventCallbackFunc() = 0;
     virtual void Update() = 0;
+    virtual bool ShouldClose() const = 0;
+
+    int GetWidth() const { return m_width; }
+    int GetHeight() const { return m_height; }
 
 protected:
     Window(int width, int height, const std::string& title);
