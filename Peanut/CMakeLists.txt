@@ -23,6 +23,9 @@ set(GLFW_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(Deps/glfw)
 
+# Build spdlog alongside with Peanut
+add_subdirectory(Deps/spdlog)
+
 add_executable(Peanut)
 add_subdirectory(Deps)
 add_subdirectory(Source)
@@ -45,9 +48,11 @@ target_include_directories(
     Peanut PRIVATE 
     Deps/glad/include
     Deps/glfw/include
+    Deps/spdlog/include
 )
 
 target_link_libraries(
     Peanut PRIVATE
     glfw
+    spdlog::spdlog
 )

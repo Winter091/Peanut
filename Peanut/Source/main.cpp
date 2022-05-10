@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <spdlog/spdlog.h>
 
 #include <iostream>
 
@@ -24,7 +25,7 @@ int main()
 
     GLFWwindow* window = glfwCreateWindow(800, 600, "GLFW Window", NULL, NULL);
     if (window == NULL) {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        spdlog::critical("Unable to create GLFW window!\n");
         glfwTerminate();
         return -1;
     }
@@ -33,9 +34,18 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        spdlog::critical("Failed to initialize GLAD!\n");
         return -1;
-    }    
+    }
+
+    {
+        auto glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+        auto vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+        auto renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+        
+        spdlog::info("Using OpenGL {0}", glVersion);
+        spdlog::info("Renderer: {} ({})", vendor, renderer);
+    }
 
     while (!glfwWindowShouldClose(window))
     {

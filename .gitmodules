@@ -1,3 +1,6 @@
 [submodule "Peanut/Deps/glfw"]
 	path = Peanut/Deps/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "Peanut/Deps/spdlog"]
+	path = Peanut/Deps/spdlog
+	url = https://github.com/gabime/spdlog.git
