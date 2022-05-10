@@ -1,0 +1,3 @@
+[submodule "Peanut/Deps/glfw"]
+	path = Peanut/Deps/glfw
+	url = https://github.com/glfw/glfw.git
