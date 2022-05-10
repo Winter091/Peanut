@@ -46,7 +46,9 @@ package Window {
     }
 
     interface Window {
+        WindowProvider s_windowProvider
         RenderContext m_context
+        static void Init() (determine WindowProvider)
         static Window Create() (get impl)
         SetCallbackFunc()
         Update(poll, swap buffers)
@@ -56,8 +58,9 @@ package Window {
 
     interface RenderContext {
         static RenderContext Create() (get impl)
+        Setup()
         SetCurrentWindow(Window w)
-        SwapBuffers()
+        SwapBuffers(window)
     }
 
     OpenGLGLFWRenderContext --|> RenderContext
