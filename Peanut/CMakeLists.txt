@@ -46,6 +46,7 @@ endif()
 
 target_include_directories(
     Peanut PRIVATE 
+    Source
     Deps/glad/include
     Deps/glfw/include
     Deps/spdlog/include
