@@ -1,15 +1,18 @@
 #include "Log.hpp"
 
+// Stick to C asserts here, because Peanut asserts 
+// don't work without this logger being initialized
+
 namespace pn {
 
-bool Log::s_initted = false;
+bool Log::s_isInitialized = false;
 std::unique_ptr<spdlog::logger> Log::m_coreLogger;
 std::unique_ptr<spdlog::logger> Log::m_clientLogger;
 
 void Log::Init()
 {
-    assert(!s_initted && "Logger should be initted only once");
-    s_initted = true;
+    assert(!s_isInitialized && "Logger should be initialized only once");
+    s_isInitialized = true;
 
     std::vector<spdlog::sink_ptr> sinks = {
         std::make_shared<spdlog::sinks::stdout_color_sink_mt>(),
@@ -30,13 +33,13 @@ void Log::Init()
 
 spdlog::logger& Log::GetCoreLogger()
 {
-    assert(s_initted && "Logger should be initialized before usage");
+    assert(s_isInitialized && "Logger should be initialized before usage");
     return *m_coreLogger;
 }
 
 spdlog::logger& Log::GetClientLogger()
 {
-    assert(s_initted && "Logger should be initialized before usage");
+    assert(s_isInitialized && "Logger should be initialized before usage");
     return *m_clientLogger;
 }
 

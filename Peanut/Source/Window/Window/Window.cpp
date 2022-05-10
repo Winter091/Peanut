@@ -2,14 +2,14 @@
 
 #include "Window/Window/Impl/GLFWWindow.hpp"
 #include "Core/PlatformDetection.hpp"
-#include <cassert>
+#include <Core/Assert.hpp>
 
 namespace pn {
 
 
 // Static members
 EWindowProvider Window::s_windowProvider;
-bool Window::s_initted = false;
+bool Window::s_isInitialized = false;
 
 
 Window::Window(int width, int height, const std::string& title)
@@ -23,8 +23,8 @@ Window::Window(int width, int height, const std::string& title)
 
 void Window::Init()
 {
-    assert(!s_initted && "You can init window only once");
-    s_initted = true;
+    PN_CORE_ASSERT(!s_isInitialized, "You can init window only once");
+    s_isInitialized = true;
 
 #if defined(PN_PLATFORM_WINDOWS)
     s_windowProvider = EWindowProvider::GLFW;
@@ -37,20 +37,20 @@ void Window::Init()
 
 std::unique_ptr<Window> Window::Create(int width, int height, const char* title)
 {
-    assert(s_initted && "You must init window before trying to create it");
+    PN_CORE_ASSERT(s_isInitialized, "You must init window before trying to create it");
 
     switch (s_windowProvider) {
-        case EWindowProvider::None:     assert(0 && "Window provider is not supported");
+        case EWindowProvider::None:     PN_CORE_ASSERT(false, "Window provider is not supported");
         case EWindowProvider::GLFW:     return std::make_unique<GLFWWindow>(width, height, title);
     }
 
-    assert(0 && "Window provider is not supported");
+    PN_CORE_ASSERT(false, "Window provider is not supported");
     return nullptr;
 }
 
 EWindowProvider Window::GetWindowProvider()
 {
-    assert(s_initted && "You must init window before trying to get window provider");
+    PN_CORE_ASSERT(s_isInitialized, "You must init window before trying to get window provider");
     return s_windowProvider;
 }
 

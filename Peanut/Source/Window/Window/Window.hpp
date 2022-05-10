@@ -40,7 +40,7 @@ protected:
 
 private:
     static EWindowProvider s_windowProvider;
-    static bool s_initted;
+    static bool s_isInitialized;
 };
 
 }

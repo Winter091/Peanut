@@ -20,7 +20,7 @@ public:
     static void SetClientLoggerLever(spdlog::level::level_enum level) { m_clientLogger->set_level(level); }
 
 private:
-    static bool s_initted;
+    static bool s_isInitialized;
 
     static std::unique_ptr<spdlog::logger> m_coreLogger;
     static std::unique_ptr<spdlog::logger> m_clientLogger;

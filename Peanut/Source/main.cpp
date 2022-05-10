@@ -2,8 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <Core/Log.hpp>
 
-#include <iostream>
-
 #include <Window/Window/Window.hpp>
 
 int main()
