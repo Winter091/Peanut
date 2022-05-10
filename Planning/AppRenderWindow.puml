@@ -1,0 +1,96 @@
+@startuml RendererAndWindow
+
+hide empty members
+hide empty methods
+skinparam packageStyle Frame
+skinparam PackageBackgroundColor Lavender
+
+
+enum GraphicsAPI {
+        OpenGL    
+        DirectX
+    }
+
+
+package Render {
+    interface RenderAPI {
+        Clear()
+        SetClearColor()
+        DrawArrays()
+        DrawIndexed()
+    }
+
+    OpenGLRenderAPI --|> RenderAPI
+
+    class Render {
+        RenderAPI s_renderAPI
+        GraphicsAPI s_API
+        Init() (determine api to use)
+        Clear()
+        SetClearColor()
+        DrawVertexArray()
+        DrawIndexed()
+        ...()
+    }
+
+    Render -- GraphicsAPI
+    Render *-- RenderAPI
+}
+
+
+package Window {
+    enum WindowProvider {
+        GLFW
+        Windows
+        Linux
+    }
+
+    interface Window {
+        RenderContext m_context
+        static Window Create() (get impl)
+        SetCallbackFunc()
+        Update(poll, swap buffers)
+    }
+
+    GLFWWindow --|> Window
+
+    interface RenderContext {
+        static RenderContext Create() (get impl)
+        SetCurrentWindow(Window w)
+        SwapBuffers()
+    }
+
+    OpenGLGLFWRenderContext --|> RenderContext
+    RenderContext --* Window
+    Window -- WindowProvider
+    RenderContext -- WindowProvider
+    RenderContext -- GraphicsAPI
+}
+
+
+package Application {
+    abstract class Application {
+        m_window
+
+        Update()
+        Render()
+
+        OnUpdate() = 0
+        OnRender() = 0
+    }
+
+    class UserApplication {
+        OnUpdate() (implements)
+        OnRender() (implements)
+    }
+
+    UserApplication --|> Application
+    Window --* Application
+    Application -- Render
+}
+
+
+
+
+@enduml
+
