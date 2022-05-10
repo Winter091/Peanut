@@ -1,13 +1,13 @@
 #include "GLFWWindow.hpp"
 
-#include <spdlog/spdlog.h>
+#include <Core/Log.hpp>
 
 namespace pn {
 
 GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
     : Window(width, height, title)
 {
-    spdlog::info("Using GLFW Window");
+    PN_CORE_INFO("Using GLFW Window");
 
     m_renderContext->Setup();
 

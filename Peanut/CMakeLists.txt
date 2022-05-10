@@ -30,6 +30,10 @@ add_executable(Peanut)
 add_subdirectory(Deps)
 add_subdirectory(Source)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(Peanut PRIVATE PN_DEBUG)
+endif()
+
 # Useful Warnings
 if(MSVC)
     target_compile_options(
