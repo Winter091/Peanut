@@ -87,9 +87,9 @@ void GLFWWindow::SetupGlfwCallbacks()
     );
 
     glfwSetScrollCallback(m_data.m_glfwHandle, 
-        [](GLFWwindow* window, double xoffset, double /*yoffset*/) {
+        [](GLFWwindow* window, double /*xoffset*/, double yoffset) {
             WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-            MouseScrolledEvent event(static_cast<float>(xoffset));
+            MouseScrolledEvent event(static_cast<float>(yoffset));
             data->eventCallbackFunc(event);
         }
     );
