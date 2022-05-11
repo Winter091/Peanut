@@ -1,13 +1,13 @@
 #include "Application.hpp"
 
-#include "Core.hpp"
+#include <Peanut/Core/Core.hpp>
 
 namespace pn
 {
 
-Application::Application(int width, int height, std::string title)
-    : m_window(Window::Create(width, height, std::move(title)))
+Application::Application(const ApplicationOptions& options)
 {
+    m_window = Window::Create(options.width, options.height, options.title);
     m_window->SetEventCallbackFunc(PN_BIND_METHOD_CALL(MainOnEvent));
 }
 

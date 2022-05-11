@@ -1,8 +1,10 @@
 #ifndef __APPLICATION_H__
 #define __APPLICATION_H__
 
+#include <Peanut/Application/ApplicationOptions.hpp>
 #include <Peanut/Window/Window/Window.hpp>
 #include <Peanut/Events/Event.hpp>
+#include <Peanut/Core/CommandLineArgs.hpp>
 #include <memory>
 
 namespace pn {
@@ -10,7 +12,7 @@ namespace pn {
 class Application
 {
 public:
-    Application(int width, int height, std::string title);
+    Application(const ApplicationOptions& options);
     Application(const Application&) = delete;
     Application& operator=(const Application&) = delete;
     virtual ~Application() = default;
@@ -24,7 +26,7 @@ public:
 
     void Run();
 
-    static Application* CreateApplication();
+    static Application* CreateApplication(const CommandLineArgs& args);
 
 private:
     std::unique_ptr<Window> m_window;

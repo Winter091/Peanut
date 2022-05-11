@@ -1,6 +1,6 @@
 target_sources(
     Peanut PRIVATE
-    Application.cpp
+    CommandLineArgs.cpp
     EntryPoint.cpp
     Log.cpp
 )
