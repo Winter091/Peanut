@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+namespace pn {
+
 enum class EventType : uint32_t
 {
     KeyPressed = 0,
@@ -15,5 +17,7 @@ enum class EventType : uint32_t
     WindowSizeChanged,
     FramebufferSizeChanged,
 };
+
+}
 
 #endif
