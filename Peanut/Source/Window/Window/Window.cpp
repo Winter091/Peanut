@@ -12,11 +12,8 @@ EWindowProvider Window::s_windowProvider;
 bool Window::s_isInitialized = false;
 
 
-Window::Window(int width, int height, std::string title)
-    : m_width(width)
-    , m_height(height)
-    , m_title(std::move(title))
-    , m_renderContext(RenderContext::Create())
+Window::Window()
+    : m_renderContext(RenderContext::Create())
 {
 
 }

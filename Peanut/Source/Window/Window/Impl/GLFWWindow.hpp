@@ -16,13 +16,28 @@ public:
     ~GLFWWindow() override;
 
     void MakeContextCurrent() override;
-    void SetEventCallbackFunc() override;
+    void SetEventCallbackFunc(const EventCallbackFunc& func) override;
     void Update() override;
     bool ShouldClose() const override;
     void* GetNativeHandle() const override;
 
+    int GetWidth() const override { return m_data.m_width; }
+    int GetHeight() const override { return m_data.m_height; }
+    const std::string& GetTitle() const override { return m_data.m_title; }
+
 private:
-    GLFWwindow* m_glfwHandle;
+    struct WindowData {
+        GLFWwindow* m_glfwHandle;
+
+        int m_width;
+        int m_height;
+        std::string m_title;
+
+        EventCallbackFunc eventCallbackFunc;
+    } m_data;
+
+private:
+    void SetupGlfwCallbacks();
 };
 
 }

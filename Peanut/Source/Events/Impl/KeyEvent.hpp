@@ -9,14 +9,15 @@ namespace pn {
 class KeyPressedEvent : public Event
 {
 public:
-    KeyPressedEvent(KeyCode code) : m_keyCode(type), m_action(action) {};
+    KeyPressedEvent(pn::KeyCode code) : m_keyCode(code) {};
     ~KeyPressedEvent() override = default;
 
-    EventType GetEventType() override const { return EventType::KeyPressed; }
-    KeyCode GetKeyCode() const { return m_keyCode; }
+    PN_DEFINE_EVENT_TYPE(KeyPressed);
+
+    pn::KeyCode GetKeyCode() const { return m_keyCode; }
 
 private:
-    KeyCode m_keyCode;
+    pn::KeyCode m_keyCode;
 };
 
 }

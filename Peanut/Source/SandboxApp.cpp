@@ -22,14 +22,14 @@ SandboxApp::SandboxApp()
     PN_CORE_INFO("==========================================");
 }
 
-void SandboxApp::OnEvent(const Event& /*event*/)
+void SandboxApp::OnEvent(const Event& event)
 {
-    PN_CLIENT_DEBUG("OnEvent");
+    PN_CLIENT_DEBUG("Received event: {}", event.GetStringType());
 }
 
 void SandboxApp::OnUpdate()
 {
-    PN_CLIENT_DEBUG("OnUpdate");
+    // PN_CLIENT_DEBUG("OnUpdate");
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);

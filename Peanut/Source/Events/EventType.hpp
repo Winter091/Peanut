@@ -1,9 +1,11 @@
 #ifndef __EVENTTYPE_H__
 #define __EVENTTYPE_H__
 
-enum class EventType
+#include <cstdint>
+
+enum class EventType : uint32_t
 {
-    KeyPressed,
+    KeyPressed = 0,
     KeyReleased,
     MouseButtonPressed,
     MouseButtonReleased,

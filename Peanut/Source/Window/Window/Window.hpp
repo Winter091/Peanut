@@ -3,14 +3,19 @@
 
 #include <Window/RenderContext/RenderContext.hpp>
 #include <Window/Window/EWindowProvider.hpp>
+#include <Events/Event.hpp>
 #include <memory>
 #include <string>
+#include <functional>
 
 namespace pn {
 
 class Window 
 {
 public:
+    using EventCallbackFunc = std::function<void(const Event&)>;
+
+    Window();
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
     virtual ~Window() = default;
@@ -20,22 +25,15 @@ public:
     static EWindowProvider GetWindowProvider();
 
     virtual void MakeContextCurrent() = 0;
-    virtual void SetEventCallbackFunc() = 0;
+    virtual void SetEventCallbackFunc(const EventCallbackFunc& func) = 0;
     virtual void Update() = 0;
     virtual bool ShouldClose() const = 0;
     virtual void* GetNativeHandle() const = 0;
-
-    int GetWidth() const { return m_width; }
-    int GetHeight() const { return m_height; }
-
-protected:
-    Window(int width, int height, std::string title);
+    virtual int GetWidth() const = 0;
+    virtual int GetHeight() const = 0;
+    virtual const std::string& GetTitle() const = 0;
 
 protected:
-    int m_width;
-    int m_height;
-    std::string m_title;
-
     std::unique_ptr<RenderContext> m_renderContext;
 
 private:
