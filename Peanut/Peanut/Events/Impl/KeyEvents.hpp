@@ -1,8 +1,8 @@
 #ifndef __KEYPRESSEDEVENTS_H__
 #define __KEYPRESSEDEVENTS_H__
 
-#include <Events/Event.hpp>
-#include <Core/KeyCodes.hpp>
+#include <Peanut/Events/Event.hpp>
+#include <Peanut/Core/KeyCodes.hpp>
 
 namespace pn {
 

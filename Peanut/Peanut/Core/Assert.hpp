@@ -1,7 +1,7 @@
 #ifndef __ASSERT_H__
 #define __ASSERT_H__
 
-#include <Core/Log.hpp>
+#include <Peanut/Core/Log.hpp>
 #include <filesystem>
 
 #if defined(PN_DEBUG)

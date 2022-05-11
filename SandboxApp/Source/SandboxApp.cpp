@@ -2,13 +2,13 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <Core/Assert.hpp>
+#include <Peanut/Core/Assert.hpp>
 
 SandboxApp::SandboxApp()
     : pn::Application(800, 600, "Sandbox Application")
 {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        PN_CLIENT_ASSERT(false, "Failed to initialize GLAD!\n");
+        PN_CLIENT_ASSERT(false, "Failed to initialize GLAD!");
     }
 
     auto glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
@@ -33,4 +33,9 @@ void SandboxApp::OnUpdate()
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+}
+
+pn::Application* pn::Application::CreateApplication()
+{
+    return new SandboxApp();
 }

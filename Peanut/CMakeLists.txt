@@ -26,12 +26,12 @@ add_subdirectory(Deps/glfw)
 # Build spdlog alongside with Peanut
 add_subdirectory(Deps/spdlog)
 
-add_executable(Peanut)
+add_library(Peanut)
 add_subdirectory(Deps)
-add_subdirectory(Source)
+add_subdirectory(Peanut)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(Peanut PRIVATE PN_DEBUG)
+    target_compile_definitions(Peanut PUBLIC PN_DEBUG)
 endif()
 
 # Useful Warnings
@@ -50,7 +50,7 @@ endif()
 
 target_include_directories(
     Peanut PRIVATE 
-    Source
+    .
     Deps/glad/include
     Deps/glfw/include
     Deps/spdlog/include

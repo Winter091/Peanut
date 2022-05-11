@@ -1,7 +1,7 @@
 #ifndef __WINDOWEVENTS_H__
 #define __WINDOWEVENTS_H__
 
-#include <Events/Event.hpp>
+#include <Peanut/Events/Event.hpp>
 
 namespace pn {
 

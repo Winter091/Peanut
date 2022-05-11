@@ -1,7 +1,7 @@
 #ifndef __GLFWWINDOW_H__
 #define __GLFWWINDOW_H__
 
-#include <Window/Window/Window.hpp>
+#include <Peanut/Window/Window/Window.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
