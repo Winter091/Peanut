@@ -24,13 +24,13 @@ void OpenGLGLFWRenderContext::Setup()
 
 void OpenGLGLFWRenderContext::SetCurrentContext(Window& window)
 {
-    GLFWwindow* handle = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
+    auto handle = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
     glfwMakeContextCurrent(handle);
 }
 
 void OpenGLGLFWRenderContext::SwapBuffers(Window& window)
 {
-    GLFWwindow* handle = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
+    auto handle = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
     glfwSwapBuffers(handle);
 }
 

@@ -20,7 +20,7 @@ GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
 
     m_renderContext->Setup();
 
-    m_data.m_glfwHandle = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+    m_data.m_glfwHandle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
     PN_CORE_ASSERT(m_data.m_glfwHandle, "Unable to create GLFW window!");
 
     m_renderContext->SetCurrentContext(*this);
@@ -42,7 +42,7 @@ void GLFWWindow::SetupGlfwCallbacks()
     
     glfwSetKeyCallback(m_data.m_glfwHandle, 
         [](GLFWwindow *window, int key, int /*scancode*/, int action, int /*mods*/) {
-            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+            auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
             switch (action) {
                 case GLFW_PRESS:
@@ -71,7 +71,7 @@ void GLFWWindow::SetupGlfwCallbacks()
 
     glfwSetMouseButtonCallback(m_data.m_glfwHandle, 
         [](GLFWwindow* window, int button, int action, int /*mods*/) {
-            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+            auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
             switch (action) {
                 case GLFW_PRESS:
@@ -94,7 +94,7 @@ void GLFWWindow::SetupGlfwCallbacks()
 
     glfwSetCursorPosCallback(m_data.m_glfwHandle, 
         [](GLFWwindow* window, double xpos, double ypos) {
-            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+            auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
             MousePosChangedEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
             data->eventCallbackFunc(event);
         }
@@ -102,7 +102,7 @@ void GLFWWindow::SetupGlfwCallbacks()
 
     glfwSetScrollCallback(m_data.m_glfwHandle, 
         [](GLFWwindow* window, double /*xoffset*/, double yoffset) {
-            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+            auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
             MouseScrolledEvent event(static_cast<float>(yoffset));
             data->eventCallbackFunc(event);
         }
@@ -110,7 +110,7 @@ void GLFWWindow::SetupGlfwCallbacks()
 
     glfwSetWindowSizeCallback(m_data.m_glfwHandle, 
         [](GLFWwindow* window, int width, int height) {
-            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+            auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
             WindowSizeChangedEvent event(width, height);
             data->eventCallbackFunc(event);
         }
@@ -118,7 +118,7 @@ void GLFWWindow::SetupGlfwCallbacks()
 
     glfwSetFramebufferSizeCallback(m_data.m_glfwHandle, 
         [](GLFWwindow* window, int width, int height) {
-            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+            auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
             FramebufferSizeChangedEvent event(width, height);
             data->eventCallbackFunc(event);
         }
