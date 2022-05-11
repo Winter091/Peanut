@@ -112,18 +112,14 @@ void GLFWWindow::SetupGlfwCallbacks()
         }
     );
 
-    glfwSetWindowSizeCallback(m_data.glfwHandle,
+    glfwSetFramebufferSizeCallback(m_data.glfwHandle, 
         [](GLFWwindow* window, int width, int height) {
             auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-            WindowSizeChangedEvent event(width, height);
-            data->eventCallbackFunc(event);
-        }
-    );
+            
+            data->width = width;
+            data->height = height;
 
-    glfwSetFramebufferSizeCallback(m_data.glfwHandle,
-        [](GLFWwindow* window, int width, int height) {
-            auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-            FramebufferSizeChangedEvent event(width, height);
+            WindowSizeChangedEvent event(width, height);
             data->eventCallbackFunc(event);
         }
     );
@@ -167,6 +163,12 @@ bool GLFWWindow::ShouldClose() const
 void* GLFWWindow::GetNativeHandle() const 
 {
     return reinterpret_cast<void*>(m_data.glfwHandle);
+}
+
+void GLFWWindow::SetTitle(const std::string& title) 
+{
+    m_data.title = title;
+    glfwSetWindowTitle(m_data.glfwHandle, m_data.title.c_str());
 }
 
 }

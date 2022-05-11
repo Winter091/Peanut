@@ -19,11 +19,13 @@ public:
     void SetEventCallbackFunc(const EventCallbackFunc& func) override;
     void Update() override;
     bool ShouldClose() const override;
-    void* GetNativeHandle() const override;
 
+    void* GetNativeHandle() const override;
     int GetWidth() const override { return m_data.width; }
     int GetHeight() const override { return m_data.height; }
+
     const std::string& GetTitle() const override { return m_data.title; }
+    void SetTitle(const std::string& title) override;
 
 private:
     static int s_windowCount;

@@ -27,29 +27,6 @@ private:
     int m_height;
 };
 
-
-class FramebufferSizeChangedEvent : public Event
-{
-public:
-    FramebufferSizeChangedEvent(int width, int height) : m_width(width), m_height(height) {}
-    ~FramebufferSizeChangedEvent() override = default;
-
-    std::string ToString() const override
-    {
-        return std::string("FramebufferSizeChangedEvent: ") + 
-            std::to_string(m_width) + ", " + std::to_string(m_height);
-    }
-
-    PN_DEFINE_EVENT_TYPE(FramebufferSizeChanged);
-
-    int GetWidth() const { return m_width; }
-    int GetHeight() const { return m_height; }
-
-private:
-    int m_width;
-    int m_height;
-};
-
 }
 
 #endif

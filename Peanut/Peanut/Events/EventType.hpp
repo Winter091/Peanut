@@ -15,7 +15,6 @@ enum class EventType : uint32_t
     MousePosChanged,
     MouseScrolled,
     WindowSizeChanged,
-    FramebufferSizeChanged,
 };
 
 }
