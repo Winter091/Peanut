@@ -22,7 +22,7 @@ SandboxApp::SandboxApp()
     PN_CORE_INFO("==========================================");
 }
 
-void SandboxApp::OnEvent(const Event& event)
+void SandboxApp::OnEvent(const pn::Event& event)
 {
     PN_CLIENT_DEBUG(event.ToString());
 }

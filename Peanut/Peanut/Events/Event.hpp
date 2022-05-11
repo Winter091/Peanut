@@ -4,6 +4,8 @@
 #include <Peanut/Events/EventType.hpp>
 #include <string>
 
+namespace pn {
+
 class Event
 {
 public:
@@ -22,5 +24,7 @@ private:
 #define PN_DEFINE_EVENT_TYPE(type) \
     EventType GetType() const override { return EventType::type; } \
     const char* GetStringType() const override { return #type; }
+
+}
 
 #endif
