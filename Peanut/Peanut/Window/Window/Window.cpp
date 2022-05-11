@@ -25,10 +25,8 @@ void Window::Init()
 
 #if defined(PN_PLATFORM_WINDOWS)
     s_windowProvider = WindowProvider::GLFW;
-    glfwInit();
 #elif defined(PN_PLATFORM_LINUX)
     s_windowProvider = WindowProvider::GLFW;
-    glfwInit();
 #endif
 }
 

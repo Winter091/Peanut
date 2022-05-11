@@ -26,6 +26,7 @@ public:
     const std::string& GetTitle() const override { return m_data.m_title; }
 
 private:
+    static int s_windowCount;
 
     // m_data will be available using glfwGetWindowUserPointer(),
     // it's required while setting up callbacks
@@ -41,6 +42,8 @@ private:
 
 private:
     void SetupGlfwCallbacks();
+    static void OnWindowCreate();
+    static void OnWindowDestroy();
 };
 
 }

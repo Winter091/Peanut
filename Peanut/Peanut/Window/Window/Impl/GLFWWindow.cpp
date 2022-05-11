@@ -7,10 +7,16 @@
 
 namespace pn {
 
+
+int GLFWWindow::s_windowCount = 0;
+
+
 GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
     : Window()
 {
     PN_CORE_INFO("Using GLFW Window");
+
+    OnWindowCreate();
 
     m_renderContext->Setup();
 
@@ -20,6 +26,14 @@ GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
     m_renderContext->SetCurrentContext(*this);
 
     SetupGlfwCallbacks();
+}
+
+void GLFWWindow::OnWindowCreate()
+{
+    if (s_windowCount == 0) {
+        glfwInit();
+    }
+    ++s_windowCount;
 }
 
 void GLFWWindow::SetupGlfwCallbacks()
@@ -114,6 +128,15 @@ void GLFWWindow::SetupGlfwCallbacks()
 GLFWWindow::~GLFWWindow()
 {
     glfwDestroyWindow(m_data.m_glfwHandle);
+    OnWindowDestroy();
+}
+
+void GLFWWindow::OnWindowDestroy()
+{
+    --s_windowCount;
+    if (s_windowCount == 0) {
+        glfwTerminate();
+    }
 }
 
 void GLFWWindow::MakeContextCurrent()
