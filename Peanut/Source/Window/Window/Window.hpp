@@ -2,7 +2,7 @@
 #define __WINDOW_H__
 
 #include <Window/RenderContext/RenderContext.hpp>
-#include <Window/Window/EWindowProvider.hpp>
+#include <Window/Window/WindowProvider.hpp>
 #include <Events/Event.hpp>
 #include <memory>
 #include <string>
@@ -22,7 +22,7 @@ public:
 
     static void Init();
     static std::unique_ptr<Window> Create(int width, int height, std::string title);
-    static EWindowProvider GetWindowProvider();
+    static WindowProvider GetWindowProvider();
 
     virtual void MakeContextCurrent() = 0;
     virtual void SetEventCallbackFunc(const EventCallbackFunc& func) = 0;
@@ -37,7 +37,7 @@ protected:
     std::unique_ptr<RenderContext> m_renderContext;
 
 private:
-    static EWindowProvider s_windowProvider;
+    static WindowProvider s_windowProvider;
     static bool s_isInitialized;
 };
 
