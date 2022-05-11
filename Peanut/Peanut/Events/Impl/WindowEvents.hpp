@@ -11,6 +11,12 @@ public:
     WindowSizeChangedEvent(int width, int height) : m_width(width), m_height(height) {}
     ~WindowSizeChangedEvent() override = default;
 
+    std::string ToString() const override
+    {
+        return std::string("WindowSizeChangedEvent: ") + 
+            std::to_string(m_width) + ", " + std::to_string(m_height);
+    }
+
     PN_DEFINE_EVENT_TYPE(WindowSizeChanged);
 
     int GetWidth() const { return m_width; }
@@ -27,6 +33,12 @@ class FramebufferSizeChangedEvent : public Event
 public:
     FramebufferSizeChangedEvent(int width, int height) : m_width(width), m_height(height) {}
     ~FramebufferSizeChangedEvent() override = default;
+
+    std::string ToString() const override
+    {
+        return std::string("FramebufferSizeChangedEvent: ") + 
+            std::to_string(m_width) + ", " + std::to_string(m_height);
+    }
 
     PN_DEFINE_EVENT_TYPE(FramebufferSizeChanged);
 

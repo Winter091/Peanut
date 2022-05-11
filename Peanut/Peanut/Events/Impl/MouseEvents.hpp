@@ -12,6 +12,12 @@ public:
     MouseButtonPressedEvent(pn::MouseButtonCode code) : m_mouseButtonCode(code) {};
     ~MouseButtonPressedEvent() override = default;
 
+    std::string ToString() const override
+    {
+        return std::string("MouseButtonPressedEvent: ") + 
+            std::to_string(static_cast<uint32_t>(m_mouseButtonCode));
+    }
+
     PN_DEFINE_EVENT_TYPE(MouseButtonPressed);
 
     pn::MouseButtonCode GetMouseButtonCode() const { return m_mouseButtonCode; }
@@ -27,6 +33,12 @@ public:
     MouseButtonReleasedEvent(pn::MouseButtonCode code) : m_mouseButtonCode(code) {};
     ~MouseButtonReleasedEvent() override = default;
 
+    std::string ToString() const override
+    {
+        return std::string("MouseButtonReleasedEvent: ") + 
+            std::to_string(static_cast<uint32_t>(m_mouseButtonCode));
+    }
+
     PN_DEFINE_EVENT_TYPE(MouseButtonReleased);
 
     pn::MouseButtonCode GetMouseButtonCode() const { return m_mouseButtonCode; }
@@ -41,6 +53,12 @@ class MousePosChangedEvent : public Event
 public:
     MousePosChangedEvent(float x, float y) : m_x(x), m_y(y) {}
     ~MousePosChangedEvent() override = default;
+
+    std::string ToString() const override
+    {
+        return std::string("MousePosChangedEvent: ") + 
+            std::to_string(m_x) + ", " + std::to_string(m_y);
+    }
 
     PN_DEFINE_EVENT_TYPE(MousePosChanged);
 
@@ -58,6 +76,11 @@ class MouseScrolledEvent : public Event
 public:
     MouseScrolledEvent(float offset) : m_offset(offset) {};
     ~MouseScrolledEvent() override = default;
+
+    std::string ToString() const override
+    {
+        return std::string("MouseScrolledEvent: ") + std::to_string(m_offset);
+    }
 
     PN_DEFINE_EVENT_TYPE(MouseScrolled);
 

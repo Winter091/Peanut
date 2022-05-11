@@ -3,6 +3,7 @@
 
 #include <Peanut/Events/Event.hpp>
 #include <Peanut/Core/KeyCodes.hpp>
+#include <sstream>
 
 namespace pn {
 
@@ -11,6 +12,11 @@ class KeyPressedEvent : public Event
 public:
     KeyPressedEvent(pn::KeyCode code) : m_keyCode(code) {};
     ~KeyPressedEvent() override = default;
+
+    std::string ToString() const override
+    {
+        return std::string("KeyPressedEvent: ") + std::to_string(static_cast<uint32_t>(m_keyCode));
+    }
 
     PN_DEFINE_EVENT_TYPE(KeyPressed);
 
@@ -27,6 +33,11 @@ public:
     KeyRepeatedEvent(pn::KeyCode code) : m_keyCode(code) {};
     ~KeyRepeatedEvent() override = default;
 
+    std::string ToString() const override
+    {
+        return std::string("KeyRepeatedEvent: ") + std::to_string(static_cast<uint32_t>(m_keyCode));
+    }
+
     PN_DEFINE_EVENT_TYPE(KeyRepeated);
 
     pn::KeyCode GetKeyCode() const { return m_keyCode; }
@@ -41,6 +52,11 @@ class KeyReleasedEvent : public Event
 public:
     KeyReleasedEvent(pn::KeyCode code) : m_keyCode(code) {};
     ~KeyReleasedEvent() override = default;
+
+    std::string ToString() const override
+    {
+        return std::string("KeyReleasedEvent: ") + std::to_string(static_cast<uint32_t>(m_keyCode));
+    }
 
     PN_DEFINE_EVENT_TYPE(KeyReleased);
 

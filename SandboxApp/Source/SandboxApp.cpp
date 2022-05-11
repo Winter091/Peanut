@@ -24,7 +24,7 @@ SandboxApp::SandboxApp()
 
 void SandboxApp::OnEvent(const Event& event)
 {
-    PN_CLIENT_DEBUG("Received event: {}", event.GetStringType());
+    PN_CLIENT_DEBUG(event.ToString());
 }
 
 void SandboxApp::OnUpdate()
