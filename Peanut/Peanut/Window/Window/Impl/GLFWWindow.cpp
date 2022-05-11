@@ -16,12 +16,16 @@ GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
 {
     PN_CORE_INFO("Using GLFW Window");
 
+    m_data.width = width;
+    m_data.height = height;
+    m_data.title = title;
+
     OnWindowCreate();
 
     m_renderContext->Setup();
 
-    m_data.m_glfwHandle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-    PN_CORE_ASSERT(m_data.m_glfwHandle, "Unable to create GLFW window!");
+    m_data.glfwHandle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+    PN_CORE_ASSERT(m_data.glfwHandle, "Unable to create GLFW window!");
 
     m_renderContext->SetCurrentContext(*this);
 
@@ -38,9 +42,9 @@ void GLFWWindow::OnWindowCreate()
 
 void GLFWWindow::SetupGlfwCallbacks()
 {
-    glfwSetWindowUserPointer(m_data.m_glfwHandle, &m_data);
+    glfwSetWindowUserPointer(m_data.glfwHandle, &m_data);
     
-    glfwSetKeyCallback(m_data.m_glfwHandle, 
+    glfwSetKeyCallback(m_data.glfwHandle,
         [](GLFWwindow *window, int key, int /*scancode*/, int action, int /*mods*/) {
             auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
@@ -69,7 +73,7 @@ void GLFWWindow::SetupGlfwCallbacks()
         }
     );
 
-    glfwSetMouseButtonCallback(m_data.m_glfwHandle, 
+    glfwSetMouseButtonCallback(m_data.glfwHandle,
         [](GLFWwindow* window, int button, int action, int /*mods*/) {
             auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
@@ -92,7 +96,7 @@ void GLFWWindow::SetupGlfwCallbacks()
         }
     );
 
-    glfwSetCursorPosCallback(m_data.m_glfwHandle, 
+    glfwSetCursorPosCallback(m_data.glfwHandle,
         [](GLFWwindow* window, double xpos, double ypos) {
             auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
             MousePosChangedEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
@@ -100,7 +104,7 @@ void GLFWWindow::SetupGlfwCallbacks()
         }
     );
 
-    glfwSetScrollCallback(m_data.m_glfwHandle, 
+    glfwSetScrollCallback(m_data.glfwHandle,
         [](GLFWwindow* window, double /*xoffset*/, double yoffset) {
             auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
             MouseScrolledEvent event(static_cast<float>(yoffset));
@@ -108,7 +112,7 @@ void GLFWWindow::SetupGlfwCallbacks()
         }
     );
 
-    glfwSetWindowSizeCallback(m_data.m_glfwHandle, 
+    glfwSetWindowSizeCallback(m_data.glfwHandle,
         [](GLFWwindow* window, int width, int height) {
             auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
             WindowSizeChangedEvent event(width, height);
@@ -116,7 +120,7 @@ void GLFWWindow::SetupGlfwCallbacks()
         }
     );
 
-    glfwSetFramebufferSizeCallback(m_data.m_glfwHandle, 
+    glfwSetFramebufferSizeCallback(m_data.glfwHandle,
         [](GLFWwindow* window, int width, int height) {
             auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
             FramebufferSizeChangedEvent event(width, height);
@@ -127,7 +131,7 @@ void GLFWWindow::SetupGlfwCallbacks()
 
 GLFWWindow::~GLFWWindow()
 {
-    glfwDestroyWindow(m_data.m_glfwHandle);
+    glfwDestroyWindow(m_data.glfwHandle);
     OnWindowDestroy();
 }
 
@@ -141,7 +145,7 @@ void GLFWWindow::OnWindowDestroy()
 
 void GLFWWindow::MakeContextCurrent()
 {
-    glfwMakeContextCurrent(m_data.m_glfwHandle);
+    glfwMakeContextCurrent(m_data.glfwHandle);
 }
 
 void GLFWWindow::SetEventCallbackFunc(const EventCallbackFunc& func)
@@ -157,12 +161,12 @@ void GLFWWindow::Update()
 
 bool GLFWWindow::ShouldClose() const
 {
-    return static_cast<bool>(glfwWindowShouldClose(m_data.m_glfwHandle));
+    return static_cast<bool>(glfwWindowShouldClose(m_data.glfwHandle));
 }
 
 void* GLFWWindow::GetNativeHandle() const 
 {
-    return reinterpret_cast<void*>(m_data.m_glfwHandle);
+    return reinterpret_cast<void*>(m_data.glfwHandle);
 }
 
 }
