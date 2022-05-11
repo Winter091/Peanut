@@ -24,6 +24,8 @@ public:
 
     void Run();
 
+    static Application* CreateApplication();
+
 private:
     std::unique_ptr<Window> m_window;
 
