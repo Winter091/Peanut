@@ -1,6 +1,5 @@
 target_sources(
-    PeanutProject PRIVATE
-    SandboxApp.cpp
+    Peanut PRIVATE
 )
 
 add_subdirectory(Core)

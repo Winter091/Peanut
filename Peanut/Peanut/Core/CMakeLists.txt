@@ -1,5 +1,5 @@
 target_sources(
-    PeanutProject PRIVATE
+    Peanut PRIVATE
     Application.cpp
     EntryPoint.cpp
     Log.cpp

@@ -1,4 +1,4 @@
 target_sources(
-    PeanutProject PRIVATE
+    Peanut PRIVATE
     glad/src/glad.c
 )

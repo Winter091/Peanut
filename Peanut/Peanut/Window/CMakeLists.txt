@@ -1,5 +1,5 @@
 target_sources(
-    PeanutProject PRIVATE
+    Peanut PRIVATE
 
     RenderContext/RenderContext.cpp
     RenderContext/Impl/OpenGLGLFWRenderContext.cpp

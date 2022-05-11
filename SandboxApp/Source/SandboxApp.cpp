@@ -8,7 +8,7 @@ SandboxApp::SandboxApp()
     : pn::Application(800, 600, "Sandbox Application")
 {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        PN_CLIENT_ASSERT(false, "Failed to initialize GLAD!\n");
+        PN_CLIENT_ASSERT(false, "Failed to initialize GLAD!");
     }
 
     auto glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
