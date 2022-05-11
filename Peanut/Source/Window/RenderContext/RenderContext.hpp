@@ -12,7 +12,7 @@ class RenderContext
 public:
     RenderContext(const RenderContext&) = delete;
     RenderContext& operator=(const RenderContext&) = delete;
-    virtual ~RenderContext() {}
+    virtual ~RenderContext() = default;
 
     static std::unique_ptr<RenderContext> Create();
 

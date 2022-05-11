@@ -13,7 +13,7 @@ class Window
 public:
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
-    virtual ~Window() {}
+    virtual ~Window() = default;
 
     static void Init();
     static std::unique_ptr<Window> Create(int width, int height, const char* title);
@@ -29,7 +29,7 @@ public:
     int GetHeight() const { return m_height; }
 
 protected:
-    Window(int width, int height, const std::string& title);
+    Window(int width, int height, std::string title);
 
 protected:
     int m_width;

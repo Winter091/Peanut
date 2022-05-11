@@ -13,13 +13,13 @@ public:
     GLFWWindow(int width, int height, const std::string& title);
     GLFWWindow(const GLFWWindow&) = delete;
     GLFWWindow& operator=(const GLFWWindow&) = delete;
-    virtual ~GLFWWindow() override;
+    ~GLFWWindow() override;
 
-    virtual void MakeContextCurrent() override;
-    virtual void SetEventCallbackFunc() override;
-    virtual void Update() override;
-    virtual bool ShouldClose() const override;
-    virtual void* GetNativeHandle() const override;
+    void MakeContextCurrent() override;
+    void SetEventCallbackFunc() override;
+    void Update() override;
+    bool ShouldClose() const override;
+    void* GetNativeHandle() const override;
 
 private:
     GLFWwindow* m_glfwHandle;
