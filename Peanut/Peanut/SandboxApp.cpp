@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <Core/Assert.hpp>
+#include <Peanut/Core/Assert.hpp>
 
 SandboxApp::SandboxApp()
     : pn::Application(800, 600, "Sandbox Application")

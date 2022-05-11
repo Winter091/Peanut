@@ -1,7 +1,7 @@
 #ifndef __SANDBOXAPP_H__
 #define __SANDBOXAPP_H__
 
-#include <Core/Application.hpp>
+#include <Peanut/Core/Application.hpp>
 
 class SandboxApp : public pn::Application
 {

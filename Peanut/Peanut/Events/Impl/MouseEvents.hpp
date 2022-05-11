@@ -1,8 +1,8 @@
 #ifndef __MOUSEEVENTS_H__
 #define __MOUSEEVENTS_H__
 
-#include <Events/Event.hpp>
-#include <Core/MouseCodes.hpp>
+#include <Peanut/Events/Event.hpp>
+#include <Peanut/Core/MouseCodes.hpp>
 
 namespace pn {
 

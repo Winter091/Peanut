@@ -1,10 +1,10 @@
 #include "RenderContext.hpp"
 
-#include <Window/RenderContext/Impl/OpenGLGLFWRenderContext.hpp>
-#include <Core/PlatformDetection.hpp>
-#include <Render/EGraphicsAPI.hpp>
-#include <Window/Window/Window.hpp>
-#include <Core/Assert.hpp>
+#include <Peanut/Window/RenderContext/Impl/OpenGLGLFWRenderContext.hpp>
+#include <Peanut/Core/PlatformDetection.hpp>
+#include <Peanut/Render/EGraphicsAPI.hpp>
+#include <Peanut/Window/Window/Window.hpp>
+#include <Peanut/Core/Assert.hpp>
 
 namespace pn
 {

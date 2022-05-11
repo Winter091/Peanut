@@ -1,7 +1,7 @@
 #ifndef __EVENT_H__
 #define __EVENT_H__
 
-#include <Events/EventType.hpp>
+#include <Peanut/Events/EventType.hpp>
 
 class Event
 {

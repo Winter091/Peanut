@@ -1,8 +1,8 @@
 #include "OpenGLGLFWRenderContext.hpp"
 
-#include <Window/Window/Impl/GLFWWindow.hpp>
+#include <Peanut/Window/Window/Impl/GLFWWindow.hpp>
 
-#include <Core/Log.hpp>
+#include <Peanut/Core/Log.hpp>
 #include <GLFW/glfw3.h>
 
 namespace pn

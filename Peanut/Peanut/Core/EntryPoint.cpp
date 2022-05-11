@@ -1,5 +1,5 @@
-#include <Core/Log.hpp>
-#include <Core/Application.hpp>
+#include <Peanut/Core/Log.hpp>
+#include <Peanut/Core/Application.hpp>
 
 #include <memory>
 

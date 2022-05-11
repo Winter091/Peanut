@@ -1,8 +1,8 @@
 #include "Window.hpp"
 
-#include "Window/Window/Impl/GLFWWindow.hpp"
-#include "Core/PlatformDetection.hpp"
-#include <Core/Assert.hpp>
+#include <Peanut/Window/Window/Impl/GLFWWindow.hpp>
+#include <Peanut/Core/PlatformDetection.hpp>
+#include <Peanut/Core/Assert.hpp>
 
 namespace pn {
 

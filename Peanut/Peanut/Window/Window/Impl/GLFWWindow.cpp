@@ -1,9 +1,9 @@
 #include "GLFWWindow.hpp"
 
-#include <Core/Assert.hpp>
-#include <Events/Impl/KeyEvents.hpp>
-#include <Events/Impl/MouseEvents.hpp>
-#include <Events/Impl/WindowEvents.hpp>
+#include <Peanut/Core/Assert.hpp>
+#include <Peanut/Events/Impl/KeyEvents.hpp>
+#include <Peanut/Events/Impl/MouseEvents.hpp>
+#include <Peanut/Events/Impl/WindowEvents.hpp>
 
 namespace pn {
 

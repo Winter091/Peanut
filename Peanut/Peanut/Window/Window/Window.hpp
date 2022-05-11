@@ -1,9 +1,9 @@
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
 
-#include <Window/RenderContext/RenderContext.hpp>
-#include <Window/Window/WindowProvider.hpp>
-#include <Events/Event.hpp>
+#include <Peanut/Window/RenderContext/RenderContext.hpp>
+#include <Peanut/Window/Window/WindowProvider.hpp>
+#include <Peanut/Events/Event.hpp>
 #include <memory>
 #include <string>
 #include <functional>

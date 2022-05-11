@@ -1,8 +1,8 @@
 #ifndef __APPLICATION_H__
 #define __APPLICATION_H__
 
-#include <Window/Window/Window.hpp>
-#include <Events/Event.hpp>
+#include <Peanut/Window/Window/Window.hpp>
+#include <Peanut/Events/Event.hpp>
 #include <memory>
 
 namespace pn {

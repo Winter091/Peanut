@@ -50,7 +50,7 @@ endif()
 
 target_include_directories(
     PeanutProject PRIVATE 
-    Peanut
+    .
     Deps/glad/include
     Deps/glfw/include
     Deps/spdlog/include

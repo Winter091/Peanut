@@ -1,7 +1,7 @@
 #ifndef __OPENGLGLFWRENDERCONTEXT_H__
 #define __OPENGLGLFWRENDERCONTEXT_H__
 
-#include <Window/RenderContext/RenderContext.hpp>
+#include <Peanut/Window/RenderContext/RenderContext.hpp>
 
 namespace pn {
 
