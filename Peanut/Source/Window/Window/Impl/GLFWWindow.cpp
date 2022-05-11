@@ -1,7 +1,9 @@
 #include "GLFWWindow.hpp"
 
 #include <Core/Assert.hpp>
-#include <Events/Impl/KeyEvent.hpp>
+#include <Events/Impl/KeyEvents.hpp>
+#include <Events/Impl/MouseEvents.hpp>
+#include <Events/Impl/WindowEvents.hpp>
 
 namespace pn {
 
@@ -17,12 +19,13 @@ GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
 
     m_renderContext->SetCurrentContext(*this);
 
-    glfwSetWindowUserPointer(m_data.m_glfwHandle, &m_data);
     SetupGlfwCallbacks();
 }
 
 void GLFWWindow::SetupGlfwCallbacks()
 {
+    glfwSetWindowUserPointer(m_data.m_glfwHandle, &m_data);
+    
     glfwSetKeyCallback(m_data.m_glfwHandle, 
         [](GLFWwindow *window, int key, int /*scancode*/, int action, int /*mods*/) {
             WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
@@ -34,10 +37,76 @@ void GLFWWindow::SetupGlfwCallbacks()
                     data->eventCallbackFunc(event);
                     break;
                 }
+                case GLFW_REPEAT:
+                {
+                    KeyRepeatedEvent event(static_cast<KeyCode>(key));
+                    data->eventCallbackFunc(event);
+                    break;
+                }
                 case GLFW_RELEASE:
+                {
+                    KeyReleasedEvent event(static_cast<KeyCode>(key));
+                    data->eventCallbackFunc(event);
+                    break;
+                }
                 default:
                     break;
             }
+        }
+    );
+
+    glfwSetMouseButtonCallback(m_data.m_glfwHandle, 
+        [](GLFWwindow* window, int button, int action, int /*mods*/) {
+            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+
+            switch (action) {
+                case GLFW_PRESS:
+                {
+                    MouseButtonPressedEvent event(static_cast<MouseButtonCode>(button));
+                    data->eventCallbackFunc(event);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    MouseButtonReleasedEvent event(static_cast<MouseButtonCode>(button));
+                    data->eventCallbackFunc(event);
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    );
+
+    glfwSetCursorPosCallback(m_data.m_glfwHandle, 
+        [](GLFWwindow* window, double xpos, double ypos) {
+            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+            MousePosChangedEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
+            data->eventCallbackFunc(event);
+        }
+    );
+
+    glfwSetScrollCallback(m_data.m_glfwHandle, 
+        [](GLFWwindow* window, double xoffset, double /*yoffset*/) {
+            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+            MouseScrolledEvent event(static_cast<float>(xoffset));
+            data->eventCallbackFunc(event);
+        }
+    );
+
+    glfwSetWindowSizeCallback(m_data.m_glfwHandle, 
+        [](GLFWwindow* window, int width, int height) {
+            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+            WindowSizeChangedEvent event(width, height);
+            data->eventCallbackFunc(event);
+        }
+    );
+
+    glfwSetFramebufferSizeCallback(m_data.m_glfwHandle, 
+        [](GLFWwindow* window, int width, int height) {
+            WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+            FramebufferSizeChangedEvent event(width, height);
+            data->eventCallbackFunc(event);
         }
     );
 }
