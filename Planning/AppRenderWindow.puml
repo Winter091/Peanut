@@ -75,11 +75,16 @@ package Application {
     abstract class Application {
         m_window
 
-        Update()
-        Render()
+
+        MainOnUpdate()
+        MainOnRender()
+        MainOnEvent()
+
+        Run()
 
         OnUpdate() = 0
         OnRender() = 0
+        OnEvent() = 0
     }
 
     class UserApplication {

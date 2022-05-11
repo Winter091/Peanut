@@ -13,8 +13,8 @@ std::unique_ptr<RenderContext> RenderContext::Create()
 {
     // TODO: select proper RenderContext
     switch (Window::GetWindowProvider()) {
-        case EWindowProvider::None:     PN_CORE_ASSERT(false, "WindowProvider is not supported");
-        case EWindowProvider::GLFW:     return std::make_unique<OpenGLGLFWRenderContext>();
+        case WindowProvider::None:     PN_CORE_ASSERT(false, "WindowProvider is not supported");
+        case WindowProvider::GLFW:     return std::make_unique<OpenGLGLFWRenderContext>();
     }
     
     PN_CORE_ASSERT(false, "WindowProvider is not supported");

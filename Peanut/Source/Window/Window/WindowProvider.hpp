@@ -5,7 +5,7 @@
 
 namespace pn {
 
-enum class EWindowProvider : uint32_t
+enum class WindowProvider : uint32_t
 {
     None = 0,
     GLFW,

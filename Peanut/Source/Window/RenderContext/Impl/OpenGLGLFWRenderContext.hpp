@@ -11,11 +11,11 @@ public:
     OpenGLGLFWRenderContext();
     OpenGLGLFWRenderContext(const OpenGLGLFWRenderContext&) = delete;
     OpenGLGLFWRenderContext& operator=(const OpenGLGLFWRenderContext&) = delete;
-    virtual ~OpenGLGLFWRenderContext() override;
+    ~OpenGLGLFWRenderContext() override = default;
 
-    virtual void Setup() override;
-    virtual void SetCurrentContext(Window& window) override;
-    virtual void SwapBuffers(Window& window) override;
+    void Setup() override;
+    void SetCurrentContext(Window& window) override;
+    void SwapBuffers(Window& window) override;
 };
 
 }

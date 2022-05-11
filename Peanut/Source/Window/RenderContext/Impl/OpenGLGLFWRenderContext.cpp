@@ -13,11 +13,6 @@ OpenGLGLFWRenderContext::OpenGLGLFWRenderContext()
     PN_CORE_INFO("Using OpenGL-GLFW Render Context");
 }
 
-OpenGLGLFWRenderContext::~OpenGLGLFWRenderContext()
-{
-    
-}
-
 void OpenGLGLFWRenderContext::Setup()
 {
     int major = 4, minor = 4;
