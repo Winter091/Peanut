@@ -1,5 +1,5 @@
 target_sources(
-    Peanut PRIVATE
+    PeanutProject PRIVATE
     SandboxApp.cpp
 )
 

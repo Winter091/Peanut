@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(Peanut)
+project(PeanutProject)
 
 # Force c11
 set(CMAKE_C_STANDARD 11)
@@ -26,38 +26,38 @@ add_subdirectory(Deps/glfw)
 # Build spdlog alongside with Peanut
 add_subdirectory(Deps/spdlog)
 
-add_executable(Peanut)
+add_executable(PeanutProject)
 add_subdirectory(Deps)
-add_subdirectory(Source)
+add_subdirectory(Peanut)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(Peanut PRIVATE PN_DEBUG)
+    target_compile_definitions(PeanutProject PRIVATE PN_DEBUG)
 endif()
 
 # Useful Warnings
 if(MSVC)
     target_compile_options(
-        Peanut PRIVATE 
+        PeanutProject PRIVATE 
         /W4 /WX
     )
 else()
     target_compile_options(
-        Peanut PRIVATE 
+        PeanutProject PRIVATE 
         -Wall -Wextra -Wnon-virtual-dtor -Wsign-promo 
         -Wduplicated-branches -Wduplicated-cond -Wconversion
     )
 endif()
 
 target_include_directories(
-    Peanut PRIVATE 
-    Source
+    PeanutProject PRIVATE 
+    Peanut
     Deps/glad/include
     Deps/glfw/include
     Deps/spdlog/include
 )
 
 target_link_libraries(
-    Peanut PRIVATE
+    PeanutProject PRIVATE
     glfw
     spdlog::spdlog
 )
