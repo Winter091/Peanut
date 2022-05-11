@@ -35,13 +35,13 @@ void Window::Init()
 #endif
 }
 
-std::unique_ptr<Window> Window::Create(int width, int height, const char* title)
+std::unique_ptr<Window> Window::Create(int width, int height, std::string title)
 {
     PN_CORE_ASSERT(s_isInitialized, "You must init window before trying to create it");
 
     switch (s_windowProvider) {
         case EWindowProvider::None:     PN_CORE_ASSERT(false, "Window provider is not supported");
-        case EWindowProvider::GLFW:     return std::make_unique<GLFWWindow>(width, height, title);
+        case EWindowProvider::GLFW:     return std::make_unique<GLFWWindow>(width, height, std::move(title));
     }
 
     PN_CORE_ASSERT(false, "Window provider is not supported");

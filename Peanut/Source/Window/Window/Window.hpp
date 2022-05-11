@@ -16,7 +16,7 @@ public:
     virtual ~Window() = default;
 
     static void Init();
-    static std::unique_ptr<Window> Create(int width, int height, const char* title);
+    static std::unique_ptr<Window> Create(int width, int height, std::string title);
     static EWindowProvider GetWindowProvider();
 
     virtual void MakeContextCurrent() = 0;
