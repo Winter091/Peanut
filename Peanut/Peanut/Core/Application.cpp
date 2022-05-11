@@ -1,5 +1,6 @@
 #include "Application.hpp"
 
+#include "Core.hpp"
 
 namespace pn
 {
@@ -7,7 +8,7 @@ namespace pn
 Application::Application(int width, int height, std::string title)
     : m_window(Window::Create(width, height, std::move(title)))
 {
-    m_window->SetEventCallbackFunc(std::bind(&Application::MainOnEvent, this, std::placeholders::_1));
+    m_window->SetEventCallbackFunc(PN_BIND_METHOD_CALL(MainOnEvent));
 }
 
 void Application::Init()

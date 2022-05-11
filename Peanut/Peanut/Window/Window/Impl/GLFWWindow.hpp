@@ -21,9 +21,9 @@ public:
     bool ShouldClose() const override;
     void* GetNativeHandle() const override;
 
-    int GetWidth() const override { return m_data.m_width; }
-    int GetHeight() const override { return m_data.m_height; }
-    const std::string& GetTitle() const override { return m_data.m_title; }
+    int GetWidth() const override { return m_data.width; }
+    int GetHeight() const override { return m_data.height; }
+    const std::string& GetTitle() const override { return m_data.title; }
 
 private:
     static int s_windowCount;
@@ -31,11 +31,11 @@ private:
     // m_data will be available using glfwGetWindowUserPointer(),
     // it's required while setting up callbacks
     struct WindowData {
-        GLFWwindow* m_glfwHandle;
+        GLFWwindow* glfwHandle;
 
-        int m_width;
-        int m_height;
-        std::string m_title;
+        int width;
+        int height;
+        std::string title;
 
         EventCallbackFunc eventCallbackFunc;
     } m_data;

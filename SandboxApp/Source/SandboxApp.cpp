@@ -15,22 +15,20 @@ SandboxApp::SandboxApp()
     auto vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
     auto renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
 
-    PN_CORE_INFO("==========================================");
-    PN_CORE_INFO("\tUsing OpenGL {}", glVersion);
-    PN_CORE_INFO("\tVendor: {}", vendor);
-    PN_CORE_INFO("\tRenderer: {}", renderer);
-    PN_CORE_INFO("==========================================");
+    PN_CLIENT_INFO("==========================================");
+    PN_CLIENT_INFO("\tUsing OpenGL {}", glVersion);
+    PN_CLIENT_INFO("\tVendor: {}", vendor);
+    PN_CLIENT_INFO("\tRenderer: {}", renderer);
+    PN_CLIENT_INFO("==========================================");
 }
 
-void SandboxApp::OnEvent(const Event& event)
+void SandboxApp::OnEvent(const pn::Event& event)
 {
     PN_CLIENT_DEBUG(event.ToString());
 }
 
 void SandboxApp::OnUpdate()
 {
-    // PN_CLIENT_DEBUG("OnUpdate");
-
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }

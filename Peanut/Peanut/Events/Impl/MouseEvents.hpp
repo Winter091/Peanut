@@ -9,7 +9,7 @@ namespace pn {
 class MouseButtonPressedEvent : public Event
 {
 public:
-    MouseButtonPressedEvent(pn::MouseButtonCode code) : m_mouseButtonCode(code) {};
+    explicit MouseButtonPressedEvent(pn::MouseButtonCode code) : m_mouseButtonCode(code) {};
     ~MouseButtonPressedEvent() override = default;
 
     std::string ToString() const override
@@ -30,7 +30,7 @@ private:
 class MouseButtonReleasedEvent : public Event
 {
 public:
-    MouseButtonReleasedEvent(pn::MouseButtonCode code) : m_mouseButtonCode(code) {};
+    explicit MouseButtonReleasedEvent(pn::MouseButtonCode code) : m_mouseButtonCode(code) {};
     ~MouseButtonReleasedEvent() override = default;
 
     std::string ToString() const override
@@ -74,7 +74,7 @@ private:
 class MouseScrolledEvent : public Event
 {
 public:
-    MouseScrolledEvent(float offset) : m_offset(offset) {};
+    explicit MouseScrolledEvent(float offset) : m_offset(offset) {};
     ~MouseScrolledEvent() override = default;
 
     std::string ToString() const override

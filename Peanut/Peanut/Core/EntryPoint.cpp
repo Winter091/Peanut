@@ -3,7 +3,7 @@
 
 #include <memory>
 
-int main(int argc, const char** argv)
+int main(int /*argc*/, const char** /*argv*/)
 {
     pn::Log::Init();
     pn::Application::Init();

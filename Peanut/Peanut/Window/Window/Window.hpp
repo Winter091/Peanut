@@ -21,7 +21,7 @@ public:
     virtual ~Window() = default;
 
     static void Init();
-    static std::unique_ptr<Window> Create(int width, int height, std::string title);
+    static std::unique_ptr<Window> Create(int width, int height, const std::string& title);
     static WindowProvider GetWindowProvider();
 
     virtual void MakeContextCurrent() = 0;

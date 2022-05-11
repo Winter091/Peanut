@@ -11,7 +11,7 @@ public:
     SandboxApp& operator=(const SandboxApp&) = delete;
     ~SandboxApp() override = default;
 
-    void OnEvent(const Event& event) override;
+    void OnEvent(const pn::Event& event) override;
     void OnUpdate() override;
 };
 

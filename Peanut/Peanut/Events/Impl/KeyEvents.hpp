@@ -10,7 +10,7 @@ namespace pn {
 class KeyPressedEvent : public Event
 {
 public:
-    KeyPressedEvent(pn::KeyCode code) : m_keyCode(code) {};
+    explicit KeyPressedEvent(pn::KeyCode code) : m_keyCode(code) {};
     ~KeyPressedEvent() override = default;
 
     std::string ToString() const override
@@ -30,7 +30,7 @@ private:
 class KeyRepeatedEvent : public Event
 {
 public:
-    KeyRepeatedEvent(pn::KeyCode code) : m_keyCode(code) {};
+    explicit KeyRepeatedEvent(pn::KeyCode code) : m_keyCode(code) {};
     ~KeyRepeatedEvent() override = default;
 
     std::string ToString() const override
@@ -50,7 +50,7 @@ private:
 class KeyReleasedEvent : public Event
 {
 public:
-    KeyReleasedEvent(pn::KeyCode code) : m_keyCode(code) {};
+    explicit KeyReleasedEvent(pn::KeyCode code) : m_keyCode(code) {};
     ~KeyReleasedEvent() override = default;
 
     std::string ToString() const override
