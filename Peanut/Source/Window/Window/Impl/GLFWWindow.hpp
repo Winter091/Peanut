@@ -26,6 +26,9 @@ public:
     const std::string& GetTitle() const override { return m_data.m_title; }
 
 private:
+
+    // m_data will be available using glfwGetWindowUserPointer(),
+    // it's required while setting up callbacks
     struct WindowData {
         GLFWwindow* m_glfwHandle;
 
