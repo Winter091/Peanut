@@ -1,13 +1,10 @@
-#include <Peanut/Core/Log.hpp>
-#include <Peanut/Application/Application.hpp>
+#include <Peanut/Core/Init.hpp>
 #include <Peanut/Core/CommandLineArgs.hpp>
-
-#include <memory>
+#include <Peanut/Application/Application.hpp>
 
 int main(int argc, const char** argv)
 {
-    pn::Log::Init();
-    pn::Application::Init();
+    pn::Init();
 
     pn::CommandLineArgs args(argc, argv);
 
