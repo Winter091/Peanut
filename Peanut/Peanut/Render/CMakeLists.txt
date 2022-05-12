@@ -1,7 +1,7 @@
 target_sources(
     Peanut PRIVATE
 
-    Render.cpp
+    RenderCommand.cpp
 
     Impl/OpenGLRenderCommand.cpp
 )

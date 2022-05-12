@@ -13,7 +13,7 @@ enum RenderAPI {
 
 
 package Render {
-    interface RenderCommand {
+    interface RenderCommandImpl {
         void Clear()
         void SetClearColor()
         void DrawVertexArray()
@@ -21,11 +21,11 @@ package Render {
         ...()
     }
 
-    OpenGLRenderCommand --|> RenderCommand
+    OpenGLRenderCommand --|> RenderCommandImpl
 
-    class Render {
-        RenderAPI s_renderAPI
-        RenderCommand* s_renderCommand;
+    class RenderCommand {
+        static RenderAPI s_renderAPI
+        static RenderCommandImpl* s_renderCommandImpl
 
         static void Init() (determine api to use)
         static void Clear()
@@ -35,8 +35,8 @@ package Render {
         ...()
     }
 
-    RenderCommand --* Render
-    RenderAPI -- Render
+    RenderCommandImpl --* RenderCommand
+    RenderAPI -- RenderCommand
 }
 
 
@@ -53,14 +53,15 @@ package Window {
         static void Init() (determine WindowProvider)
         static Window Create() (get impl)
         SetCallbackFunc()
-        Update(poll, swap buffers)
+        Update(poll events, swap buffers)
     }
 
     GLFWWindow --|> Window
 
     abstract class RenderContext {
         static RenderContext Create() (get impl)
-        Setup()
+        PreWindowSetup()
+        PostWindowSetup(Window w)
         SetCurrentWindow(Window w)
         SwapBuffers(window)
     }
@@ -76,31 +77,28 @@ package Window {
 package Application {
     abstract class Application {
         m_window
+        m_eventQueue
 
-
+        MainOnEvent(Event e)
         MainOnUpdate()
-        MainOnRender()
-        MainOnEvent()
 
-        Run()
+        Run() (Entry point)
 
+        OnEvent(Event e) = 0
         OnUpdate() = 0
-        OnRender() = 0
-        OnEvent() = 0
     }
 
+    Window::Update --> Application::MainOnEvent
+
     class UserApplication {
-        OnUpdate() (implements)
-        OnRender() (implements)
+        OnEvent(Event e)
+        OnUpdate()
     }
 
     UserApplication --|> Application
     Window --* Application
-    Application -- Render
+    Application -- RenderCommand
 }
-
-
-
 
 @enduml
 

@@ -1,4 +1,4 @@
-#include "Render.hpp"
+#include "RenderCommand.hpp"
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/PlatformDetection.hpp>
@@ -9,12 +9,12 @@ namespace pn
 
 
 // Static members
-RenderAPI Render::s_renderAPI;
-bool Render::s_isInitialized = false;
-std::unique_ptr<RenderCommand> Render::s_renderCommand;
+RenderAPI RenderCommand::s_renderAPI;
+bool RenderCommand::s_isInitialized = false;
+std::unique_ptr<RenderCommandImpl> RenderCommand::s_renderCommandImpl;
 
 
-void Render::Init()
+void RenderCommand::Init()
 {
     PN_CORE_ASSERT(!s_isInitialized, "RenderCommand can be initialized only once");
     s_isInitialized = true;
@@ -24,28 +24,28 @@ void Render::Init()
     s_instance = std::make_unique<OpenGLRenderCommand>();
 #elif defined(PN_PLATFORM_LINUX)
     s_renderAPI = RenderAPI::OpenGL;
-    s_renderCommand = std::make_unique<OpenGLRenderCommand>();
+    s_renderCommandImpl = std::make_unique<OpenGLRenderCommand>();
 #else
     PN_CORE_ASSERT("RenderCommand: platform is not supported");
 #endif
 }
 
-RenderAPI Render::GetRenderAPI()
+RenderAPI RenderCommand::GetRenderAPI()
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
     return s_renderAPI;
 }
 
-void Render::SetClearColor(const glm::vec4& color)
+void RenderCommand::SetClearColor(const glm::vec4& color)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    return s_renderCommand->SetClearColor(color);
+    return s_renderCommandImpl->SetClearColor(color);
 }
 
-void Render::Clear()
+void RenderCommand::Clear()
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    return s_renderCommand->Clear();
+    return s_renderCommandImpl->Clear();
 }
 
 }

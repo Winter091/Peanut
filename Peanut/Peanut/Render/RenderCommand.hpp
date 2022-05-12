@@ -1,23 +1,29 @@
-#ifndef __RENDERCOMMAND_H__
-#define __RENDERCOMMAND_H__
+#ifndef __RENDER_H__
+#define __RENDER_H__
 
 #include <Peanut/Render/RenderAPI.hpp>
+#include <Peanut/Render/RenderCommandImpl.hpp>
 #include <glm/vec4.hpp>
-
 #include <memory>
 
 namespace pn {
 
-class RenderCommand 
+class RenderCommand
 {
 public:
-    RenderCommand() = default;
-    virtual ~RenderCommand() = default;
-    RenderCommand(const RenderCommand&) = delete;
-    RenderCommand& operator=(const RenderCommand&) = delete;
+    static void Init();
+    static RenderAPI GetRenderAPI();
 
-    virtual void SetClearColor(const glm::vec4& color) = 0;
-    virtual void Clear() = 0;
+    static void SetClearColor(const glm::vec4& color);
+    static void Clear();
+
+private:
+    RenderCommand() = delete;
+
+private:
+    static RenderAPI s_renderAPI;
+    static bool s_isInitialized;
+    static std::unique_ptr<RenderCommandImpl> s_renderCommandImpl;
 };
 
 }

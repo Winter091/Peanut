@@ -2,7 +2,7 @@
 
 #include <Peanut/Window/RenderContext/Impl/OpenGLGLFWRenderContext.hpp>
 #include <Peanut/Core/PlatformDetection.hpp>
-#include <Peanut/Render/Render.hpp>
+#include <Peanut/Render/RenderCommand.hpp>
 #include <Peanut/Window/Window/Window.hpp>
 #include <Peanut/Core/Assert.hpp>
 
@@ -12,7 +12,7 @@ namespace pn
 std::unique_ptr<RenderContext> RenderContext::Create()
 {
     auto windowProvider = Window::GetWindowProvider();
-    auto renderAPI = Render::GetRenderAPI();
+    auto renderAPI = RenderCommand::GetRenderAPI();
 
     switch (windowProvider) {
         case WindowProvider::None:

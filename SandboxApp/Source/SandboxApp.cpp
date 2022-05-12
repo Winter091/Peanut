@@ -1,7 +1,7 @@
 #include "SandboxApp.hpp"
 
 #include <Peanut/Core/Assert.hpp>
-#include <Peanut/Render/Render.hpp>
+#include <Peanut/Render/RenderCommand.hpp>
 
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
@@ -16,8 +16,8 @@ void SandboxApp::OnEvent(const pn::Event& event)
 
 void SandboxApp::OnUpdate()
 {
-    pn::Render::SetClearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
-    pn::Render::Clear();
+    pn::RenderCommand::SetClearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
+    pn::RenderCommand::Clear();
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)

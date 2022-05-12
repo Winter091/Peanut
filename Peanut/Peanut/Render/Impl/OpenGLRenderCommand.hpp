@@ -1,11 +1,11 @@
 #ifndef __OPENGLRENDERCOMMAND_H__
 #define __OPENGLRENDERCOMMAND_H__
 
-#include <Peanut/Render/RenderCommand.hpp>
+#include <Peanut/Render/RenderCommandImpl.hpp>
 
 namespace pn {
 
-class OpenGLRenderCommand : public RenderCommand
+class OpenGLRenderCommand : public RenderCommandImpl
 {
 public:
     OpenGLRenderCommand();
