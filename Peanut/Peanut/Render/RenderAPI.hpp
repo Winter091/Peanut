@@ -1,5 +1,5 @@
-#ifndef __RENDERPROVIDER_H__
-#define __RENDERPROVIDER_H__
+#ifndef __RENDERAPI_H__
+#define __RENDERAPI_H__
 
 #include <cstdint>
 

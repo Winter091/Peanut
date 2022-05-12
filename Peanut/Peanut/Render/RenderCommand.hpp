@@ -1,5 +1,5 @@
-#ifndef __RENDER_H__
-#define __RENDER_H__
+#ifndef __RENDERCOMMAND_H__
+#define __RENDERCOMMAND_H__
 
 #include <Peanut/Render/RenderAPI.hpp>
 #include <Peanut/Render/RenderCommandImpl.hpp>

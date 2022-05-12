@@ -1,5 +1,5 @@
-#ifndef __RENDERCOMMAND_H__
-#define __RENDERCOMMAND_H__
+#ifndef __RENDERCOMMANDIMPL_H__
+#define __RENDERCOMMANDIMPL_H__
 
 #include <Peanut/Render/RenderAPI.hpp>
 #include <glm/vec4.hpp>
