@@ -3,6 +3,7 @@
 
 #include <Peanut/Events/EventType.hpp>
 #include <string>
+#include <Peanut/Core/Assert.hpp>
 
 namespace pn {
 
@@ -10,9 +11,11 @@ class Event
 {
 public:
     virtual ~Event() = default;
+
     virtual EventType GetType() const = 0;
     virtual const char* GetStringType() const = 0;
     virtual std::string ToString() const = 0;
+    virtual Event* Copy() const = 0;
 
     void SetIsProcessed(bool value) { m_isProcessed = value; }
     bool GetIsProcessed() const { return m_isProcessed; }

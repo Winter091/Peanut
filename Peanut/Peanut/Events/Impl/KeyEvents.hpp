@@ -13,6 +13,8 @@ public:
     explicit KeyPressedEvent(pn::KeyCode code) : m_keyCode(code) {};
     ~KeyPressedEvent() override = default;
 
+    Event* Copy() const override { return new KeyPressedEvent(*this); }
+
     std::string ToString() const override
     {
         return std::string("KeyPressedEvent: ") + std::to_string(static_cast<uint32_t>(m_keyCode));
@@ -33,6 +35,8 @@ public:
     explicit KeyRepeatedEvent(pn::KeyCode code) : m_keyCode(code) {};
     ~KeyRepeatedEvent() override = default;
 
+    Event* Copy() const override { return new KeyRepeatedEvent(*this); }
+
     std::string ToString() const override
     {
         return std::string("KeyRepeatedEvent: ") + std::to_string(static_cast<uint32_t>(m_keyCode));
@@ -52,6 +56,8 @@ class KeyReleasedEvent : public Event
 public:
     explicit KeyReleasedEvent(pn::KeyCode code) : m_keyCode(code) {};
     ~KeyReleasedEvent() override = default;
+
+    Event* Copy() const override { return new KeyReleasedEvent(*this); }
 
     std::string ToString() const override
     {

@@ -12,6 +12,8 @@ public:
     explicit MouseButtonPressedEvent(pn::MouseButtonCode code) : m_mouseButtonCode(code) {};
     ~MouseButtonPressedEvent() override = default;
 
+    Event* Copy() const override { return new MouseButtonPressedEvent(*this); }
+
     std::string ToString() const override
     {
         return std::string("MouseButtonPressedEvent: ") + 
@@ -33,6 +35,8 @@ public:
     explicit MouseButtonReleasedEvent(pn::MouseButtonCode code) : m_mouseButtonCode(code) {};
     ~MouseButtonReleasedEvent() override = default;
 
+    Event* Copy() const override { return new MouseButtonReleasedEvent(*this); }
+
     std::string ToString() const override
     {
         return std::string("MouseButtonReleasedEvent: ") + 
@@ -53,6 +57,8 @@ class MousePosChangedEvent : public Event
 public:
     MousePosChangedEvent(float x, float y) : m_x(x), m_y(y) {}
     ~MousePosChangedEvent() override = default;
+
+    Event* Copy() const override { return new MousePosChangedEvent(*this); }
 
     std::string ToString() const override
     {
@@ -76,6 +82,8 @@ class MouseScrolledEvent : public Event
 public:
     explicit MouseScrolledEvent(float offset) : m_offset(offset) {};
     ~MouseScrolledEvent() override = default;
+
+    Event* Copy() const override { return new MouseScrolledEvent(*this); }
 
     std::string ToString() const override
     {

@@ -4,4 +4,5 @@ target_sources(
 
 add_subdirectory(Application)
 add_subdirectory(Core)
+add_subdirectory(Events)
 add_subdirectory(Window)

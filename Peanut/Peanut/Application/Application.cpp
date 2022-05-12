@@ -25,13 +25,22 @@ void Application::Run()
 
 void Application::MainOnEvent(const Event& event)
 {
-    OnEvent(event);
+    m_eventQueue.Push(event);
 }
 
 void Application::MainOnUpdate()
 {
+    SendEvents();
     OnUpdate();
     m_window->Update();
+}
+
+void Application::SendEvents()
+{
+    while (m_eventQueue.HasEvents()) {
+        std::unique_ptr<Event> event = m_eventQueue.Pop();
+        OnEvent(*event);
+    }
 }
 
 }

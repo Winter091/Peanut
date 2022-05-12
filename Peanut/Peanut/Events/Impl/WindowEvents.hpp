@@ -11,6 +11,8 @@ public:
     WindowSizeChangedEvent(int width, int height) : m_width(width), m_height(height) {}
     ~WindowSizeChangedEvent() override = default;
 
+    Event* Copy() const override { return new WindowSizeChangedEvent(*this); }
+
     std::string ToString() const override
     {
         return std::string("WindowSizeChangedEvent: ") + 

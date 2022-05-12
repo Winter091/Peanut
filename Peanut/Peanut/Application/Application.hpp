@@ -3,7 +3,7 @@
 
 #include <Peanut/Application/ApplicationOptions.hpp>
 #include <Peanut/Window/Window/Window.hpp>
-#include <Peanut/Events/Event.hpp>
+#include <Peanut/Events/EventQueue.hpp>
 #include <Peanut/Core/CommandLineArgs.hpp>
 #include <memory>
 
@@ -30,10 +30,12 @@ public:
 
 private:
     std::unique_ptr<Window> m_window;
+    EventQueue m_eventQueue;
 
 private:
     void MainOnEvent(const Event& event);
     void MainOnUpdate();
+    void SendEvents();
 };
 
 }
