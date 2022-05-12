@@ -27,9 +27,7 @@ void OpenGLGLFWRenderContext::PostWindowSetup(Window& window)
 {
     SetCurrentContext(window);
     
-    if (!gladLoadGL()) {
-        PN_CLIENT_ASSERT(false, "Failed to initialize GLAD!");
-    }
+    InitializeGlad();
 
     auto glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
     auto vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
@@ -40,6 +38,19 @@ void OpenGLGLFWRenderContext::PostWindowSetup(Window& window)
     PN_CORE_INFO("\tVendor: {}", vendor);
     PN_CORE_INFO("\tRenderer: {}", renderer);
     PN_CORE_INFO("==========================================");
+}
+
+void OpenGLGLFWRenderContext::InitializeGlad()
+{
+    static bool isGladInitialized = false;
+
+    if (!isGladInitialized) {
+        if (!gladLoadGL()) {
+            PN_CLIENT_ASSERT(false, "Failed to initialize GLAD!");
+        }
+    }
+
+    isGladInitialized = true;
 }
 
 void OpenGLGLFWRenderContext::SetCurrentContext(Window& window)
