@@ -6,35 +6,37 @@ skinparam packageStyle Frame
 skinparam PackageBackgroundColor Lavender
 
 
-enum GraphicsAPI {
+enum RenderAPI {
         OpenGL    
         DirectX
     }
 
 
 package Render {
-    interface RenderAPI {
-        Clear()
-        SetClearColor()
-        DrawArrays()
-        DrawIndexed()
-    }
-
-    OpenGLRenderAPI --|> RenderAPI
-
-    class Render {
-        RenderAPI s_renderAPI
-        GraphicsAPI s_API
-        Init() (determine api to use)
-        Clear()
-        SetClearColor()
-        DrawVertexArray()
-        DrawIndexed()
+    interface RenderCommandImpl {
+        void Clear()
+        void SetClearColor()
+        void DrawVertexArray()
+        void DrawIndexed()
         ...()
     }
 
-    Render -- GraphicsAPI
-    Render *-- RenderAPI
+    OpenGLRenderCommand --|> RenderCommandImpl
+
+    class RenderCommand {
+        static RenderAPI s_renderAPI
+        static RenderCommandImpl* s_renderCommandImpl
+
+        static void Init() (determine api to use)
+        static void Clear()
+        static void SetClearColor()
+        static void DrawVertexArray()
+        static void DrawIndexed()
+        ...()
+    }
+
+    RenderCommandImpl --* RenderCommand
+    RenderAPI -- RenderCommand
 }
 
 
@@ -45,20 +47,21 @@ package Window {
         Linux
     }
 
-    interface Window {
+    abstract class Window {
         WindowProvider s_windowProvider
         RenderContext m_context
         static void Init() (determine WindowProvider)
         static Window Create() (get impl)
         SetCallbackFunc()
-        Update(poll, swap buffers)
+        Update(poll events, swap buffers)
     }
 
     GLFWWindow --|> Window
 
-    interface RenderContext {
+    abstract class RenderContext {
         static RenderContext Create() (get impl)
-        Setup()
+        PreWindowSetup()
+        PostWindowSetup(Window w)
         SetCurrentWindow(Window w)
         SwapBuffers(window)
     }
@@ -67,38 +70,35 @@ package Window {
     RenderContext --* Window
     Window -- WindowProvider
     RenderContext -- WindowProvider
-    RenderContext -- GraphicsAPI
+    RenderContext -- RenderAPI 
 }
 
 
 package Application {
     abstract class Application {
         m_window
+        m_eventQueue
 
-
+        MainOnEvent(Event e)
         MainOnUpdate()
-        MainOnRender()
-        MainOnEvent()
 
-        Run()
+        Run() (Entry point)
 
+        OnEvent(Event e) = 0
         OnUpdate() = 0
-        OnRender() = 0
-        OnEvent() = 0
     }
 
+    Window::Update --> Application::MainOnEvent
+
     class UserApplication {
-        OnUpdate() (implements)
-        OnRender() (implements)
+        OnEvent(Event e)
+        OnUpdate()
     }
 
     UserApplication --|> Application
     Window --* Application
-    Application -- Render
+    Application -- RenderCommand
 }
-
-
-
 
 @enduml
 

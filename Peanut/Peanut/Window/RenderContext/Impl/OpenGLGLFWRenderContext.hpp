@@ -6,7 +6,7 @@
 
 namespace pn {
 
-class OpenGLGLFWRenderContext : public RenderContext
+class OpenGLGLFWRenderContext final : public RenderContext
 {
 public:
     OpenGLGLFWRenderContext();
@@ -14,9 +14,13 @@ public:
     OpenGLGLFWRenderContext& operator=(const OpenGLGLFWRenderContext&) = delete;
     ~OpenGLGLFWRenderContext() override = default;
 
-    void Setup() override;
+    void PreWindowSetup() override;
+    void PostWindowSetup(Window& window) override;
     void SetCurrentContext(Window& window) override;
     void SwapBuffers(Window& window) override;
+
+private:
+    void InitializeGlad();
 };
 
 }

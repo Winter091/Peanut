@@ -53,6 +53,7 @@ target_include_directories(
     .
     Deps/glad/include
     Deps/glfw/include
+    Deps/glm/include
     Deps/spdlog/include
 )
 
