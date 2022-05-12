@@ -6,7 +6,7 @@
 
 namespace pn {
 
-class OpenGLGLFWRenderContext : public RenderContext
+class OpenGLGLFWRenderContext final : public RenderContext
 {
 public:
     OpenGLGLFWRenderContext();

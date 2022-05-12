@@ -7,7 +7,7 @@
 
 namespace pn {
 
-class GLFWWindow : public Window
+class GLFWWindow final : public Window
 {
 public:
     GLFWWindow(const WindowSettings& settings);

@@ -11,14 +11,13 @@ namespace pn {
 class RenderCommand
 {
 public:
+    RenderCommand() = delete;
+
     static void Init();
     static RenderAPI GetRenderAPI();
 
     static void SetClearColor(const glm::vec4& color);
     static void Clear();
-
-private:
-    RenderCommand() = delete;
 
 private:
     static RenderAPI s_renderAPI;

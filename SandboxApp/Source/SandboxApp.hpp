@@ -3,7 +3,7 @@
 
 #include <Peanut/Application/Application.hpp>
 
-class SandboxApp : public pn::Application
+class SandboxApp final : public pn::Application
 {
 public:
     SandboxApp(const pn::WindowSettings& settings);

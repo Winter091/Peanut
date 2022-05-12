@@ -5,7 +5,7 @@
 
 namespace pn {
 
-class OpenGLRenderCommand : public RenderCommandImpl
+class OpenGLRenderCommand final : public RenderCommandImpl
 {
 public:
     OpenGLRenderCommand();
