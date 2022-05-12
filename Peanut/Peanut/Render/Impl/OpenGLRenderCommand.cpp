@@ -10,14 +10,14 @@ OpenGLRenderCommand::OpenGLRenderCommand()
     PN_CORE_INFO("Using OpenGL Renderer");
 }
 
-void OpenGLRenderCommand::ClearColor()
+void OpenGLRenderCommand::SetClearColor(const glm::vec4& color)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void OpenGLRenderCommand::ClearDepth()
+void OpenGLRenderCommand::Clear()
 {
-    glClear(GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 }

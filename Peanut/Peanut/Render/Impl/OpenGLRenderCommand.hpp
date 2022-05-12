@@ -11,8 +11,8 @@ public:
     OpenGLRenderCommand();
     ~OpenGLRenderCommand() override = default;
 
-    void ClearColor() override;
-    void ClearDepth() override;
+    void SetClearColor(const glm::vec4& color) override;
+    void Clear() override;
 };
 
 }

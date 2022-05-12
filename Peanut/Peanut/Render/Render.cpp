@@ -36,16 +36,16 @@ RenderAPI Render::GetRenderAPI()
     return s_renderAPI;
 }
 
-void Render::ClearColor()
+void Render::SetClearColor(const glm::vec4& color)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    return s_renderCommand->ClearColor();
+    return s_renderCommand->SetClearColor(color);
 }
 
-void Render::ClearDepth()
+void Render::Clear()
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    return s_renderCommand->ClearDepth();
+    return s_renderCommand->Clear();
 }
 
 }

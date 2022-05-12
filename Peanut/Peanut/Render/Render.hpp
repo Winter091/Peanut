@@ -3,6 +3,7 @@
 
 #include <Peanut/Render/RenderAPI.hpp>
 #include <Peanut/Render/RenderCommand.hpp>
+#include <glm/vec4.hpp>
 #include <memory>
 
 namespace pn {
@@ -13,8 +14,8 @@ public:
     static void Init();
     static RenderAPI GetRenderAPI();
 
-    static void ClearColor();
-    static void ClearDepth();
+    static void SetClearColor(const glm::vec4& color);
+    static void Clear();
 
 private:
     Render() = delete;
