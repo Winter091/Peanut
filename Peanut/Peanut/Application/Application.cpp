@@ -5,9 +5,9 @@
 namespace pn
 {
 
-Application::Application(const ApplicationOptions& options)
+Application::Application(const WindowSettings& settings)
 {
-    m_window = Window::Create(options.width, options.height, options.title);
+    m_window = Window::Create(settings);
     m_window->SetEventCallbackFunc(PN_BIND_METHOD_CALL(MainOnEvent));
 }
 

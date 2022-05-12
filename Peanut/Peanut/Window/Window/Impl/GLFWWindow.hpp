@@ -10,7 +10,7 @@ namespace pn {
 class GLFWWindow : public Window
 {
 public:
-    GLFWWindow(int width, int height, const std::string& title);
+    GLFWWindow(const WindowSettings& settings);
     GLFWWindow(const GLFWWindow&) = delete;
     GLFWWindow& operator=(const GLFWWindow&) = delete;
     ~GLFWWindow() override;
@@ -27,6 +27,8 @@ public:
     const std::string& GetTitle() const override { return m_data.title; }
     void SetTitle(const std::string& title) override;
 
+    void SetSwapInterval(int interval) override;
+
 private:
     static int s_windowCount;
 
@@ -37,6 +39,7 @@ private:
 
         int width;
         int height;
+        int swapInterval;
         std::string title;
 
         EventCallbackFunc eventCallbackFunc;

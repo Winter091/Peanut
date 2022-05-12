@@ -6,7 +6,7 @@
 class SandboxApp : public pn::Application
 {
 public:
-    SandboxApp(const pn::ApplicationOptions& options);
+    SandboxApp(const pn::WindowSettings& settings);
     SandboxApp(const SandboxApp&) = delete;
     SandboxApp& operator=(const SandboxApp&) = delete;
     ~SandboxApp() override = default;

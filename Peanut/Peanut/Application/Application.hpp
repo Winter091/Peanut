@@ -1,8 +1,8 @@
 #ifndef __APPLICATION_H__
 #define __APPLICATION_H__
 
-#include <Peanut/Application/ApplicationOptions.hpp>
 #include <Peanut/Window/Window/Window.hpp>
+#include <Peanut/Window/Window/WindowSettings.hpp>
 #include <Peanut/Events/EventQueue.hpp>
 #include <Peanut/Core/CommandLineArgs.hpp>
 #include <memory>
@@ -12,7 +12,7 @@ namespace pn {
 class Application
 {
 public:
-    Application(const ApplicationOptions& options);
+    Application(const WindowSettings& settings);
     Application(const Application&) = delete;
     Application& operator=(const Application&) = delete;
     virtual ~Application() = default;

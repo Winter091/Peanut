@@ -4,6 +4,7 @@
 #include <Peanut/Window/RenderContext/RenderContext.hpp>
 #include <Peanut/Window/Window/WindowProvider.hpp>
 #include <Peanut/Events/Event.hpp>
+#include <Peanut/Window/Window/WindowSettings.hpp>
 #include <memory>
 #include <string>
 #include <functional>
@@ -21,7 +22,7 @@ public:
     virtual ~Window() = default;
 
     static void Init();
-    static std::unique_ptr<Window> Create(int width, int height, const std::string& title);
+    static std::unique_ptr<Window> Create(const WindowSettings& settings);
     static WindowProvider GetWindowProvider();
 
     virtual void MakeContextCurrent() = 0;
@@ -35,6 +36,8 @@ public:
     
     virtual const std::string& GetTitle() const = 0;
     virtual void SetTitle(const std::string& title) = 0;
+
+    virtual void SetSwapInterval(int interval) = 0;
 
 protected:
     std::unique_ptr<RenderContext> m_renderContext;

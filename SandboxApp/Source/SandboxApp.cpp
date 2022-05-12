@@ -4,8 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <Peanut/Core/Assert.hpp>
 
-SandboxApp::SandboxApp(const pn::ApplicationOptions& options)
-    : pn::Application(options)
+SandboxApp::SandboxApp(const pn::WindowSettings& settings)
+    : pn::Application(settings)
 {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         PN_CLIENT_ASSERT(false, "Failed to initialize GLAD!");
@@ -40,8 +40,8 @@ pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
         PN_CLIENT_DEBUG("Arg {}: {}", i, args[i]);
     }
 
-    ApplicationOptions options;
-    options.title = "Sandbox Application";
+    pn::WindowSettings settings;
+    settings.title = "Sandbox Application";
     
-    return new SandboxApp(options);
+    return new SandboxApp(settings);
 }

@@ -11,25 +11,31 @@ namespace pn {
 int GLFWWindow::s_windowCount = 0;
 
 
-GLFWWindow::GLFWWindow(int width, int height, const std::string& title)
+GLFWWindow::GLFWWindow(const WindowSettings& settings)
     : Window()
 {
-    PN_CORE_INFO("Using GLFW Window");
+    PN_CORE_INFO("Using GLFW Window: {}x{}, title: {}", 
+        settings.width, settings.height, settings.title);
 
-    m_data.width = width;
-    m_data.height = height;
-    m_data.title = title;
+    m_data.width = settings.width;
+    m_data.height = settings.height;
+    m_data.title = settings.title;
 
     OnWindowCreate();
 
-    m_renderContext->Setup();
+    {
+        m_renderContext->Setup();
 
-    m_data.glfwHandle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-    PN_CORE_ASSERT(m_data.glfwHandle, "Unable to create GLFW window!");
+        m_data.glfwHandle = glfwCreateWindow(
+            m_data.width, m_data.height, m_data.title.c_str(), nullptr, nullptr
+        );
+        PN_CORE_ASSERT(m_data.glfwHandle, "Unable to create GLFW window!");
 
-    m_renderContext->SetCurrentContext(*this);
-
+        m_renderContext->SetCurrentContext(*this);
+    }
+    
     SetupGlfwCallbacks();
+    SetSwapInterval(settings.swapInterval);
 }
 
 void GLFWWindow::OnWindowCreate()
@@ -169,6 +175,13 @@ void GLFWWindow::SetTitle(const std::string& title)
 {
     m_data.title = title;
     glfwSetWindowTitle(m_data.glfwHandle, m_data.title.c_str());
+}
+
+void GLFWWindow::SetSwapInterval(int interval)
+{
+    PN_CORE_ASSERT(interval >= 0, "Negative swap interval is provided: {}", interval);
+    m_data.swapInterval = interval;
+    glfwSwapInterval(interval);
 }
 
 }
