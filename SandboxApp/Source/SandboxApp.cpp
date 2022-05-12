@@ -3,14 +3,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Render/Render.hpp>
 
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        PN_CLIENT_ASSERT(false, "Failed to initialize GLAD!");
-    }
-
     auto glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
     auto vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
     auto renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
@@ -30,7 +27,7 @@ void SandboxApp::OnEvent(const pn::Event& event)
 void SandboxApp::OnUpdate()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    pn::Render::ClearColor();
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)

@@ -6,35 +6,37 @@ skinparam packageStyle Frame
 skinparam PackageBackgroundColor Lavender
 
 
-enum GraphicsAPI {
+enum RenderAPI {
         OpenGL    
         DirectX
     }
 
 
 package Render {
-    interface RenderAPI {
-        Clear()
-        SetClearColor()
-        DrawArrays()
-        DrawIndexed()
-    }
-
-    OpenGLRenderAPI --|> RenderAPI
-
-    class Render {
-        RenderAPI s_renderAPI
-        GraphicsAPI s_API
-        Init() (determine api to use)
-        Clear()
-        SetClearColor()
-        DrawVertexArray()
-        DrawIndexed()
+    interface RenderCommand {
+        void Clear()
+        void SetClearColor()
+        void DrawVertexArray()
+        void DrawIndexed()
         ...()
     }
 
-    Render -- GraphicsAPI
-    Render *-- RenderAPI
+    OpenGLRenderCommand --|> RenderCommand
+
+    class Render {
+        RenderAPI s_renderAPI
+        RenderCommand* s_renderCommand;
+
+        static void Init() (determine api to use)
+        static void Clear()
+        static void SetClearColor()
+        static void DrawVertexArray()
+        static void DrawIndexed()
+        ...()
+    }
+
+    RenderCommand --* Render
+    RenderAPI -- Render
 }
 
 
@@ -45,7 +47,7 @@ package Window {
         Linux
     }
 
-    interface Window {
+    abstract class Window {
         WindowProvider s_windowProvider
         RenderContext m_context
         static void Init() (determine WindowProvider)
@@ -56,7 +58,7 @@ package Window {
 
     GLFWWindow --|> Window
 
-    interface RenderContext {
+    abstract class RenderContext {
         static RenderContext Create() (get impl)
         Setup()
         SetCurrentWindow(Window w)
@@ -67,7 +69,7 @@ package Window {
     RenderContext --* Window
     Window -- WindowProvider
     RenderContext -- WindowProvider
-    RenderContext -- GraphicsAPI
+    RenderContext -- RenderAPI 
 }
 
 

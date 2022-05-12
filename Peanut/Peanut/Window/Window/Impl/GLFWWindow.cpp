@@ -23,16 +23,14 @@ GLFWWindow::GLFWWindow(const WindowSettings& settings)
 
     OnWindowCreate();
 
+    m_renderContext->PreWindowSetup();
     {
-        m_renderContext->Setup();
-
         m_data.glfwHandle = glfwCreateWindow(
             m_data.width, m_data.height, m_data.title.c_str(), nullptr, nullptr
         );
         PN_CORE_ASSERT(m_data.glfwHandle, "Unable to create GLFW window!");
-
-        m_renderContext->SetCurrentContext(*this);
     }
+    m_renderContext->PostWindowSetup(*this);
     
     SetupGlfwCallbacks();
     SetSwapInterval(settings.swapInterval);

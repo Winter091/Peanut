@@ -16,7 +16,8 @@ public:
 
     static std::unique_ptr<RenderContext> Create();
 
-    virtual void Setup() = 0;
+    virtual void PreWindowSetup() = 0;
+    virtual void PostWindowSetup(Window& window) = 0;
     virtual void SetCurrentContext(Window& window) = 0;
     virtual void SwapBuffers(Window& window) = 0;
 
