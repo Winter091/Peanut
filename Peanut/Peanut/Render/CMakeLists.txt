@@ -6,3 +6,4 @@ target_sources(
 )
 
 add_subdirectory(Buffers)
+add_subdirectory(Shaders)
