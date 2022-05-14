@@ -98,7 +98,7 @@ uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
     }
 
     PN_CORE_ASSERT(false, "Unknown element type: {}", static_cast<uint32_t>(type));
-
+    return 0u;
 }
 
 }
