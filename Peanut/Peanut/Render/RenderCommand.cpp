@@ -21,7 +21,7 @@ void RenderCommand::Init()
 
 #if defined(PN_PLATFORM_WINDOWS)
     s_renderAPI = RenderAPI::OpenGL;
-    s_instance = std::make_unique<OpenGLRenderCommand>();
+    s_renderCommandImpl = std::make_unique<OpenGLRenderCommand>();
 #elif defined(PN_PLATFORM_LINUX)
     s_renderAPI = RenderAPI::OpenGL;
     s_renderCommandImpl = std::make_unique<OpenGLRenderCommand>();
