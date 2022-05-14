@@ -16,12 +16,26 @@ struct ShaderPaths
 {
     std::string vertexPath;
     std::string fragmentPath;
+
+    ShaderPaths() = default;
+
+    ShaderPaths(std::string vertexPath, std::string fragmentPath)
+        : vertexPath(std::move(vertexPath))
+        , fragmentPath(std::move(fragmentPath))
+    {}
 };
 
 struct ShaderSources
 {
     std::string vertexSource;
     std::string fragmentSource;
+
+    ShaderSources() = default;
+
+    ShaderSources(std::string vertexSource, std::string fragmentSource)
+        : vertexSource(std::move(vertexSource))
+        , fragmentSource(std::move(fragmentSource))
+    {}
 };
 
 class Shader
@@ -42,7 +56,7 @@ public:
     virtual void SetFloat3(const std::string& name, const glm::vec3& vec) = 0;
     virtual void SetFloat4(const std::string& name, const glm::vec4& vec) = 0;
 
-    virtual void SetInt1(const std::string& name, int scalar);
+    virtual void SetInt1(const std::string& name, int scalar) = 0;
     virtual void SetInt2(const std::string& name, const glm::ivec2& vec) = 0;
     virtual void SetInt3(const std::string& name, const glm::ivec3& vec) = 0;
     virtual void SetInt4(const std::string& name, const glm::ivec4& vec) = 0;
@@ -50,8 +64,8 @@ public:
     virtual void SetMat3(const std::string& name, const glm::mat3& mat) = 0;
     virtual void SetMat4(const std::string& name, const glm::mat4& mat) = 0;
 
-    std::shared_ptr<Shader> Create(const ShaderPaths& paths, const std::string& name = "");
-    std::shared_ptr<Shader> Create(const ShaderSources& sources, const std::string& name = "");
+    static std::shared_ptr<Shader> Create(const ShaderPaths& paths, const std::string& name = "");
+    static std::shared_ptr<Shader> Create(const ShaderSources& sources, const std::string& name = "");
 };
 
 }

@@ -23,7 +23,7 @@ public:
     void SetFloat3(const std::string& name, const glm::vec3& vec) override;
     void SetFloat4(const std::string& name, const glm::vec4& vec) override;
     
-    void SetInt1(const std::string& name, int scalar);
+    void SetInt1(const std::string& name, int scalar) override;
     void SetInt2(const std::string& name, const glm::ivec2& vec) override;
     void SetInt3(const std::string& name, const glm::ivec3& vec) override;
     void SetInt4(const std::string& name, const glm::ivec4& vec) override;

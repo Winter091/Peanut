@@ -18,6 +18,8 @@ public:
 
     static void SetClearColor(const glm::vec4& color);
     static void Clear();
+    
+    static void DrawArrays(uint32_t first, uint32_t count);
 
 private:
     static RenderAPI s_renderAPI;

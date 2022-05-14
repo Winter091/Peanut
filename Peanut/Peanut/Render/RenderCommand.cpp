@@ -48,4 +48,10 @@ void RenderCommand::Clear()
     return s_renderCommandImpl->Clear();
 }
 
+void RenderCommand::DrawArrays(uint32_t first, uint32_t count)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->DrawArrays(first, count);
+}
+
 }

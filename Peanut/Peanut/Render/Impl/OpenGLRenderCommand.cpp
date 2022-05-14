@@ -20,4 +20,9 @@ void OpenGLRenderCommand::Clear()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void OpenGLRenderCommand::DrawArrays(uint32_t first, uint32_t count)
+{
+    glDrawArrays(GL_TRIANGLES, first, count);
+}
+
 }

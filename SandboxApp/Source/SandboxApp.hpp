@@ -5,6 +5,7 @@
 
 #include <Peanut/Render/Buffers/VertexBuffer.hpp>
 #include <Peanut/Render/Buffers/VertexArray.hpp>
+#include <Peanut/Render/Shaders/Shader.hpp>
 
 class SandboxApp final : public pn::Application
 {
@@ -19,6 +20,7 @@ public:
 
 private:
     std::shared_ptr<pn::VertexArray> m_triangleVAO;
+    std::shared_ptr<pn::Shader> m_shader;
 };
 
 #endif

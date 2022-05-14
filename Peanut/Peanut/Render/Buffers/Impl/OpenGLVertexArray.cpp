@@ -62,7 +62,7 @@ void OpenGLVertexArray::ProcessVertexBufferLayoutElement(
                 index, elem.count, MapToGLType(elem.type), stride, 
                 reinterpret_cast<const void*>(elem.offset)
             );
-            return;
+            break;
         }
         case BufferLayoutElementType::Float:
         case BufferLayoutElementType::Double:
@@ -71,13 +71,16 @@ void OpenGLVertexArray::ProcessVertexBufferLayoutElement(
                 index, elem.count, MapToGLType(elem.type), 
                 elem.isNormalized, stride, reinterpret_cast<const void*>(elem.offset)
             );
-            return;
+            break;
         }
         default:
+        {
+            PN_CORE_ASSERT(false, "Unknown element type: {}", static_cast<uint32_t>(elem.type));
             break;
+        }
     }
 
-    PN_CORE_ASSERT(false, "Unknown element type: {}", static_cast<uint32_t>(elem.type));
+    glEnableVertexAttribArray(index);
 }
 
 uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
