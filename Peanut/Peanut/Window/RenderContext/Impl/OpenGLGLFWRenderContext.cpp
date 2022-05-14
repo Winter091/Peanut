@@ -16,7 +16,7 @@ OpenGLGLFWRenderContext::OpenGLGLFWRenderContext()
 
 void OpenGLGLFWRenderContext::PreWindowSetup()
 {
-    int major = 4, minor = 4;
+    int major = 4, minor = 5;
     PN_CORE_INFO("Requesting OpenGL {}.{}", major, minor);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
