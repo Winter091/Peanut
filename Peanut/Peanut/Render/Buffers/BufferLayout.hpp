@@ -19,29 +19,26 @@ enum class BufferLayoutElementType : uint32_t
     Double,
 };
 
-class BufferLayoutElement
+struct BufferLayoutElement
 {
-public:
     BufferLayoutElement(BufferLayoutElementType type, uint32_t count, 
                         const std::string& name, bool isNormalized = false);
 
-private:
-    std::string m_name;
-    uint32_t m_index;
-    uint32_t m_size;
-    uint32_t m_offset;
-    BufferLayoutElementType m_type;
-    uint32_t m_count;
-    bool m_isNormalized;
-
-private:
-    friend class BufferLayout;
+    std::string name;
+    uint32_t index;
+    uint32_t size;
+    uint32_t offset;
+    BufferLayoutElementType type;
+    uint32_t count;
+    bool isNormalized;
 };
 
 class BufferLayout
 {
 public:
+    BufferLayout() = default;
     BufferLayout(std::initializer_list<BufferLayoutElement> elements);
+    BufferLayout(const BufferLayout&) = default;
 
     const std::vector<BufferLayoutElement>& GetElements() const { return m_elements; }
     uint32_t GetStride() const { return m_stride; }

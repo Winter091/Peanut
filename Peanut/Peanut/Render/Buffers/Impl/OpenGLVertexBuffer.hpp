@@ -14,13 +14,16 @@ public:
     void Bind() override;
     void Unbind() override;
     
-    void SetData(const void* data, uint32_t size) override;
+    void ReplaceData(const void* data, uint32_t size) override;
+    void UpdateData(const void* data, uint32_t size, uint32_t offset = 0) override;
     
     const BufferLayout& GetLayout() const override;
-    void SetLayout(const BufferLayout& layout) override;
+    void SetLayout(const BufferLayout& layout) override { m_layout = layout; }
 
 private:
-
+    uint32_t m_handle;
+    uint32_t m_size;
+    BufferLayout m_layout;
 };
 
 }

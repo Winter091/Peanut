@@ -7,15 +7,15 @@ namespace pn {
 BufferLayoutElement::BufferLayoutElement(
     BufferLayoutElementType type, uint32_t count, const std::string& name, bool isNormalized
 )
-    : m_name(name), 
-    m_index(0), 
-    m_size(0), 
-    m_offset(0), 
-    m_type(type), 
-    m_count(count),
-    m_isNormalized(isNormalized)
+    : name(name), 
+    index(0), 
+    size(0), 
+    offset(0), 
+    type(type), 
+    count(count),
+    isNormalized(isNormalized)
 {
-    PN_CORE_ASSERT(m_count >= 1 && m_count <= 4, "Buffer layout: invalid count of elements: {}", m_count);
+    PN_CORE_ASSERT(count >= 1 && count <= 4, "Buffer layout: invalid count of elements: {}", count);
 }
 
 BufferLayout::BufferLayout(std::initializer_list<BufferLayoutElement> elements)
@@ -28,11 +28,11 @@ BufferLayout::BufferLayout(std::initializer_list<BufferLayoutElement> elements)
     for (auto& element : elements) {
         m_elements.emplace_back(element);
         
-        m_elements[i].m_index = i;
-        m_elements[i].m_size = m_elements[i].m_count * GetTypeSize(m_elements[i].m_type);
-        m_elements[i].m_offset = currOffset;
+        m_elements[i].index = i;
+        m_elements[i].size = m_elements[i].count * GetTypeSize(m_elements[i].type);
+        m_elements[i].offset = currOffset;
 
-        currOffset += m_elements[i].m_size;
+        currOffset += m_elements[i].size;
         ++i;
     }
 
@@ -44,17 +44,17 @@ uint32_t BufferLayout::GetTypeSize(BufferLayoutElementType type)
     switch (type) {
         case BufferLayoutElementType::Int8:
         case BufferLayoutElementType::Uint8:
-            return 8u;
+            return 1u;
         case BufferLayoutElementType::Int16:
         case BufferLayoutElementType::Uint16:
-            return 16u;
+            return 2u;
         case BufferLayoutElementType::Int32:
         case BufferLayoutElementType::Uint32:
-            return 32u;
+            return 4u;
         case BufferLayoutElementType::Float:
-            return 32u;
+            return 4u;
         case BufferLayoutElementType::Double:
-            return 64u;
+            return 8u;
         default:
             break;
     }
