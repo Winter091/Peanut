@@ -3,6 +3,9 @@
 
 #include <Peanut/Application/Application.hpp>
 
+#include <Peanut/Render/Buffers/VertexBuffer.hpp>
+#include <Peanut/Render/Buffers/VertexArray.hpp>
+
 class SandboxApp final : public pn::Application
 {
 public:
@@ -13,6 +16,9 @@ public:
 
     void OnEvent(const pn::Event& event) override;
     void OnUpdate() override;
+
+private:
+    std::shared_ptr<pn::VertexArray> m_triangleVAO;
 };
 
 #endif

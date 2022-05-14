@@ -2,37 +2,28 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Render/RenderCommand.hpp>
-#include <Peanut/Render/Buffers/VertexBuffer.hpp>
 
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
-    float data[] = {
-        0.0f, 0.0f, 0.0f,   0.0f, 0.0f, 0.0f, 0.0f,     0.0f, 0.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f,   0.0f, 0.0f, 0.0f, 0.0f,     0.0f, 0.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f,   0.0f, 0.0f, 0.0f, 0.0f,     0.0f, 0.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f,   0.0f, 0.0f, 0.0f, 0.0f,     0.0f, 0.0f, 0.0f, 0.0f,
+    float triangleVertices[] = {
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f
     };
 
-    auto buffer = pn::VertexBuffer::Create(sizeof(data));
+    auto buffer = pn::VertexBuffer::Create(sizeof(triangleVertices), triangleVertices);
     buffer->SetLayout({
-        { pn::BufferLayoutElementType::Float, 3, "position" },
-        { pn::BufferLayoutElementType::Float, 4, "color" },
-        { pn::BufferLayoutElementType::Float, 4, "normal" },
+        { pn::BufferLayoutElementType::Float, 3, "position" }
     });
 
-    buffer->UpdateData(data, sizeof(data), 1);
-
-    auto layout = buffer->GetLayout();
-    PN_CLIENT_DEBUG("Stride: {}", layout.GetStride());
-    for (const auto& elem : layout.GetElements()) {
-        PN_CLIENT_DEBUG("{}, {}: count = {}, size = {}, offset = {}", elem.index, elem.name, elem.count, elem.size, elem.offset);
-    }
+    m_triangleVAO = pn::VertexArray::Create();
+    m_triangleVAO->AddVertexBuffer(buffer);
 }
 
 void SandboxApp::OnEvent(const pn::Event& event)
 {
-    PN_CLIENT_DEBUG(event.ToString());
+    // PN_CLIENT_DEBUG(event.ToString());
 }
 
 void SandboxApp::OnUpdate()
