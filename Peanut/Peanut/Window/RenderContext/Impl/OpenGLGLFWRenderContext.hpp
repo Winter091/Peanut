@@ -21,6 +21,7 @@ public:
 
 private:
     void InitializeGlad();
+    void SetupDebugContext();
 };
 
 }

@@ -42,9 +42,9 @@ if(MSVC)
     )
 else()
     target_compile_options(
-        Peanut PRIVATE 
-        -Wall -Wextra -Wnon-virtual-dtor -Wsign-promo 
-        -Wduplicated-branches -Wduplicated-cond -Wconversion
+        Peanut PRIVATE
+        -Wall -Wextra -Wduplicated-branches -Wduplicated-cond -Wconversion
+        $<$<COMPILE_LANGUAGE:CXX>: -Wnon-virtual-dtor -Wsign-promo>
     )
 endif()
 
@@ -58,7 +58,7 @@ target_include_directories(
 )
 
 target_link_libraries(
-    Peanut PRIVATE
-    glfw
-    spdlog::spdlog
+    Peanut PRIVATE 
+    glfw 
+    spdlog
 )

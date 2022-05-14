@@ -13,6 +13,8 @@ public:
 
     void SetClearColor(const glm::vec4& color) override;
     void Clear() override;
+
+    void DrawArrays(uint32_t first, uint32_t count) override;
 };
 
 }
