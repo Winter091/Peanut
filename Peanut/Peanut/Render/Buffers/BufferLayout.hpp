@@ -22,7 +22,7 @@ enum class BufferLayoutElementType : uint32_t
 struct BufferLayoutElement
 {
     BufferLayoutElement(BufferLayoutElementType type, uint32_t count, 
-                        const std::string& name, bool isNormalized = false);
+                        std::string name, bool isNormalized = false);
 
     std::string name;
     uint32_t index;
@@ -45,7 +45,7 @@ public:
 
 private:
     std::vector<BufferLayoutElement> m_elements;
-    uint32_t m_stride;
+    uint32_t m_stride = 0u;
 
 private:
     uint32_t GetTypeSize(BufferLayoutElementType type);

@@ -3,18 +3,16 @@
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Render/RenderCommand.hpp>
 
-#include <glad/glad.h>
-
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f
+    float triangleVertives[] = {
+        -0.5f, -0.5f,  0.0f,
+         0.5f, -0.5f,  0.0f,
+         0.0f,  0.5f,  0.0f
     };  
 
-    auto buffer = pn::VertexBuffer::Create(sizeof(vertices), vertices);
+    auto buffer = pn::VertexBuffer::Create(sizeof(triangleVertives), triangleVertives);
     buffer->SetLayout({
         { pn::BufferLayoutElementType::Float, 3, "position" },
     });

@@ -22,7 +22,7 @@ void OpenGLRenderCommand::Clear()
 
 void OpenGLRenderCommand::DrawArrays(uint32_t first, uint32_t count)
 {
-    glDrawArrays(GL_TRIANGLES, first, count);
+    glDrawArrays(GL_TRIANGLES, static_cast<int32_t>(first), static_cast<int32_t>(count));
 }
 
 }

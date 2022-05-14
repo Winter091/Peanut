@@ -9,8 +9,8 @@ namespace pn {
 class OpenGLShader final : public Shader
 {
 public:
-    OpenGLShader(const ShaderPaths& paths, const std::string& name = "");
-    OpenGLShader(const ShaderSources& sources, const std::string& name = "");
+    OpenGLShader(const ShaderPaths& paths, std::string name = "");
+    OpenGLShader(const ShaderSources& sources, std::string name = "");
     ~OpenGLShader() override;
 
     const std::string& GetName() const override { return m_name; }

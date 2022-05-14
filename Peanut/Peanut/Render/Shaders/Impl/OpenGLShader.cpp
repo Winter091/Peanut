@@ -9,8 +9,8 @@
 namespace pn
 {
 
-OpenGLShader::OpenGLShader(const ShaderPaths& paths, const std::string& name)
-    : m_name(name)
+OpenGLShader::OpenGLShader(const ShaderPaths& paths, std::string name)
+    : m_name(std::move(name))
 {
     ShaderSources sources;
     sources.vertexSource = ReadFile(paths.vertexPath);
@@ -33,10 +33,11 @@ std::string OpenGLShader::ReadFile(const std::string& filePath)
     return ss.str();
 }
 
-OpenGLShader::OpenGLShader(const ShaderSources& sources, const std::string& name)
-    : m_name(name)
+OpenGLShader::OpenGLShader(const ShaderSources& sources, std::string name)
+    : m_handler(CreateShaderProgram(sources))
+    , m_name(std::move(name))
 {
-    m_handler = CreateShaderProgram(sources);
+
 }
 
 uint32_t OpenGLShader::CreateShaderProgram(const ShaderSources& sources)
@@ -80,7 +81,7 @@ void OpenGLShader::CheckShaderCompileStatus(uint32_t handler)
         return;
     }
 
-    int bufSize;
+    int bufSize = 0;
     glGetShaderiv(handler, GL_INFO_LOG_LENGTH, &bufSize);
 
     std::vector<char> buffer(bufSize);

@@ -59,8 +59,8 @@ void OpenGLVertexArray::ProcessVertexBufferLayoutElement(
         case BufferLayoutElementType::Uint32:
         {
             glVertexAttribIPointer(
-                index, elem.count, MapToGLType(elem.type), stride, 
-                reinterpret_cast<const void*>(elem.offset)
+                index, static_cast<int32_t>(elem.count), MapToGLType(elem.type), 
+                static_cast<int32_t>(stride), reinterpret_cast<const void*>(elem.offset)
             );
             break;
         }
@@ -68,8 +68,8 @@ void OpenGLVertexArray::ProcessVertexBufferLayoutElement(
         case BufferLayoutElementType::Double:
         {
             glVertexAttribPointer(
-                index, elem.count, MapToGLType(elem.type), 
-                elem.isNormalized, stride, reinterpret_cast<const void*>(elem.offset)
+                index, static_cast<int32_t>(elem.count), MapToGLType(elem.type), elem.isNormalized, 
+                static_cast<int32_t>(stride), reinterpret_cast<const void*>(elem.offset)
             );
             break;
         }

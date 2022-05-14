@@ -17,7 +17,7 @@ public:
     void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) override;
 
 private:
-    uint32_t m_handle;
+    uint32_t m_handle = 0u;
     std::vector<std::shared_ptr<VertexBuffer>> m_vertexBuffers;
 
 private:

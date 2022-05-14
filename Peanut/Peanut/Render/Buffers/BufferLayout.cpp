@@ -5,9 +5,9 @@
 namespace pn {
 
 BufferLayoutElement::BufferLayoutElement(
-    BufferLayoutElementType type, uint32_t count, const std::string& name, bool isNormalized
+    BufferLayoutElementType type, uint32_t count, std::string name, bool isNormalized
 )
-    : name(name), 
+    : name(std::move(name)), 
     index(0), 
     size(0), 
     offset(0), 
@@ -50,7 +50,6 @@ uint32_t BufferLayout::GetTypeSize(BufferLayoutElementType type)
             return 2u;
         case BufferLayoutElementType::Int32:
         case BufferLayoutElementType::Uint32:
-            return 4u;
         case BufferLayoutElementType::Float:
             return 4u;
         case BufferLayoutElementType::Double:
