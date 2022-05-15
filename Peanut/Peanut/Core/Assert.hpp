@@ -9,7 +9,7 @@
         do { \
             if (!(cond)) { \
                 PN_ ##logName ##_CRITICAL("Assertion error: " fmt, ##__VA_ARGS__); \
-                PN_ ##logName ##_CRITICAL("\tFile: {}", ::std::filesystem::path(__FILE__).filename().c_str()); \
+                PN_ ##logName ##_CRITICAL("\tFile: {}", ::std::filesystem::path(__FILE__).filename().string()); \
                 PN_ ##logName ##_CRITICAL("\tLine: {}", __LINE__); \
                 std::terminate(); \
             } \
