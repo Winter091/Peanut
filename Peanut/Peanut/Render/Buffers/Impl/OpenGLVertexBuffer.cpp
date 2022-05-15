@@ -47,10 +47,28 @@ void OpenGLVertexBuffer::UpdateData(const void* data, uint32_t size, uint32_t of
     glNamedBufferSubData(m_handle, offset, size, data);
 }
 
-const BufferLayout& OpenGLVertexBuffer::GetLayout() const 
+const std::shared_ptr<BufferLayout>& OpenGLVertexBuffer::GetLayout() const 
 {
-    PN_CORE_ASSERT(m_layout.GetStride() > 0u, "Layout is not specified");
+    PN_CORE_ASSERT(m_layout, "Layout is not specified");
     return m_layout;
+}
+
+void OpenGLVertexBuffer::SetLayout(const std::shared_ptr<BufferLayout>& layout)
+{
+    PN_CORE_ASSERT(layout, "Layout is nullptr");
+    m_layout = layout;
+}
+
+uint32_t OpenGLVertexBuffer::GetVertexSize() const 
+{
+    PN_CORE_ASSERT(m_layout, "Layout is nullptr");
+    return m_layout->GetStride();
+}
+
+uint32_t OpenGLVertexBuffer::GetVertexCount() const 
+{
+    PN_CORE_ASSERT(m_layout, "Layout is nullptr");
+    return GetSize() / GetVertexSize();
 }
 
 }

@@ -20,9 +20,14 @@ void OpenGLRenderCommand::Clear()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void OpenGLRenderCommand::DrawArrays(uint32_t first, uint32_t count)
+void OpenGLRenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
-    glDrawArrays(GL_TRIANGLES, static_cast<int32_t>(first), static_cast<int32_t>(count));
+    if (count == 0) {
+        count = vertexArray->GetVertexCount();
+    }
+
+    vertexArray->Bind();
+    glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(count));
 }
 
 }

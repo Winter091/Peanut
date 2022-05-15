@@ -13,12 +13,15 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     };  
 
     auto buffer = pn::VertexBuffer::Create(sizeof(triangleVertives), triangleVertives);
-    buffer->SetLayout({
+
+    auto layout = pn::BufferLayout::Create({
         { pn::BufferLayoutElementType::Float, 3, "position" },
     });
 
+    buffer->SetLayout(layout);
+
     m_triangleVAO = pn::VertexArray::Create();
-    m_triangleVAO->AddVertexBuffer(buffer);
+    m_triangleVAO->SetVertexBuffer(buffer);
 
     pn::ShaderPaths paths(
         "Peanut/Assets/Shaders/test.vert", 
@@ -39,7 +42,7 @@ void SandboxApp::OnUpdate()
 
     m_triangleVAO->Bind();
     m_shader->Bind();
-    pn::RenderCommand::DrawArrays(0, 3);
+    pn::RenderCommand::DrawArrays(m_triangleVAO);
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)

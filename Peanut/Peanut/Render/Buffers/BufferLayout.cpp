@@ -20,6 +20,8 @@ BufferLayoutElement::BufferLayoutElement(
 
 BufferLayout::BufferLayout(std::initializer_list<BufferLayoutElement> elements)
 {
+    PN_CORE_ASSERT(elements.size() > 0, "Buffer layout is empty");
+    
     m_elements.reserve(elements.size());
 
     uint32_t i = 0;
@@ -37,6 +39,11 @@ BufferLayout::BufferLayout(std::initializer_list<BufferLayoutElement> elements)
     }
 
     m_stride = currOffset;
+}
+
+std::shared_ptr<BufferLayout> BufferLayout::Create(std::initializer_list<BufferLayoutElement> elements)
+{
+    return std::make_shared<BufferLayout>(elements);
 }
 
 uint32_t BufferLayout::GetTypeSize(BufferLayoutElementType type)

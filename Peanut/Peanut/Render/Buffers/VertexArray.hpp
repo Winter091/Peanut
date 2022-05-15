@@ -16,7 +16,10 @@ public:
     virtual void Bind() = 0;
     virtual void Unbind() = 0;
 
-    virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) = 0;
+    virtual void SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) = 0;
+
+    virtual uint32_t GetSize() const = 0;
+    virtual uint32_t GetVertexCount() const = 0;
 
     static std::shared_ptr<VertexArray> Create();
 };
