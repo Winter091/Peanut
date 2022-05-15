@@ -2,7 +2,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/PlatformDetection.hpp>
-#include <Peanut/Render/Impl/OpenGLRenderCommand.hpp>
+#include <Peanut/Render/Commands/Impl/OpenGLRenderCommand.hpp>
 
 namespace pn
 {

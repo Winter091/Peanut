@@ -2,7 +2,7 @@
 #define __RENDERCOMMAND_H__
 
 #include <Peanut/Render/RenderAPI.hpp>
-#include <Peanut/Render/RenderCommandImpl.hpp>
+#include <Peanut/Render/Commands/RenderCommandImpl.hpp>
 #include <glm/vec4.hpp>
 #include <memory>
 

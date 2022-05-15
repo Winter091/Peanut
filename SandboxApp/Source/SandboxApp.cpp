@@ -1,7 +1,7 @@
 #include "SandboxApp.hpp"
 
 #include <Peanut/Core/Assert.hpp>
-#include <Peanut/Render/RenderCommand.hpp>
+#include <Peanut/Render/Commands/RenderCommand.hpp>
 
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)

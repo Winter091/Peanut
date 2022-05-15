@@ -2,7 +2,7 @@
 
 #include <Peanut/Window/RenderContext/Impl/OpenGLGLFWRenderContext.hpp>
 #include <Peanut/Core/PlatformDetection.hpp>
-#include <Peanut/Render/RenderCommand.hpp>
+#include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Window/Window/Window.hpp>
 #include <Peanut/Core/Assert.hpp>
 

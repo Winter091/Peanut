@@ -1,7 +1,7 @@
 #ifndef __OPENGLRENDERCOMMAND_H__
 #define __OPENGLRENDERCOMMAND_H__
 
-#include <Peanut/Render/RenderCommandImpl.hpp>
+#include <Peanut/Render/Commands/RenderCommandImpl.hpp>
 
 namespace pn {
 
