@@ -15,13 +15,17 @@ public:
     void Unbind() override;
 
     void SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) override;
+    void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) override;
 
     uint32_t GetSize() const override;
     uint32_t GetVertexCount() const override;
+    uint32_t GetIndexCount() const override;
+    IndexBufferDataFormat GetIndexDataFormat() const override;
 
 private:
     uint32_t m_handle = 0u;
     std::shared_ptr<VertexBuffer> m_vertexBuffer;
+    std::shared_ptr<IndexBuffer> m_indexBuffer;
 
 private:
     void ProcessVertexBufferLayout();

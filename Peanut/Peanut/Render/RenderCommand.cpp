@@ -54,4 +54,10 @@ void RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32
     s_renderCommandImpl->DrawArrays(vertexArray, count);
 }
 
+void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->DrawIndexed(vertexArray, count);
+}
+
 }

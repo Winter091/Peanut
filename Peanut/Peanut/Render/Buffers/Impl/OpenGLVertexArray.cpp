@@ -101,6 +101,15 @@ uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
     return 0u;
 }
 
+void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+{
+    m_indexBuffer = indexBuffer;
+
+    Bind();
+    indexBuffer->Bind();
+    Unbind();
+}
+
 uint32_t OpenGLVertexArray::GetSize() const 
 {
     PN_CORE_ASSERT(m_vertexBuffer, "Vertex buffer is not set");
@@ -111,6 +120,18 @@ uint32_t OpenGLVertexArray::GetVertexCount() const
 {
     PN_CORE_ASSERT(m_vertexBuffer, "Vertex buffer is not set");
     return m_vertexBuffer->GetVertexCount();
+}
+
+uint32_t OpenGLVertexArray::GetIndexCount() const 
+{
+    PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set");
+    return m_indexBuffer->GetIndexCount();
+}
+
+IndexBufferDataFormat OpenGLVertexArray::GetIndexDataFormat() const 
+{
+    PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set");
+    return m_indexBuffer->GetDataFormat();
 }
 
 }

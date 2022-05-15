@@ -20,6 +20,7 @@ public:
     static void Clear();
     
     static void DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0);
+    static void DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0);
 
 private:
     static RenderAPI s_renderAPI;

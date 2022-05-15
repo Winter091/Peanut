@@ -15,6 +15,10 @@ public:
     void Clear() override;
 
     void DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count) override;
+    void DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count) override;
+
+private:
+    static uint32_t GetGLDataType(IndexBufferDataFormat format);
 };
 
 }

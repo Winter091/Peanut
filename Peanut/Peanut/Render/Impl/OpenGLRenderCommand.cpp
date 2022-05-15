@@ -3,6 +3,8 @@
 #include <Peanut/Core/Assert.hpp>
 #include <glad/glad.h>
 
+#include <Peanut/Render/Buffers/Impl/OpenGLIndexBuffer.hpp>
+
 namespace pn {
 
 OpenGLRenderCommand::OpenGLRenderCommand()
@@ -28,6 +30,31 @@ void OpenGLRenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, 
 
     vertexArray->Bind();
     glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(count));
+}
+
+void OpenGLRenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
+{
+    if (count == 0) {
+        count = vertexArray->GetIndexCount();
+    }
+
+    uint32_t dataType = GetGLDataType(vertexArray->GetIndexDataFormat());
+
+    vertexArray->Bind();
+    glDrawElements(GL_TRIANGLES, count, dataType, nullptr);
+}
+
+uint32_t OpenGLRenderCommand::GetGLDataType(IndexBufferDataFormat format)
+{
+    switch (format) {
+        case IndexBufferDataFormat::Uint8:  return GL_UNSIGNED_BYTE;
+        case IndexBufferDataFormat::Uint16: return GL_UNSIGNED_SHORT;
+        case IndexBufferDataFormat::Uint32: return GL_UNSIGNED_INT;
+        default: break;
+    }
+
+    PN_CORE_ASSERT(false, "Unknown index buffer data format: {}", static_cast<uint32_t>(format));
+    return 0u;
 }
 
 }
