@@ -110,6 +110,16 @@ void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& index
     Unbind();
 }
 
+bool OpenGLVertexArray::GetIsVertexBufferInitialized() const 
+{
+    return m_vertexBuffer && m_vertexBuffer->GetIsDataInitialized();
+}
+
+bool OpenGLVertexArray::GetIsIndexBufferInitialized() const 
+{
+    return m_indexBuffer && m_indexBuffer->GetIsDataInitialized();
+}
+
 uint32_t OpenGLVertexArray::GetSize() const 
 {
     PN_CORE_ASSERT(m_vertexBuffer, "Vertex buffer is not set");

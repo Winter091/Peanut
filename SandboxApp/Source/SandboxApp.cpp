@@ -47,7 +47,6 @@ void SandboxApp::OnUpdate()
     pn::RenderCommand::SetClearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
     pn::RenderCommand::Clear();
 
-    m_rectangleVAO->Bind();
     m_shader->Bind();
     pn::RenderCommand::DrawIndexed(m_rectangleVAO);
 }

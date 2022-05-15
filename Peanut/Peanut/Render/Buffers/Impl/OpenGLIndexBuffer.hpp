@@ -16,6 +16,7 @@ public:
 
     void ReplaceData(IndexBufferDataFormat format, const void* data, uint32_t size) override;
     void UpdateData(const void* data, uint32_t size, uint32_t offset = 0) override;
+    bool GetIsDataInitialized() const override { return m_isDataInitialized; }
 
     uint32_t GetIndexCount() const override { return m_indexCount; }
     IndexBufferDataFormat GetDataFormat() const override { return m_format; }
@@ -29,6 +30,7 @@ private:
     uint32_t m_size;
     uint32_t m_indexCount;
     IndexBufferDataFormat m_format;
+    bool m_isDataInitialized;
 };
 
 }

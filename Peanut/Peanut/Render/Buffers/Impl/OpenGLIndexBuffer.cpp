@@ -7,17 +7,15 @@ namespace pn
 {
 
 OpenGLIndexBuffer::OpenGLIndexBuffer(IndexBufferDataFormat format, uint32_t size, const void* data)
-    : m_handle(0u)
-    , m_size(size)
+    : m_size(size)
     , m_indexCount(0u)
     , m_format(format)
+    , m_isDataInitialized(false)
 {
     PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
 
     glCreateBuffers(1, &m_handle);
-    glNamedBufferData(m_handle, size, data, GL_STATIC_DRAW);
-
-    UpdateIndexCount();
+    ReplaceData(format, data, size);
 }
 
 OpenGLIndexBuffer::~OpenGLIndexBuffer()
@@ -43,6 +41,7 @@ void OpenGLIndexBuffer::ReplaceData(IndexBufferDataFormat format, const void* da
 
     m_size = size;
     m_format = format;
+    m_isDataInitialized = (data != nullptr);
     UpdateIndexCount();
 }
 
@@ -56,6 +55,7 @@ void OpenGLIndexBuffer::UpdateData(const void* data, uint32_t size, uint32_t off
     );
     
     glNamedBufferSubData(m_handle, offset, size, data);
+    m_isDataInitialized = true;
 }
 
 uint32_t OpenGLIndexBuffer::GetGLDataTypeSize() const

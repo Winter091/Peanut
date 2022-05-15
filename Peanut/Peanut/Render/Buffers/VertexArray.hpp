@@ -20,6 +20,9 @@ public:
     virtual void SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) = 0;
     virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) = 0;
 
+    virtual bool GetIsVertexBufferInitialized() const = 0;
+    virtual bool GetIsIndexBufferInitialized() const = 0;
+
     virtual uint32_t GetSize() const = 0;
     virtual uint32_t GetVertexCount() const = 0;
     virtual uint32_t GetIndexCount() const = 0;
