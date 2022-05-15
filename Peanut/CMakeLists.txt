@@ -23,9 +23,6 @@ set(GLFW_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(Deps/glfw)
 
-# Build spdlog alongside with Peanut
-add_subdirectory(Deps/spdlog)
-
 add_library(Peanut)
 add_subdirectory(Deps)
 add_subdirectory(Peanut)
@@ -60,5 +57,4 @@ target_include_directories(
 target_link_libraries(
     Peanut PRIVATE 
     glfw 
-    spdlog
 )

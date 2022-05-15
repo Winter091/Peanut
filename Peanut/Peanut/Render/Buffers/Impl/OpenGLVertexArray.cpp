@@ -60,7 +60,7 @@ void OpenGLVertexArray::ProcessVertexBufferLayoutElement(
         {
             glVertexAttribIPointer(
                 index, static_cast<int32_t>(elem.count), MapToGLType(elem.type), 
-                static_cast<int32_t>(stride), reinterpret_cast<const void*>(elem.offset)
+                static_cast<int32_t>(stride), (const void*)elem.offset
             );
             break;
         }
@@ -69,7 +69,7 @@ void OpenGLVertexArray::ProcessVertexBufferLayoutElement(
         {
             glVertexAttribPointer(
                 index, static_cast<int32_t>(elem.count), MapToGLType(elem.type), elem.isNormalized, 
-                static_cast<int32_t>(stride), reinterpret_cast<const void*>(elem.offset)
+                static_cast<int32_t>(stride), (const void*)elem.offset
             );
             break;
         }
@@ -98,7 +98,7 @@ uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
     }
 
     PN_CORE_ASSERT(false, "Unknown element type: {}", static_cast<uint32_t>(type));
-
+    return 0u;
 }
 
 }

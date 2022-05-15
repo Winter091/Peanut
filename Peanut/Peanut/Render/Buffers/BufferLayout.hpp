@@ -27,7 +27,7 @@ struct BufferLayoutElement
     std::string name;
     uint32_t index;
     uint32_t size;
-    uint32_t offset;
+    uint64_t offset;
     BufferLayoutElementType type;
     uint32_t count;
     bool isNormalized;
@@ -45,7 +45,7 @@ public:
 
 private:
     std::vector<BufferLayoutElement> m_elements;
-    uint32_t m_stride = 0u;
+    uint32_t m_stride = 0;
 
 private:
     uint32_t GetTypeSize(BufferLayoutElementType type);
