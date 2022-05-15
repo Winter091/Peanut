@@ -14,16 +14,22 @@ public:
     void Bind() override;
     void Unbind() override;
     
-    void ReplaceData(const void* data, uint32_t size) override;
-    void UpdateData(const void* data, uint32_t size, uint32_t offset = 0) override;
+    void ReplaceData(uint32_t size, const void* data) override;
+    void UpdateData(uint32_t size, const void* data, uint32_t offset = 0) override;
+    bool GetIsDataInitialized() const override { return m_isDataInitialized; }
     
-    const BufferLayout& GetLayout() const override;
-    void SetLayout(const BufferLayout& layout) override { m_layout = layout; }
+    const std::shared_ptr<BufferLayout>& GetLayout() const override;
+    void SetLayout(const std::shared_ptr<BufferLayout>& layout) override;
+
+    uint32_t GetSize() const override { return m_size; }
+    uint32_t GetVertexSize() const override;
+    uint32_t GetVertexCount() const override;
 
 private:
     uint32_t m_handle;
     uint32_t m_size;
-    BufferLayout m_layout;
+    std::shared_ptr<BufferLayout> m_layout;
+    bool m_isDataInitialized;
 };
 
 }

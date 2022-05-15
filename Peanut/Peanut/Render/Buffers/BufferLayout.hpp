@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace pn {
 
@@ -36,12 +37,13 @@ struct BufferLayoutElement
 class BufferLayout
 {
 public:
-    BufferLayout() = default;
+    // BufferLayout() = default;
     BufferLayout(std::initializer_list<BufferLayoutElement> elements);
-    BufferLayout(const BufferLayout&) = default;
 
     const std::vector<BufferLayoutElement>& GetElements() const { return m_elements; }
     uint32_t GetStride() const { return m_stride; }
+
+    static std::shared_ptr<BufferLayout> Create(std::initializer_list<BufferLayoutElement> elements);
 
 private:
     std::vector<BufferLayoutElement> m_elements;

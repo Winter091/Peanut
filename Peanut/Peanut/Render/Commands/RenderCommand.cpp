@@ -2,7 +2,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/PlatformDetection.hpp>
-#include <Peanut/Render/Impl/OpenGLRenderCommand.hpp>
+#include <Peanut/Render/Commands/Impl/OpenGLRenderCommand.hpp>
 
 namespace pn
 {
@@ -48,10 +48,16 @@ void RenderCommand::Clear()
     return s_renderCommandImpl->Clear();
 }
 
-void RenderCommand::DrawArrays(uint32_t first, uint32_t count)
+void RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    s_renderCommandImpl->DrawArrays(first, count);
+    s_renderCommandImpl->DrawArrays(vertexArray, count);
+}
+
+void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->DrawIndexed(vertexArray, count);
 }
 
 }

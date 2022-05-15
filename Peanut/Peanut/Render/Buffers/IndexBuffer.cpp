@@ -1,13 +1,15 @@
-#include "VertexArray.hpp"
+#include "IndexBuffer.hpp"
 
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
-#include <Peanut/Render/Buffers/Impl/OpenGLVertexArray.hpp>
+#include <Peanut/Render/Buffers/Impl/OpenGLIndexBuffer.hpp>
+
+#include <memory>
 
 namespace pn
 {
 
-std::shared_ptr<VertexArray> VertexArray::Create()
+std::shared_ptr<IndexBuffer> IndexBuffer::Create(IndexBufferDataFormat format, uint32_t size, const void* data)
 {
     auto renderApi = RenderCommand::GetRenderAPI();
 
@@ -16,13 +18,13 @@ std::shared_ptr<VertexArray> VertexArray::Create()
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
         case RenderAPI::OpenGL:
-            return std::make_shared<OpenGLVertexArray>();
+            return std::make_shared<OpenGLIndexBuffer>(format, size, data);
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;
     }
 
-    return nullptr; 
+    return nullptr;
 }
 
 }

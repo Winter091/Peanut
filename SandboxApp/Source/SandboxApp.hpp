@@ -19,7 +19,7 @@ public:
     void OnUpdate() override;
 
 private:
-    std::shared_ptr<pn::VertexArray> m_triangleVAO;
+    std::shared_ptr<pn::VertexArray> m_rectangleVAO;
     std::shared_ptr<pn::Shader> m_shader;
 };
 

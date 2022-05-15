@@ -7,12 +7,11 @@ namespace pn
 {
 
 OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size, const void* data)
-    : m_size(size)
 {
     PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
     
     glCreateBuffers(1, &m_handle);
-    glNamedBufferData(m_handle, size, data, GL_STATIC_DRAW);
+    ReplaceData(size, data);
 }
 
 OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -30,14 +29,17 @@ void OpenGLVertexBuffer::Unbind()
     glBindBuffer(GL_ARRAY_BUFFER, 0u);
 }
 
-void OpenGLVertexBuffer::ReplaceData(const void* data, uint32_t size)
+void OpenGLVertexBuffer::ReplaceData(uint32_t size, const void* data)
 {
     glNamedBufferData(m_handle, size, data, GL_STATIC_DRAW);
+
     m_size = size;
+    m_isDataInitialized = (data != nullptr);
 }
 
-void OpenGLVertexBuffer::UpdateData(const void* data, uint32_t size, uint32_t offset)
+void OpenGLVertexBuffer::UpdateData(uint32_t size, const void* data, uint32_t offset)
 {
+    PN_CORE_ASSERT(data, "Data provided for UpdateData is nullptr");
     PN_CORE_ASSERT(
         offset + size <= m_size, 
         "Trying to update data out of bounds: last buffer index = {}, update range = ({}, {})",
@@ -45,12 +47,31 @@ void OpenGLVertexBuffer::UpdateData(const void* data, uint32_t size, uint32_t of
     );
     
     glNamedBufferSubData(m_handle, offset, size, data);
+    m_isDataInitialized = true;
 }
 
-const BufferLayout& OpenGLVertexBuffer::GetLayout() const 
+const std::shared_ptr<BufferLayout>& OpenGLVertexBuffer::GetLayout() const 
 {
-    PN_CORE_ASSERT(m_layout.GetStride() > 0u, "Layout is not specified");
+    PN_CORE_ASSERT(m_layout, "Layout is not specified");
     return m_layout;
+}
+
+void OpenGLVertexBuffer::SetLayout(const std::shared_ptr<BufferLayout>& layout)
+{
+    PN_CORE_ASSERT(layout, "Layout is nullptr");
+    m_layout = layout;
+}
+
+uint32_t OpenGLVertexBuffer::GetVertexSize() const 
+{
+    PN_CORE_ASSERT(m_layout, "Layout is nullptr");
+    return m_layout->GetStride();
+}
+
+uint32_t OpenGLVertexBuffer::GetVertexCount() const 
+{
+    PN_CORE_ASSERT(m_layout, "Layout is nullptr");
+    return GetSize() / GetVertexSize();
 }
 
 }

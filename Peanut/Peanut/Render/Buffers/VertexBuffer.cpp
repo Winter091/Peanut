@@ -1,6 +1,6 @@
 #include "VertexBuffer.hpp"
 
-#include <Peanut/Render/RenderCommand.hpp>
+#include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
 
 #include <Peanut/Render/Buffers/Impl/OpenGLVertexBuffer.hpp>

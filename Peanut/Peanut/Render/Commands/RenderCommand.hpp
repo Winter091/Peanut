@@ -2,7 +2,7 @@
 #define __RENDERCOMMAND_H__
 
 #include <Peanut/Render/RenderAPI.hpp>
-#include <Peanut/Render/RenderCommandImpl.hpp>
+#include <Peanut/Render/Commands/RenderCommandImpl.hpp>
 #include <glm/vec4.hpp>
 #include <memory>
 
@@ -19,7 +19,8 @@ public:
     static void SetClearColor(const glm::vec4& color);
     static void Clear();
     
-    static void DrawArrays(uint32_t first, uint32_t count);
+    static void DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0);
+    static void DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0);
 
 private:
     static RenderAPI s_renderAPI;

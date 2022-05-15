@@ -1,6 +1,6 @@
 #include <Peanut/Core/Log.hpp>
 #include <Peanut/Application/Application.hpp>
-#include <Peanut/Render/RenderCommand.hpp>
+#include <Peanut/Render/Commands/RenderCommand.hpp>
 
 namespace pn {
 
