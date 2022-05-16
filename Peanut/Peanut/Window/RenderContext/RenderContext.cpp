@@ -1,6 +1,7 @@
 #include "RenderContext.hpp"
 
 #include <Peanut/Window/RenderContext/Impl/OpenGLGLFWRenderContext.hpp>
+#include <Peanut/Window/RenderContext/Impl/DX11GLFWRenderContext.hpp>
 #include <Peanut/Core/PlatformDetection.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Window/Window/Window.hpp>
@@ -28,6 +29,8 @@ std::unique_ptr<RenderContext> RenderContext::Create()
                     return nullptr;
                 case RenderAPI::OpenGL:
                     return std::make_unique<OpenGLGLFWRenderContext>();
+                case RenderAPI::DirectX11:
+                    return std::make_unique<DX11GLFWRenderContext>();
             }
         }
     }

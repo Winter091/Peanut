@@ -17,6 +17,15 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
+# ===========================================================================
+
+# ===========================================================================
+
+
+
+
+
+
 # Build GLFW alongside with Peanut
 set(GLFW_BUILD_DOCS     OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
@@ -62,5 +71,6 @@ target_include_directories(
 target_link_libraries(
     Peanut PRIVATE 
     glfw
-    spdlog 
+    spdlog
+    d3d11
 )

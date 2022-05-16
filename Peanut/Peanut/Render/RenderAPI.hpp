@@ -9,6 +9,7 @@ enum class RenderAPI : uint32_t
 {
     None = 0,
     OpenGL,
+    DirectX11,
 };
 
 }
