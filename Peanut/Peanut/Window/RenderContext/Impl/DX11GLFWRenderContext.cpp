@@ -23,6 +23,16 @@ DX11GLFWRenderContext::DX11GLFWRenderContext()
     PN_CORE_INFO("Using DX11-GLFW Render Context");
 }
 
+DX11GLFWRenderContext::~DX11GLFWRenderContext()
+{
+	m_swapChain->SetFullscreenState(false, nullptr);
+
+	m_renderTargetView->Release();
+	m_deviceContext->Release();
+	m_device->Release();
+	m_swapChain->Release();
+}
+
 void DX11GLFWRenderContext::PreWindowSetup()
 {
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -88,7 +98,7 @@ static DXGI_SWAP_CHAIN_DESC SetupSwapChainDesc(HWND window, int windowWidth, int
 	swapChain.SampleDesc.Count = 1;
 	swapChain.SampleDesc.Quality = 0;
 
-    // TODO: handle window size stuff correctly
+    // TODO: handle full screen mode
 	swapChain.Windowed = true;
 
 	swapChain.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;

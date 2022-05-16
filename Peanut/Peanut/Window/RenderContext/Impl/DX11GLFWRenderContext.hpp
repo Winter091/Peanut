@@ -18,7 +18,7 @@ public:
     DX11GLFWRenderContext();
     DX11GLFWRenderContext(const DX11GLFWRenderContext&) = delete;
     DX11GLFWRenderContext& operator=(const DX11GLFWRenderContext&) = delete;
-    ~DX11GLFWRenderContext() override = default;
+    ~DX11GLFWRenderContext() override;
 
     void PreWindowSetup() override;
     void PostWindowSetup(Window& window) override;
