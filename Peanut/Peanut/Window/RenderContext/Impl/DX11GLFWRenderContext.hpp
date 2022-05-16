@@ -23,6 +23,7 @@ public:
     void PreWindowSetup() override;
     void PostWindowSetup(Window& window) override;
     void SetCurrentContext(Window& window) override;
+    void SetSwapInterval(int interval) override;
     void SwapBuffers(Window& window) override;
     void OnWindowResize(Window& window) override;
 
@@ -42,6 +43,8 @@ private:
     ID3D11RenderTargetView* m_renderTargetView;
     ID3D11DeviceContext* m_deviceContext;
     IDXGISwapChain* m_swapChain;
+
+    int m_swapInterval;
 };
 
 }

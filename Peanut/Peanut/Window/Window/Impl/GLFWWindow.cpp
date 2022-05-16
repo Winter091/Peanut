@@ -183,7 +183,7 @@ void GLFWWindow::SetSwapInterval(int interval)
 {
     PN_CORE_ASSERT(interval >= 0, "Negative swap interval is provided: {}", interval);
     m_data.swapInterval = interval;
-    glfwSwapInterval(interval);
+    GetRenderContext().SetSwapInterval(interval);
 }
 
 }

@@ -137,9 +137,14 @@ void DX11GLFWRenderContext::SetCurrentContext(Window& /*window*/)
     s_currentContext = this;
 }
 
+void DX11GLFWRenderContext::SetSwapInterval(int interval)
+{
+    m_swapInterval = interval;
+}
+
 void DX11GLFWRenderContext::SwapBuffers(Window& /*window*/)
 {
-    m_swapChain->Present(1, 0);
+    m_swapChain->Present(m_swapInterval, 0);
 }
 
 DX11GLFWRenderContext& DX11GLFWRenderContext::GetCurrentContext()
