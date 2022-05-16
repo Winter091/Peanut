@@ -28,39 +28,13 @@ void DX11GLFWRenderContext::PreWindowSetup()
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 }
 
+static DXGI_SWAP_CHAIN_DESC SetupSwapChainDesc(HWND window, int windowWidth, int windowHeight);
+
 void DX11GLFWRenderContext::PostWindowSetup(Window& window)
 {
-    D3D_FEATURE_LEVEL dxVersion = D3D_FEATURE_LEVEL_11_1;
-
-    DXGI_SWAP_CHAIN_DESC swapChainDesc;
-    memset(&swapChainDesc, 0, sizeof(swapChainDesc));
-
-    swapChainDesc.BufferCount = 1;
-    swapChainDesc.BufferDesc.Width = window.GetWidth();
-    swapChainDesc.BufferDesc.Height = window.GetHeight();
-    swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-    swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
-	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-
-    auto handle = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
-	swapChainDesc.OutputWindow = glfwGetWin32Window(handle);
-
-	// Turn multisampling off
-	swapChainDesc.SampleDesc.Count = 1;
-	swapChainDesc.SampleDesc.Quality = 0;
-
-    // TODO: handle window size stuff correctly
-	swapChainDesc.Windowed = true;
-
-	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-
-	swapChainDesc.Flags = 0;
+    auto glfwWindow = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
+    auto winWindow = glfwGetWin32Window(glfwWindow);
+    auto swapChain = SetupSwapChainDesc(winWindow, window.GetWidth(), window.GetHeight());
 
     uint32_t contextFlags = D3D11_CREATE_DEVICE_SINGLETHREADED | D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
 #ifdef PN_DEBUG
@@ -70,13 +44,15 @@ void DX11GLFWRenderContext::PostWindowSetup(Window& window)
         PN_CORE_INFO("Requesting DirectX 11.1");
 #endif
 
+    D3D_FEATURE_LEVEL dxVersion = D3D_FEATURE_LEVEL_11_1;
+
     HRESULT result = D3D11CreateDeviceAndSwapChain(
         nullptr, D3D_DRIVER_TYPE_HARDWARE, // Use default hardware render adapter
         nullptr,
         contextFlags,
         &dxVersion, 1,
         D3D11_SDK_VERSION,
-        &swapChainDesc,
+        &swapChain,
         &m_swapChain,
         &m_device,
         nullptr,
@@ -88,20 +64,53 @@ void DX11GLFWRenderContext::PostWindowSetup(Window& window)
     }
 
     ID3D11Texture2D* backBufferPtr;
-	result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr);
+	result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferPtr);
 	if(FAILED(result)) {
-		PN_CORE_ASSERT(false, "Unable to get back buffer");
+		PN_CORE_ASSERT(false, "Unable to retreive back buffer texture");
 	}
 
 	result = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
 	if(FAILED(result)) {
-		PN_CORE_ASSERT(false, "Unable to get render target view");
+		PN_CORE_ASSERT(false, "Unable to retreive render target view of back buffer texture");
 	}
 
 	backBufferPtr->Release();
-	backBufferPtr = 0;
 
     SetCurrentContext(window);
+}
+
+static DXGI_SWAP_CHAIN_DESC SetupSwapChainDesc(HWND window, int windowWidth, int windowHeight)
+{
+    DXGI_SWAP_CHAIN_DESC swapChain;
+    memset(&swapChain, 0, sizeof(swapChain));
+
+    swapChain.BufferCount = 1;
+    swapChain.BufferDesc.Width = windowWidth;
+    swapChain.BufferDesc.Height = windowHeight;
+    swapChain.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+    swapChain.BufferDesc.RefreshRate.Numerator = 0;
+	swapChain.BufferDesc.RefreshRate.Denominator = 1;
+
+	swapChain.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+
+	swapChain.OutputWindow = window;
+
+	// Turn multisampling off
+	swapChain.SampleDesc.Count = 1;
+	swapChain.SampleDesc.Quality = 0;
+
+    // TODO: handle window size stuff correctly
+	swapChain.Windowed = true;
+
+	swapChain.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapChain.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+	swapChain.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+
+	swapChain.Flags = 0;
+
+    return swapChain;
 }
 
 void DX11GLFWRenderContext::SetCurrentContext(Window& /*window*/)
