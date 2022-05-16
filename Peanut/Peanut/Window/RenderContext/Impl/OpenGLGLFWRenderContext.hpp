@@ -18,6 +18,7 @@ public:
     void PostWindowSetup(Window& window) override;
     void SetCurrentContext(Window& window) override;
     void SwapBuffers(Window& window) override;
+    void OnWindowResize(Window& window) override;
 
 private:
     void InitializeGlad();

@@ -17,20 +17,21 @@ GLFWWindow::GLFWWindow(const WindowSettings& settings)
     PN_CORE_INFO("Using GLFW Window: {}x{}, title: {}", 
         settings.width, settings.height, settings.title);
 
+    m_data.thisPtr = this;
     m_data.width = settings.width;
     m_data.height = settings.height;
     m_data.title = settings.title;
 
     OnWindowCreate();
 
-    m_renderContext->PreWindowSetup();
+    GetRenderContext().PreWindowSetup();
     {
         m_data.glfwHandle = glfwCreateWindow(
             m_data.width, m_data.height, m_data.title.c_str(), nullptr, nullptr
         );
         PN_CORE_ASSERT(m_data.glfwHandle, "Unable to create GLFW window!");
     }
-    m_renderContext->PostWindowSetup(*this);
+    GetRenderContext().PostWindowSetup(*this);
     
     SetupGlfwCallbacks();
     SetSwapInterval(settings.swapInterval);
@@ -119,7 +120,9 @@ void GLFWWindow::SetupGlfwCallbacks()
     glfwSetFramebufferSizeCallback(m_data.glfwHandle, 
         [](GLFWwindow* window, int width, int height) {
             auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-            
+
+            data->thisPtr->GetRenderContext().OnWindowResize(*data->thisPtr);
+
             data->width = width;
             data->height = height;
 
@@ -156,7 +159,7 @@ void GLFWWindow::SetEventCallbackFunc(const EventCallbackFunc& func)
 void GLFWWindow::Update()
 {
     glfwPollEvents();
-    m_renderContext->SwapBuffers(*this);
+    GetRenderContext().SwapBuffers(*this);
 }
 
 bool GLFWWindow::ShouldClose() const

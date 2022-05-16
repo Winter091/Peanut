@@ -39,10 +39,10 @@ public:
 
     virtual void SetSwapInterval(int interval) = 0;
 
-protected:
-    std::unique_ptr<RenderContext> m_renderContext;
+    RenderContext& GetRenderContext() { return *m_renderContext; }
 
 private:
+    std::unique_ptr<RenderContext> m_renderContext;
     static WindowProvider s_windowProvider;
     static bool s_isInitialized;
 };

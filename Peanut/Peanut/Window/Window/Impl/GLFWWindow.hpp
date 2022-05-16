@@ -35,6 +35,7 @@ private:
     // m_data will be available using glfwGetWindowUserPointer(),
     // it's required while setting up callbacks
     struct WindowData {
+        GLFWWindow* thisPtr;
         GLFWwindow* glfwHandle;
 
         int width;

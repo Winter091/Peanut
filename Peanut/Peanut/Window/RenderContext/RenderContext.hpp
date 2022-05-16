@@ -20,6 +20,7 @@ public:
     virtual void PostWindowSetup(Window& window) = 0;
     virtual void SetCurrentContext(Window& window) = 0;
     virtual void SwapBuffers(Window& window) = 0;
+    virtual void OnWindowResize(Window& window) = 0;
 
 protected:
     RenderContext() = default;

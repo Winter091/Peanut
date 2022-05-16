@@ -4,6 +4,7 @@
 #include <Peanut/Window/RenderContext/RenderContext.hpp>
 #include <Peanut/Core/Log.hpp>
 
+// I don't want to include DX11 headers here
 struct ID3D11Device;
 struct ID3D11RenderTargetView;
 struct ID3D11DeviceContext;
@@ -23,12 +24,16 @@ public:
     void PostWindowSetup(Window& window) override;
     void SetCurrentContext(Window& window) override;
     void SwapBuffers(Window& window) override;
+    void OnWindowResize(Window& window) override;
 
     ID3D11Device* GetDevice() { return m_device; }
     ID3D11RenderTargetView* GetRenderTargetView() { return m_renderTargetView; }
     ID3D11DeviceContext* GetDeviceContext() { return m_deviceContext; }
 
     static DX11GLFWRenderContext& GetCurrentContext();
+
+private:
+    void SetupRenderTarget();
 
 private:
     static DX11GLFWRenderContext* s_currentContext;

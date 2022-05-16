@@ -32,19 +32,19 @@ static DXGI_SWAP_CHAIN_DESC SetupSwapChainDesc(HWND window, int windowWidth, int
 
 void DX11GLFWRenderContext::PostWindowSetup(Window& window)
 {
-    auto glfwWindow = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
-    auto winWindow = glfwGetWin32Window(glfwWindow);
-    auto swapChain = SetupSwapChainDesc(winWindow, window.GetWidth(), window.GetHeight());
-
     uint32_t contextFlags = D3D11_CREATE_DEVICE_SINGLETHREADED | D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
 #ifdef PN_DEBUG
-        contextFlags |= D3D11_CREATE_DEVICE_DEBUG;
-        PN_CORE_INFO("Requesting DirectX 11.1 with debug layer");
+    contextFlags |= D3D11_CREATE_DEVICE_DEBUG;
+    PN_CORE_INFO("Requesting DirectX 11.1 with debug layer");
 #else
-        PN_CORE_INFO("Requesting DirectX 11.1");
+    PN_CORE_INFO("Requesting DirectX 11.1");
 #endif
 
     D3D_FEATURE_LEVEL dxVersion = D3D_FEATURE_LEVEL_11_1;
+
+    auto glfwWindow = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
+    auto winWindow = glfwGetWin32Window(glfwWindow);
+    auto swapChain = SetupSwapChainDesc(winWindow, window.GetWidth(), window.GetHeight());
 
     HRESULT result = D3D11CreateDeviceAndSwapChain(
         nullptr, D3D_DRIVER_TYPE_HARDWARE, // Use default hardware render adapter
@@ -63,19 +63,7 @@ void DX11GLFWRenderContext::PostWindowSetup(Window& window)
         PN_CORE_ASSERT(false, "Unable to create swap chain!");
     }
 
-    ID3D11Texture2D* backBufferPtr;
-	result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferPtr);
-	if(FAILED(result)) {
-		PN_CORE_ASSERT(false, "Unable to retreive back buffer texture");
-	}
-
-	result = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
-	if(FAILED(result)) {
-		PN_CORE_ASSERT(false, "Unable to retreive render target view of back buffer texture");
-	}
-
-	backBufferPtr->Release();
-
+    SetupRenderTarget();
     SetCurrentContext(window);
 }
 
@@ -113,13 +101,44 @@ static DXGI_SWAP_CHAIN_DESC SetupSwapChainDesc(HWND window, int windowWidth, int
     return swapChain;
 }
 
+void DX11GLFWRenderContext::SetupRenderTarget()
+{
+    ID3D11Texture2D* backBufferPtr;
+    HRESULT hr = m_swapChain->GetBuffer(0, __uuidof( ID3D11Texture2D), (void**)&backBufferPtr);
+    if (FAILED(hr)) {
+        PN_CORE_ASSERT(false, "IDXGISwapChain::GetBuffer() failed");
+    }
+
+    hr = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
+    if (FAILED(hr)) {
+        PN_CORE_ASSERT(false, "ID3D11Device::CreateRenderTargetView() failed");
+    }
+
+    backBufferPtr->Release();
+
+    m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, nullptr);
+}
+
+void DX11GLFWRenderContext::OnWindowResize(Window& /*window*/)
+{
+    m_deviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+    m_renderTargetView->Release();
+
+    HRESULT hr = m_swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+    if (FAILED(hr)) {
+        PN_CORE_ASSERT(false, "IDXGISwapChain::ResizeBuffers() failed");
+    }
+
+    SetupRenderTarget();
+}
+
 void DX11GLFWRenderContext::SetCurrentContext(Window& /*window*/)
 {
     s_currentContext = this;
 }
 
 void DX11GLFWRenderContext::SwapBuffers(Window& /*window*/)
-{    
+{
     m_swapChain->Present(1, 0);
 }
 
