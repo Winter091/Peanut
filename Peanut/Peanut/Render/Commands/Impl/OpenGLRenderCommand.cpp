@@ -20,6 +20,11 @@ void OpenGLRenderCommand::Clear()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void OpenGLRenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height)
+{
+    glViewport(leftX, bottomY, width, height);
+}
+
 void OpenGLRenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
     PN_CORE_ASSERT(vertexArray->GetIsVertexBufferInitialized(), "Vertex buffer or its data is not initialized");

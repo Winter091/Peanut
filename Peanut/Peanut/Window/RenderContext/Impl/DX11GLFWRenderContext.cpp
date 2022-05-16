@@ -62,8 +62,6 @@ void DX11GLFWRenderContext::PostWindowSetup(Window& window)
 
 	swapChainDesc.Flags = 0;
 
-    D3D_FEATURE_LEVEL obtainedFeatureLevel;
-
     HRESULT hr = D3D11CreateDeviceAndSwapChain(
         nullptr, D3D_DRIVER_TYPE_HARDWARE, // Use default hardware render adapter
         nullptr,
@@ -77,7 +75,7 @@ void DX11GLFWRenderContext::PostWindowSetup(Window& window)
         &swapChainDesc,
         &m_swapChain,
         &m_device,
-        &obtainedFeatureLevel,
+        nullptr,
         &m_deviceContext
     );
 
@@ -99,24 +97,7 @@ void DX11GLFWRenderContext::PostWindowSetup(Window& window)
 	backBufferPtr->Release();
 	backBufferPtr = 0;
 
-    D3D11_VIEWPORT viewport;
-	viewport.Width =  static_cast<float>(window.GetWidth());
-	viewport.Height = static_cast<float>(window.GetHeight());
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
-	viewport.TopLeftX = 0.0f;
-	viewport.TopLeftY = 0.0f;
-
-	// TODO: Create viewport setter in Window class
-	m_deviceContext->RSSetViewports(1, &viewport);
-
     SetCurrentContext(window);
-
-    PN_CORE_INFO("==========================================");
-    bool isUsingDX11 = (D3D_FEATURE_LEVEL_11_1 == static_cast<uint32_t>(obtainedFeatureLevel));
-
-    PN_CORE_INFO("\tUsing DirectX 11.1: {}", isUsingDX11);
-    PN_CORE_INFO("==========================================");
 }
 
 void DX11GLFWRenderContext::SetCurrentContext(Window& /*window*/)
@@ -131,7 +112,7 @@ void DX11GLFWRenderContext::SwapBuffers(Window& /*window*/)
 
 DX11GLFWRenderContext& DX11GLFWRenderContext::GetCurrentContext()
 {
-    PN_CORE_ASSERT(s_currentContext, "Trying to get context, but it's nullptr");
+    PN_CORE_ASSERT(s_currentContext, "Trying to get context, but it's not set");
     return *s_currentContext;
 }
 
