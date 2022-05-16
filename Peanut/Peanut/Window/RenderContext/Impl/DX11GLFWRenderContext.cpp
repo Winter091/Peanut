@@ -62,14 +62,18 @@ void DX11GLFWRenderContext::PostWindowSetup(Window& window)
 
 	swapChainDesc.Flags = 0;
 
-    HRESULT hr = D3D11CreateDeviceAndSwapChain(
+    uint32_t contextFlags = D3D11_CREATE_DEVICE_SINGLETHREADED | D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
+#ifdef PN_DEBUG
+        contextFlags |= D3D11_CREATE_DEVICE_DEBUG;
+        PN_CORE_INFO("Requesting DirectX 11.1 with debug layer");
+#else
+        PN_CORE_INFO("Requesting DirectX 11.1");
+#endif
+
+    HRESULT result = D3D11CreateDeviceAndSwapChain(
         nullptr, D3D_DRIVER_TYPE_HARDWARE, // Use default hardware render adapter
         nullptr,
-#ifdef PN_DEBUG
-        D3D11_CREATE_DEVICE_SINGLETHREADED | D3D11_CREATE_DEVICE_VIDEO_SUPPORT | D3D11_CREATE_DEVICE_DEBUG,
-#else
-        D3D11_CREATE_DEVICE_SINGLETHREADED | D3D11_CREATE_DEVICE_VIDEO_SUPPORT,
-#endif
+        contextFlags,
         &dxVersion, 1,
         D3D11_SDK_VERSION,
         &swapChainDesc,
@@ -79,12 +83,12 @@ void DX11GLFWRenderContext::PostWindowSetup(Window& window)
         &m_deviceContext
     );
 
-    if (hr != S_OK) {
+    if (result != S_OK) {
         PN_CORE_ASSERT(false, "Unable to create swap chain!");
     }
 
     ID3D11Texture2D* backBufferPtr;
-	HRESULT result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr);
+	result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr);
 	if(FAILED(result)) {
 		PN_CORE_ASSERT(false, "Unable to get back buffer");
 	}
