@@ -3,6 +3,7 @@
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/PlatformDetection.hpp>
 #include <Peanut/Render/Commands/Impl/OpenGLRenderCommand.hpp>
+#include <Peanut/Render/Commands/Impl/DX11RenderCommand.hpp>
 
 namespace pn
 {
@@ -20,8 +21,8 @@ void RenderCommand::Init()
     s_isInitialized = true;
 
 #if defined(PN_PLATFORM_WINDOWS)
-    s_renderAPI = RenderAPI::DirectX11;
-    s_renderCommandImpl = std::make_unique<OpenGLRenderCommand>();
+    s_renderAPI = RenderAPI::DX11;
+    s_renderCommandImpl = std::make_unique<DX11RenderCommand>();
 #elif defined(PN_PLATFORM_LINUX)
     s_renderAPI = RenderAPI::OpenGL;
     s_renderCommandImpl = std::make_unique<OpenGLRenderCommand>();

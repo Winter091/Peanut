@@ -29,7 +29,7 @@ std::unique_ptr<RenderContext> RenderContext::Create()
                     return nullptr;
                 case RenderAPI::OpenGL:
                     return std::make_unique<OpenGLGLFWRenderContext>();
-                case RenderAPI::DirectX11:
+                case RenderAPI::DX11:
                     return std::make_unique<DX11GLFWRenderContext>();
             }
         }

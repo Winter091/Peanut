@@ -4,6 +4,7 @@
 #include <Peanut/Window/RenderContext/RenderContext.hpp>
 #include <Peanut/Core/Log.hpp>
 
+struct ID3D11Device;
 struct ID3D11RenderTargetView;
 struct ID3D11DeviceContext;
 struct IDXGISwapChain;
@@ -23,7 +24,16 @@ public:
     void SetCurrentContext(Window& window) override;
     void SwapBuffers(Window& window) override;
 
+    ID3D11Device* GetDevice() { return m_device; }
+    ID3D11RenderTargetView* GetRenderTargetView() { return m_renderTargetView; }
+    ID3D11DeviceContext* GetDeviceContext() { return m_deviceContext; }
+
+    static DX11GLFWRenderContext& GetCurrentContext();
+
 private:
+    static DX11GLFWRenderContext* s_currentContext;
+
+    ID3D11Device* m_device;
     ID3D11RenderTargetView* m_renderTargetView;
     ID3D11DeviceContext* m_deviceContext;
     IDXGISwapChain* m_swapChain;

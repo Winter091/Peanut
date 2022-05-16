@@ -14,11 +14,13 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
 void SandboxApp::OnEvent(const pn::Event& event)
 {
-    
+    PN_CLIENT_DEBUG("Received event: {}", event.ToString());
 }
 
 void SandboxApp::OnUpdate()
 {
+    pn::RenderCommand::SetClearColor({0.2, 0.3, 0.4, 1.0});
+    pn::RenderCommand::Clear();
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)

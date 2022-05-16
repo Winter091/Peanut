@@ -3,8 +3,6 @@
 #include <Peanut/Core/Assert.hpp>
 #include <glad/glad.h>
 
-#include <Peanut/Render/Buffers/Impl/OpenGLIndexBuffer.hpp>
-
 namespace pn {
 
 OpenGLRenderCommand::OpenGLRenderCommand()
