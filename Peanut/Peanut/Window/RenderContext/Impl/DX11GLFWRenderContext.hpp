@@ -9,6 +9,7 @@ struct ID3D11Device;
 struct ID3D11RenderTargetView;
 struct ID3D11DeviceContext;
 struct IDXGISwapChain;
+struct IDXGIAdapter;
 
 namespace pn {
 
@@ -35,6 +36,8 @@ public:
 
 private:
     void SetupRenderTarget();
+    IDXGIAdapter* GetPrimaryAdapter();
+    void PrintAdapterInfo(IDXGIAdapter* adapter);
 
 private:
     static DX11GLFWRenderContext* s_currentContext;

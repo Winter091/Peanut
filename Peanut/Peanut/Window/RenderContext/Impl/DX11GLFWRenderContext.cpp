@@ -42,6 +42,8 @@ static DXGI_SWAP_CHAIN_DESC SetupSwapChainDesc(HWND window, int windowWidth, int
 
 void DX11GLFWRenderContext::PostWindowSetup(Window& window)
 {
+    auto* adapter = GetPrimaryAdapter();
+    
     uint32_t contextFlags = D3D11_CREATE_DEVICE_SINGLETHREADED | D3D11_CREATE_DEVICE_VIDEO_SUPPORT;
 #ifdef PN_DEBUG
     contextFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -75,6 +77,8 @@ void DX11GLFWRenderContext::PostWindowSetup(Window& window)
 
     SetupRenderTarget();
     SetCurrentContext(window);
+
+    PrintAdapterInfo(adapter);
 }
 
 static DXGI_SWAP_CHAIN_DESC SetupSwapChainDesc(HWND window, int windowWidth, int windowHeight)
@@ -109,6 +113,35 @@ static DXGI_SWAP_CHAIN_DESC SetupSwapChainDesc(HWND window, int windowWidth, int
 	swapChain.Flags = 0;
 
     return swapChain;
+}
+
+IDXGIAdapter* DX11GLFWRenderContext::GetPrimaryAdapter()
+{
+    IDXGIFactory* factory;
+	CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
+
+    IDXGIAdapter* adapter;
+	factory->EnumAdapters(0, &adapter);
+
+    return adapter;
+}
+
+void DX11GLFWRenderContext::PrintAdapterInfo(IDXGIAdapter* adapter)
+{
+    DXGI_ADAPTER_DESC adapterInfo;
+	adapter->GetDesc(&adapterInfo);
+
+    char buf[128] = {0};
+    for (int i = 0; i < 128 && adapterInfo.Description[i]; i++) {
+        buf[i] = static_cast<char>(adapterInfo.Description[i]);
+    }
+
+	uint32_t vramMb = (uint32_t)(adapterInfo.DedicatedVideoMemory / 1024 / 1024);
+
+    PN_CORE_INFO("==========================================");
+    PN_CORE_INFO("\tAdapter: {}", buf);
+    PN_CORE_INFO("\tVRAM: {} MB", vramMb);
+    PN_CORE_INFO("==========================================");
 }
 
 void DX11GLFWRenderContext::SetupRenderTarget()

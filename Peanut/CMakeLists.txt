@@ -73,4 +73,5 @@ target_link_libraries(
     glfw
     spdlog
     d3d11
+    DXGI
 )
