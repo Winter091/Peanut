@@ -24,8 +24,10 @@ public:
     void OnWindowResize(Window& window) override;
 
     ID3D11Device* GetDevice() { return m_device; }
-    ID3D11RenderTargetView* GetRenderTargetView() { return m_renderTargetView; }
     ID3D11DeviceContext* GetDeviceContext() { return m_deviceContext; }
+
+    ID3D11RenderTargetView* GetRenderTargetView() { return m_renderTargetView; }
+    ID3D11DepthStencilView* GetDepthStencilView() { return m_depthStencilView; }
 
     static DX11GLFWRenderContext& GetCurrentContext();
 

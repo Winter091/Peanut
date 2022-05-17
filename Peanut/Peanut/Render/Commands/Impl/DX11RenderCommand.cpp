@@ -22,9 +22,12 @@ void DX11RenderCommand::Clear()
 {
     auto& context = DX11GLFWRenderContext::GetCurrentContext();
     auto* deviceContext = context.GetDeviceContext();
-    auto* renderTargetView = context.GetRenderTargetView();
 
+    auto* renderTargetView = context.GetRenderTargetView();
 	deviceContext->ClearRenderTargetView(renderTargetView, &m_clearColor[0]);
+
+    auto* depthStencilView = context.GetDepthStencilView();
+    deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 1);
 }
 
 void DX11RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height)
