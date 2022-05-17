@@ -34,11 +34,8 @@ public:
 private:
     void CreateDeviceAndSwapChain(HWND window, int windowWidth, int windowHeight, bool createDebugContext);
 
-    void SetupRenderTarget();
     void InitDepthBuffer(int windowWidth, int windowHeight);
     void RecreateDepthBuffer(int windowWidth, int windowHeight);
-
-    void PrintAdapterInfo(IDXGIAdapter* adapter);
 
 private:
     static DX11GLFWRenderContext* s_currentContext;

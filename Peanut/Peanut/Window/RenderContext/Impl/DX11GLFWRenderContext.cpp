@@ -18,10 +18,10 @@ namespace pn
 DX11GLFWRenderContext* DX11GLFWRenderContext::s_currentContext = nullptr;
 
 
-IDXGIAdapter* GetPrimaryAdapter()
+static IDXGIAdapter* GetPrimaryAdapter()
 {
     IDXGIFactory1* factory;
-	CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&factory);
+	CreateDXGIFactory1(IID_IDXGIFactory1, (void**)&factory);
 
     IDXGIAdapter* adapter;
 	factory->EnumAdapters(0, &adapter);
@@ -30,7 +30,7 @@ IDXGIAdapter* GetPrimaryAdapter()
 }
 
 
-void DX11GLFWRenderContext::PrintAdapterInfo(IDXGIAdapter* adapter)
+static void PrintAdapterInfo(IDXGIAdapter* adapter)
 {
     DXGI_ADAPTER_DESC adapterInfo;
 	adapter->GetDesc(&adapterInfo);
@@ -87,7 +87,7 @@ static DXGI_SWAP_CHAIN_DESC GetSwapChainDesc(HWND window, int windowWidth, int w
 static ID3D11RenderTargetView* CreateRenderTargetView(ID3D11Device* device, IDXGISwapChain* swapChain)
 {
     ID3D11Texture2D* backBufferPtr;
-    HRESULT hr = swapChain->GetBuffer(0, __uuidof( ID3D11Texture2D), (void**)&backBufferPtr);
+    HRESULT hr = swapChain->GetBuffer(0, IID_ID3D11Texture2D, (void**)&backBufferPtr);
     if (FAILED(hr)) {
         PN_CORE_ASSERT(false, "IDXGISwapChain::GetBuffer() failed");
     }
@@ -191,6 +191,8 @@ DX11GLFWRenderContext::~DX11GLFWRenderContext()
 	m_swapChain->SetFullscreenState(false, nullptr);
 
 	m_renderTargetView->Release();
+    m_depthStencilView->Release();
+
 	m_deviceContext->Release();
 	m_device->Release();
 	m_swapChain->Release();
