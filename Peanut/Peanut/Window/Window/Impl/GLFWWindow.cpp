@@ -121,10 +121,10 @@ void GLFWWindow::SetupGlfwCallbacks()
         [](GLFWwindow* window, int width, int height) {
             auto data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
-            data->thisPtr->GetRenderContext().OnWindowResize(*data->thisPtr);
-
             data->width = width;
             data->height = height;
+
+            data->thisPtr->GetRenderContext().OnWindowResize(*data->thisPtr);
 
             WindowSizeChangedEvent event(width, height);
             data->eventCallbackFunc(event);

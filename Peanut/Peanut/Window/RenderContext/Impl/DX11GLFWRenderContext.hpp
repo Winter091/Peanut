@@ -4,15 +4,7 @@
 #include <Peanut/Window/RenderContext/RenderContext.hpp>
 #include <Peanut/Core/Log.hpp>
 
-// I don't want to include DX11 headers here
-struct ID3D11Device;
-struct ID3D11RenderTargetView;
-struct ID3D11DeviceContext;
-struct IDXGISwapChain;
-struct IDXGIAdapter;
-struct ID3D11Texture2D;
-struct ID3D11DepthStencilState;
-struct ID3D11DepthStencilView;
+#include <d3d11.h>
 
 namespace pn {
 
@@ -38,23 +30,25 @@ public:
     static DX11GLFWRenderContext& GetCurrentContext();
 
 private:
-    void SetupRenderTarget();
-    void SetupDepthStencilBuffer(int windowWidth, int windowHeight);
+    void CreateDeviceAndSwapChain(HWND window, int windowWidth, int windowHeight, bool createDebugContext);
 
-    IDXGIAdapter* GetPrimaryAdapter();
+    void SetupRenderTarget();
+    void InitDepthBuffer(int windowWidth, int windowHeight);
+    void RecreateDepthBuffer(int windowWidth, int windowHeight);
+
     void PrintAdapterInfo(IDXGIAdapter* adapter);
 
 private:
     static DX11GLFWRenderContext* s_currentContext;
 
-    ID3D11Device* m_device;
-    ID3D11RenderTargetView* m_renderTargetView;
-    ID3D11DeviceContext* m_deviceContext;
-    IDXGISwapChain* m_swapChain;
+    ID3D11Device* m_device = nullptr;
+    ID3D11RenderTargetView* m_renderTargetView = nullptr;
+    ID3D11DeviceContext* m_deviceContext = nullptr;
+    IDXGISwapChain* m_swapChain = nullptr;
 
-    ID3D11Texture2D* m_depthStencilBufferTexture;
-    ID3D11DepthStencilState* m_depthStencilState;
-    ID3D11DepthStencilView* m_depthStencilView;
+    ID3D11Texture2D* m_depthStencilBufferTexture = nullptr;
+    ID3D11DepthStencilState* m_depthStencilState = nullptr;
+    ID3D11DepthStencilView* m_depthStencilView = nullptr;
 
     int m_swapInterval;
 };
