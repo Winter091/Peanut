@@ -76,7 +76,10 @@ void DX11GLFWRenderContext::PostWindowSetup(Window& window)
     }
 
     SetupRenderTarget();
+    SetupDepthStencilBuffer(window.GetWidth(), window.GetHeight());
+
     SetCurrentContext(window);
+	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
     PrintAdapterInfo(adapter);
 }
@@ -152,14 +155,78 @@ void DX11GLFWRenderContext::SetupRenderTarget()
         PN_CORE_ASSERT(false, "IDXGISwapChain::GetBuffer() failed");
     }
 
-    hr = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
+    hr = m_device->CreateRenderTargetView(backBufferPtr, nullptr, &m_renderTargetView);
     if (FAILED(hr)) {
         PN_CORE_ASSERT(false, "ID3D11Device::CreateRenderTargetView() failed");
     }
 
     backBufferPtr->Release();
+}
 
-    m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, nullptr);
+void DX11GLFWRenderContext::SetupDepthStencilBuffer(int windowWidth, int windowHeight)
+{
+    D3D11_TEXTURE2D_DESC depthBufferDesc;
+    memset(&depthBufferDesc, 0, sizeof(depthBufferDesc));
+	depthBufferDesc.Width = windowWidth;
+	depthBufferDesc.Height = windowHeight;
+	depthBufferDesc.MipLevels = 1;
+	depthBufferDesc.ArraySize = 1;
+	depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthBufferDesc.SampleDesc.Count = 1;
+	depthBufferDesc.SampleDesc.Quality = 0;
+	depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthBufferDesc.CPUAccessFlags = 0;
+	depthBufferDesc.MiscFlags = 0;
+    {
+        HRESULT result = m_device->CreateTexture2D(&depthBufferDesc, nullptr, &m_depthStencilBufferTexture);
+        if(FAILED(result)) {
+            PN_CORE_ASSERT(false, "Failed to create depth buffer texture");
+        }
+    }
+
+    D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+    memset(&depthStencilDesc, 0, sizeof(depthStencilDesc));
+	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	depthStencilDesc.StencilEnable = true;
+	depthStencilDesc.StencilReadMask = 0xFF;
+	depthStencilDesc.StencilWriteMask = 0xFF;
+
+	depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+    {
+        HRESULT result = m_device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
+        if(FAILED(result)) {
+            PN_CORE_ASSERT(false, "Failed to create depth stencil state");
+        }
+        
+        int stencilRef = 1;
+        m_deviceContext->OMSetDepthStencilState(m_depthStencilState, stencilRef);
+    }
+
+    D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	memset(&depthStencilViewDesc, 0, sizeof(depthStencilViewDesc));
+
+	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Texture2D.MipSlice = 0;
+    {
+        HRESULT result = m_device->CreateDepthStencilView(
+            m_depthStencilBufferTexture, &depthStencilViewDesc, &m_depthStencilView);
+        if (FAILED(result)) {
+            PN_CORE_ASSERT(false, "Failed to create depth stencil view");
+        }
+    }
 }
 
 void DX11GLFWRenderContext::OnWindowResize(Window& /*window*/)
@@ -173,6 +240,7 @@ void DX11GLFWRenderContext::OnWindowResize(Window& /*window*/)
     }
 
     SetupRenderTarget();
+    m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 }
 
 void DX11GLFWRenderContext::SetCurrentContext(Window& /*window*/)

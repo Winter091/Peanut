@@ -10,6 +10,9 @@ struct ID3D11RenderTargetView;
 struct ID3D11DeviceContext;
 struct IDXGISwapChain;
 struct IDXGIAdapter;
+struct ID3D11Texture2D;
+struct ID3D11DepthStencilState;
+struct ID3D11DepthStencilView;
 
 namespace pn {
 
@@ -36,6 +39,8 @@ public:
 
 private:
     void SetupRenderTarget();
+    void SetupDepthStencilBuffer(int windowWidth, int windowHeight);
+
     IDXGIAdapter* GetPrimaryAdapter();
     void PrintAdapterInfo(IDXGIAdapter* adapter);
 
@@ -46,6 +51,10 @@ private:
     ID3D11RenderTargetView* m_renderTargetView;
     ID3D11DeviceContext* m_deviceContext;
     IDXGISwapChain* m_swapChain;
+
+    ID3D11Texture2D* m_depthStencilBufferTexture;
+    ID3D11DepthStencilState* m_depthStencilState;
+    ID3D11DepthStencilView* m_depthStencilView;
 
     int m_swapInterval;
 };
