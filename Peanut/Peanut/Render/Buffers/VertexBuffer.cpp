@@ -4,6 +4,7 @@
 #include <Peanut/Core/Assert.hpp>
 
 #include <Peanut/Render/Buffers/Impl/OpenGLVertexBuffer.hpp>
+#include <Peanut/Render/Buffers/Impl/DX11VertexBuffer.hpp>
 
 namespace pn {
 
@@ -17,6 +18,8 @@ std::shared_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size, const void* da
             break;
         case RenderAPI::OpenGL:
             return std::make_shared<OpenGLVertexBuffer>(size, data);
+        case RenderAPI::DX11:
+            return std::make_shared<DX11VertexBuffer>(size, data);
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;

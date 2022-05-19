@@ -9,7 +9,13 @@
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
-    
+    const float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f,
+    };
+
+    auto vertexBuffer = pn::VertexBuffer::Create(sizeof(vertices), nullptr);
 }
 
 void SandboxApp::OnEvent(const pn::Event& event)
