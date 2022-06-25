@@ -17,6 +17,7 @@ public:
     void PreWindowSetup() override;
     void PostWindowSetup(Window& window) override;
     void SetCurrentContext(Window& window) override;
+    void SetSwapInterval(int interval) override;
     void SwapBuffers(Window& window) override;
 
 private:

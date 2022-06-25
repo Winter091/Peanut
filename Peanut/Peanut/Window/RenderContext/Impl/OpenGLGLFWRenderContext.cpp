@@ -144,6 +144,11 @@ void OpenGLGLFWRenderContext::SetCurrentContext(Window& window)
     glfwMakeContextCurrent(handle);
 }
 
+void OpenGLGLFWRenderContext::SetSwapInterval(int interval)
+{
+    glfwSwapInterval(interval);
+}
+
 void OpenGLGLFWRenderContext::SwapBuffers(Window& window)
 {
     auto handle = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());

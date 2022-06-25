@@ -24,6 +24,7 @@ public:
     static void Init();
     static std::unique_ptr<Window> Create(const WindowSettings& settings);
     static WindowProvider GetWindowProvider();
+    RenderContext& GetRenderContext() { return *m_renderContext; }
 
     virtual void MakeContextCurrent() = 0;
     virtual void SetEventCallbackFunc(const EventCallbackFunc& func) = 0;
@@ -39,11 +40,9 @@ public:
 
     virtual void SetSwapInterval(int interval) = 0;
 
-protected:
-    std::unique_ptr<RenderContext> m_renderContext;
-
 private:
     static WindowProvider s_windowProvider;
+    std::unique_ptr<RenderContext> m_renderContext;
     static bool s_isInitialized;
 };
 

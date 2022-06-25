@@ -23,14 +23,14 @@ GLFWWindow::GLFWWindow(const WindowSettings& settings)
 
     OnWindowCreate();
 
-    m_renderContext->PreWindowSetup();
+    GetRenderContext().PreWindowSetup();
     {
         m_data.glfwHandle = glfwCreateWindow(
             m_data.width, m_data.height, m_data.title.c_str(), nullptr, nullptr
         );
         PN_CORE_ASSERT(m_data.glfwHandle, "Unable to create GLFW window!");
     }
-    m_renderContext->PostWindowSetup(*this);
+    GetRenderContext().PostWindowSetup(*this);
     
     SetupGlfwCallbacks();
     SetSwapInterval(settings.swapInterval);
@@ -156,7 +156,7 @@ void GLFWWindow::SetEventCallbackFunc(const EventCallbackFunc& func)
 void GLFWWindow::Update()
 {
     glfwPollEvents();
-    m_renderContext->SwapBuffers(*this);
+    GetRenderContext().SwapBuffers(*this);
 }
 
 bool GLFWWindow::ShouldClose() const
@@ -179,7 +179,7 @@ void GLFWWindow::SetSwapInterval(int interval)
 {
     PN_CORE_ASSERT(interval >= 0, "Negative swap interval is provided: {}", interval);
     m_data.swapInterval = interval;
-    glfwSwapInterval(interval);
+    GetRenderContext().SetSwapInterval(interval);
 }
 
 }
