@@ -26,7 +26,6 @@ public:
 
     virtual void ReplaceData(IndexBufferDataFormat format, const void* data, uint32_t size) = 0;
     virtual void UpdateData(const void* data, uint32_t size, uint32_t offset = 0) = 0;
-    virtual bool GetIsDataInitialized() const = 0;
 
     virtual uint32_t GetIndexCount() const = 0;
     virtual IndexBufferDataFormat GetDataFormat() const = 0;

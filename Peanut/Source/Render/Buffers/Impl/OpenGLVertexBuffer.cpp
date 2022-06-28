@@ -31,15 +31,16 @@ void OpenGLVertexBuffer::Unbind()
 
 void OpenGLVertexBuffer::ReplaceData(uint32_t size, const void* data)
 {
-    glNamedBufferData(m_handle, size, data, GL_STATIC_DRAW);
+    PN_CORE_ASSERT(size > 0u, "Unable to create index buffer with size = 0");
+    PN_CORE_ASSERT(data, "Buffer data cannot be nullptr");
 
+    glNamedBufferData(m_handle, size, data, GL_STATIC_DRAW);
     m_size = size;
-    m_isDataInitialized = (data != nullptr);
 }
 
 void OpenGLVertexBuffer::UpdateData(uint32_t size, const void* data, uint32_t offset)
 {
-    PN_CORE_ASSERT(data, "Data provided for UpdateData is nullptr");
+    PN_CORE_ASSERT(data, "Buffer data cannot be nullptr");
     PN_CORE_ASSERT(
         offset + size <= m_size, 
         "Trying to update data out of bounds: last buffer index = {}, update range = ({}, {})",
@@ -47,7 +48,6 @@ void OpenGLVertexBuffer::UpdateData(uint32_t size, const void* data, uint32_t of
     );
     
     glNamedBufferSubData(m_handle, offset, size, data);
-    m_isDataInitialized = true;
 }
 
 const std::shared_ptr<BufferLayout>& OpenGLVertexBuffer::GetLayout() const 

@@ -17,9 +17,6 @@ public:
     void SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) override;
     void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) override;
 
-    bool GetIsVertexBufferInitialized() const override;
-    bool GetIsIndexBufferInitialized() const override;
-
     uint32_t GetSize() const override;
     uint32_t GetVertexCount() const override;
     uint32_t GetIndexCount() const override;

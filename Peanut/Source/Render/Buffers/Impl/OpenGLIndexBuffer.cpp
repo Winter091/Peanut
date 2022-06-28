@@ -10,7 +10,6 @@ OpenGLIndexBuffer::OpenGLIndexBuffer(IndexBufferDataFormat format, uint32_t size
     : m_size(size)
     , m_indexCount(0u)
     , m_format(format)
-    , m_isDataInitialized(false)
 {
     PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
 
@@ -36,12 +35,12 @@ void OpenGLIndexBuffer::Unbind()
 void OpenGLIndexBuffer::ReplaceData(IndexBufferDataFormat format, const void* data, uint32_t size)
 {
     PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
+    PN_CORE_ASSERT(data, "Buffer data cannot be nullptr");
     
     glNamedBufferData(m_handle, size, data, GL_STATIC_DRAW);
 
     m_size = size;
     m_format = format;
-    m_isDataInitialized = (data != nullptr);
     UpdateIndexCount();
 }
 
@@ -55,7 +54,6 @@ void OpenGLIndexBuffer::UpdateData(const void* data, uint32_t size, uint32_t off
     );
     
     glNamedBufferSubData(m_handle, offset, size, data);
-    m_isDataInitialized = true;
 }
 
 uint32_t OpenGLIndexBuffer::GetGLDataTypeSize() const

@@ -24,8 +24,6 @@ void OpenGLRenderCommand::Clear()
 
 void OpenGLRenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
-    PN_CORE_ASSERT(vertexArray->GetIsVertexBufferInitialized(), "Vertex buffer or its data is not initialized");
-    
     if (count == 0) {
         count = vertexArray->GetVertexCount();
     }
@@ -36,9 +34,6 @@ void OpenGLRenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, 
 
 void OpenGLRenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
-    PN_CORE_ASSERT(vertexArray->GetIsVertexBufferInitialized(), "Vertex buffer or its data is not initialized");
-    PN_CORE_ASSERT(vertexArray->GetIsIndexBufferInitialized(), "Index buffer or its data is not initialized");
-
     if (count == 0) {
         count = vertexArray->GetIndexCount();
     }
