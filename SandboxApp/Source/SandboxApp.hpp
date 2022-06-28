@@ -1,11 +1,7 @@
 #ifndef __SANDBOXAPP_H__
 #define __SANDBOXAPP_H__
 
-#include <Peanut/Application/Application.hpp>
-
-#include <Peanut/Render/Buffers/VertexBuffer.hpp>
-#include <Peanut/Render/Buffers/VertexArray.hpp>
-#include <Peanut/Render/Shaders/Shader.hpp>
+#include <Peanut/Peanut.hpp>
 
 class SandboxApp final : public pn::Application
 {
