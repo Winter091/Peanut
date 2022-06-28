@@ -69,5 +69,3 @@ target_link_libraries(
     glfw
     spdlog 
 )
-
-set(PEANUT_INCLUDES "Include Deps/glm/include Deps/spdlog/include" CACHE STRING "")
