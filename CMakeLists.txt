@@ -31,13 +31,6 @@ else()
     )
 endif()
 
-get_target_property(PEANUT_INCLUDES Peanut INCLUDE_DIRECTORIES)
-
-target_include_directories(
-    SandboxSolution PRIVATE 
-    ${PEANUT_INCLUDES}
-)
-
 target_link_libraries(
     SandboxSolution PRIVATE
     Peanut

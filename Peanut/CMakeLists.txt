@@ -28,7 +28,7 @@ add_subdirectory(Deps/spdlog)
 
 add_library(Peanut)
 add_subdirectory(Deps)
-add_subdirectory(Peanut)
+add_subdirectory(Source)
 
 target_compile_definitions(Peanut PUBLIC SPDLOG_COMPILED_LIB)
 
@@ -52,9 +52,14 @@ endif()
 
 target_include_directories(
     Peanut PRIVATE 
-    .
+    Source
     Deps/glad/include
     Deps/glfw/include
+)
+
+target_include_directories(
+    Peanut PUBLIC
+    Include
     Deps/glm/include
     Deps/spdlog/include
 )
@@ -64,3 +69,5 @@ target_link_libraries(
     glfw
     spdlog 
 )
+
+set(PEANUT_INCLUDES "Include Deps/glm/include Deps/spdlog/include" CACHE STRING "")
