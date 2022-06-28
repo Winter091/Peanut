@@ -1,7 +1,5 @@
 #include "SandboxApp.hpp"
 
-#include <Peanut/Peanut.hpp>
-
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
