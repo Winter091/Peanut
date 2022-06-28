@@ -1,6 +1,6 @@
 #include <Peanut/Application/Application.hpp>
 
-#include <Peanut/Core/MethodBinding.hpp>
+#include <Core/MethodBinding.hpp>
 
 namespace pn
 {

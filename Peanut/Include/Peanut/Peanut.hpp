@@ -7,7 +7,6 @@
 #include "Core/Assert.hpp"
 #include "Core/KeyCodes.hpp"
 #include "Core/Log.hpp"
-#include "Core/MethodBinding.hpp"
 #include "Core/MouseCodes.hpp"
 
 #include "Events/Event.hpp"
