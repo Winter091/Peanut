@@ -20,8 +20,8 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 10; j++) {
-            float x = -0.9f + step * i;
-            float y = -0.9f + step * j;
+            float x = -0.9f + step * static_cast<float>(i);
+            float y = -0.9f + step * static_cast<float>(j);
             offsets.push_back(x);
             offsets.push_back(y);
             offsets.push_back(0);
@@ -38,7 +38,8 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     vertexBuffer->SetLayout(layout);
     m_rectangleVAO->AddVertexBuffer(vertexBuffer, pn::BufferDataUsage::PerVertex);
 
-    auto instanceBuffer = pn::VertexBuffer::Create(sizeof(float) * offsets.size(), &offsets[0]);
+    auto instanceBuffer = pn::VertexBuffer::Create(
+        static_cast<uint32_t>(sizeof(offsets[0]) * offsets.size()), &offsets[0]);
     auto instanceLayout = pn::BufferLayout::Create({
         { 2, pn::BufferLayoutElementType::Float, 3, "offset" },
     });

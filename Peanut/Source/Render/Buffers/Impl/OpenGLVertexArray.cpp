@@ -33,8 +33,8 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
     Bind();
     vertexBuffer->Bind();
 
-    int bindingIndex = m_vertexBuffers.size();
-    int divisor = (usage == BufferDataUsage::PerVertex ? 0 : 1);
+    uint32_t bindingIndex = static_cast<uint32_t>(m_vertexBuffers.size());
+    uint32_t divisor = (usage == BufferDataUsage::PerVertex ? 0u : 1u);
     vertexBuffer->BindToBindingIndex(bindingIndex);
     glVertexBindingDivisor(bindingIndex, divisor);
 
@@ -53,10 +53,11 @@ void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, in
     const auto& layout = vertexBuffer->GetLayout();
     const auto& layoutElements = layout->GetElements();
 
-    for (uint32_t i = 0; i < layoutElements.size(); i++) {
-        const auto& elem = layoutElements[i];
+    for (const auto& elem : layoutElements) {
+        glVertexAttribFormat(
+            elem.index, elem.count, MapToGLType(elem.type), 
+            elem.isNormalized, static_cast<GLuint>(elem.offset));
 
-        glVertexAttribFormat(elem.index, elem.count, MapToGLType(elem.type), elem.isNormalized, elem.offset);
         glVertexAttribBinding(elem.index, bindingIndex);
 
         glEnableVertexAttribArray(elem.index);
@@ -85,8 +86,8 @@ void OpenGLVertexArray::AssertAllAttributeIndicesAreUnique() const
 {
     std::unordered_set<uint32_t> seenIndices;
 
-    for (int i = 0; i < m_vertexBuffers.size(); i++) {
-        const auto& bufferAttributes = m_vertexBuffers[i]->GetLayout()->GetElements();
+    for (const auto& buffer : m_vertexBuffers) {
+        const auto& bufferAttributes = buffer->GetLayout()->GetElements();
 
         for (const BufferLayoutElement& elem : bufferAttributes) {
             if (!seenIndices.insert(elem.index).second) {

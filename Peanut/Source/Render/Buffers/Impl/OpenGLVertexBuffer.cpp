@@ -7,6 +7,8 @@ namespace pn
 {
 
 OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size, const void* data)
+    : m_handle(0)
+    , m_size(0)
 {
     PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
     
