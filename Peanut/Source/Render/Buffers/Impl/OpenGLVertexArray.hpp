@@ -31,7 +31,7 @@ private:
     std::shared_ptr<IndexBuffer> m_indexBuffer;
 
 private:
-    void ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, int bindingIndex);
+    void ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex);
     uint32_t MapToGLType(BufferLayoutElementType type) const;
     void AssertAllAttributeIndicesAreUnique() const;
     void UpdateInstanceCount(const VertexBuffer& vertexBuffer);

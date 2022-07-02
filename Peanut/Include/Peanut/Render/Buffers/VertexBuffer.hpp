@@ -16,7 +16,7 @@ public:
     virtual ~VertexBuffer() = default;
 
     virtual void Bind() = 0;
-    virtual void BindToBindingIndex(int index) = 0;
+    virtual void BindToBindingIndex(uint32_t index) = 0;
     virtual void Unbind() = 0;
 
     virtual void ReplaceData(uint32_t size, const void* data) = 0;

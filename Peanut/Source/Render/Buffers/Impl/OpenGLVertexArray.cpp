@@ -65,7 +65,7 @@ void OpenGLVertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
     }
 }
 
-void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, int bindingIndex)
+void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex)
 {
     const auto& layout = vertexBuffer->GetLayout();
     const auto& layoutElements = layout->GetElements();

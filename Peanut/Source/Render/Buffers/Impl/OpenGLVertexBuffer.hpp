@@ -12,7 +12,7 @@ public:
     ~OpenGLVertexBuffer() override;
 
     void Bind() override;
-    void BindToBindingIndex(int index) override;
+    void BindToBindingIndex(uint32_t index) override;
     void Unbind() override;
     
     void ReplaceData(uint32_t size, const void* data) override;
