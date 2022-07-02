@@ -22,6 +22,10 @@ public:
 
     virtual void DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count) = 0;
     virtual void DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count) = 0;
+    virtual void DrawArraysInstanced(
+        std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount) = 0;
+    virtual void DrawIndexedInstanced(
+        std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount) = 0;
 };
 
 }

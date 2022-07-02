@@ -60,4 +60,18 @@ void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint3
     s_renderCommandImpl->DrawIndexed(vertexArray, count);
 }
 
+void RenderCommand::DrawArraysInstanced(
+    std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->DrawArraysInstanced(vertexArray, count, instanceCount);
+}
+
+void RenderCommand::DrawIndexedInstanced(
+    std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->DrawIndexedInstanced(vertexArray, count, instanceCount);
+}
+
 }

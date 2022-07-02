@@ -34,9 +34,14 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
     vertexBuffer->Bind();
 
     uint32_t bindingIndex = static_cast<uint32_t>(m_vertexBuffers.size());
-    uint32_t divisor = (usage == BufferDataUsage::PerVertex ? 0u : 1u);
     vertexBuffer->BindToBindingIndex(bindingIndex);
-    glVertexBindingDivisor(bindingIndex, divisor);
+
+    if (usage == BufferDataUsage::PerVertex) {
+        glVertexBindingDivisor(bindingIndex, 0);
+    } else {
+        glVertexBindingDivisor(bindingIndex, 1);
+        UpdateInstanceCount(*vertexBuffer);
+    }
 
     ProcessVertexBufferLayout(vertexBuffer.get(), bindingIndex);
     m_vertexBuffers.push_back(vertexBuffer);
@@ -46,6 +51,18 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
 #if defined(PN_DEBUG)
     AssertAllAttributeIndicesAreUnique();
 #endif
+}
+
+void OpenGLVertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
+{
+    if (m_instanceCount == 0) {
+        m_instanceCount = vertexBuffer.GetVertexCount();
+        return;
+    }
+
+    if (vertexBuffer.GetVertexCount() != m_instanceCount) {
+        PN_CORE_ASSERT(false, "Instance counts are not equal for vertex buffers in signle vertex array");
+    }
 }
 
 void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, int bindingIndex)
@@ -106,12 +123,6 @@ void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& index
     Unbind();
 }
 
-uint32_t OpenGLVertexArray::GetSize() const 
-{
-    PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to vertex array");
-    return m_vertexBuffers.front()->GetSize();
-}
-
 uint32_t OpenGLVertexArray::GetVertexCount() const 
 {
     PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to vertex array");
@@ -128,6 +139,11 @@ IndexBufferDataFormat OpenGLVertexArray::GetIndexDataFormat() const
 {
     PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set");
     return m_indexBuffer->GetDataFormat();
+}
+
+uint32_t OpenGLVertexArray::GetInstanceCount() const 
+{
+    return m_instanceCount == 0 ? 1 : m_instanceCount;
 }
 
 }

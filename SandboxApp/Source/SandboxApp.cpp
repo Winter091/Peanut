@@ -67,9 +67,7 @@ void SandboxApp::OnUpdate()
     pn::RenderCommand::Clear();
 
     m_shader->Bind();
-
-    m_rectangleVAO->Bind();
-    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, nullptr, 100);
+    pn::RenderCommand::DrawIndexedInstanced(m_rectangleVAO);
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
