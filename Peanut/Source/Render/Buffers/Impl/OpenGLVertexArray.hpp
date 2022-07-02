@@ -32,6 +32,7 @@ private:
 private:
     void ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, int bindingIndex);
     uint32_t MapToGLType(BufferLayoutElementType type) const;
+    void AssertAllAttributeIndicesAreUnique() const;
 };
 
 }

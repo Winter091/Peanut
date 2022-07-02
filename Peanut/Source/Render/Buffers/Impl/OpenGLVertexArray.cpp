@@ -3,6 +3,8 @@
 #include <Peanut/Core/Assert.hpp>
 #include <glad/glad.h>
 
+#include <unordered_set>
+
 namespace pn
 {
 
@@ -40,6 +42,10 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
     m_vertexBuffers.push_back(vertexBuffer);
 
     Unbind();
+
+#if defined(PN_DEBUG)
+    AssertAllAttributeIndicesAreUnique();
+#endif
 }
 
 void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, int bindingIndex)
@@ -73,6 +79,21 @@ uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
 
     PN_CORE_ASSERT(false, "Unknown element type: {}", static_cast<uint32_t>(type));
     return 0u;
+}
+
+void OpenGLVertexArray::AssertAllAttributeIndicesAreUnique() const
+{
+    std::unordered_set<uint32_t> seenIndices;
+
+    for (int i = 0; i < m_vertexBuffers.size(); i++) {
+        const auto& bufferAttributes = m_vertexBuffers[i]->GetLayout()->GetElements();
+
+        for (const BufferLayoutElement& elem : bufferAttributes) {
+            if (!seenIndices.insert(elem.index).second) {
+                PN_CORE_ASSERT(false, "At least 2 attributes in vertex array have the same index = {}", elem.index);
+            }
+        }
+    }
 }
 
 void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
