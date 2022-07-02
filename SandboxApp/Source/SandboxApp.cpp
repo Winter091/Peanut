@@ -56,7 +56,7 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     m_shader = pn::Shader::Create(paths, "Test Shader");
 }
 
-void SandboxApp::OnEvent(const pn::Event& event)
+void SandboxApp::OnEvent(pn::Event& event)
 {
     PN_CLIENT_DEBUG(event.ToString());
 }

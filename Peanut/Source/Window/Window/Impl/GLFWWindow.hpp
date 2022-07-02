@@ -20,6 +20,8 @@ public:
     void Update() override;
     bool ShouldClose() const override;
 
+    void OnResize(int newWidth, int newHeight) override;
+
     void* GetNativeHandle() const override;
     int GetWidth() const override { return m_data.width; }
     int GetHeight() const override { return m_data.height; }

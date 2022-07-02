@@ -18,8 +18,16 @@ public:
     virtual std::string ToString() const = 0;
     virtual Event* Copy() const = 0;
 
-    void SetIsProcessed(bool value) { m_isProcessed = value; }
+    void SetIsProcessed(bool value) { m_isProcessed |= value; }
     bool GetIsProcessed() const { return m_isProcessed; }
+
+    template <EventType T, typename Fn>
+    void Dispatch(Fn&& function)
+    {
+        if (GetType() == T) {
+            SetIsProcessed(function(*this));
+        }
+    }
 
 private:
     bool m_isProcessed = false;
@@ -27,7 +35,8 @@ private:
 
 #define PN_DEFINE_EVENT_TYPE(type) \
     EventType GetType() const override { return EventType::type; } \
-    const char* GetStringType() const override { return #type; }
+    const char* GetStringType() const override { return #type; } \
+    static EventType GetStaticType() { return EventType::type; }
 
 }
 

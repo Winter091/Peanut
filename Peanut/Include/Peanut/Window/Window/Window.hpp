@@ -14,7 +14,7 @@ namespace pn {
 class Window 
 {
 public:
-    using EventCallbackFunc = std::function<void(const Event&)>;
+    using EventCallbackFunc = std::function<void(Event&)>;
 
     Window();
     Window(const Window&) = delete;
@@ -30,6 +30,8 @@ public:
     virtual void SetEventCallbackFunc(const EventCallbackFunc& func) = 0;
     virtual void Update() = 0;
     virtual bool ShouldClose() const = 0;
+
+    virtual void OnResize(int newWidth, int newHeight) = 0;
 
     virtual void* GetNativeHandle() const = 0;
     virtual int GetWidth() const = 0;

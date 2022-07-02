@@ -164,6 +164,12 @@ bool GLFWWindow::ShouldClose() const
     return static_cast<bool>(glfwWindowShouldClose(m_data.glfwHandle));
 }
 
+void GLFWWindow::OnResize(int newWidth, int newHeight)
+{
+    m_data.width = newWidth;
+    m_data.height = newHeight;
+}
+
 void* GLFWWindow::GetNativeHandle() const 
 {
     return reinterpret_cast<void*>(m_data.glfwHandle);

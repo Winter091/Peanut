@@ -21,7 +21,7 @@ public:
 
     Window& GetWindow() { return *m_window; }
 
-    virtual void OnEvent(const Event& event) = 0;
+    virtual void OnEvent(Event& event) = 0;
     virtual void OnUpdate() = 0;
 
     void Run();
@@ -33,9 +33,10 @@ private:
     EventQueue m_eventQueue;
 
 private:
-    void MainOnEvent(const Event& event);
+    void MainOnEvent(Event& event);
     void MainOnUpdate();
     void SendEvents();
+    bool OnWindowResize(Event& event);
 };
 
 }

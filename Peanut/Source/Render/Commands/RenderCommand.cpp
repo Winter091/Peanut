@@ -48,6 +48,12 @@ void RenderCommand::Clear()
     return s_renderCommandImpl->Clear();
 }
 
+void RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->SetViewport(leftX, bottomY, width, height);
+}
+
 void RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
