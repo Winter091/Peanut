@@ -7,7 +7,8 @@ namespace pn
 {
 
 OpenGLIndexBuffer::OpenGLIndexBuffer(IndexBufferDataFormat format, uint32_t size, const void* data)
-    : m_size(size)
+    : m_handle(0)
+    , m_size(size)
     , m_indexCount(0u)
     , m_format(format)
 {

@@ -21,6 +21,11 @@ public:
     
     static void DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0);
     static void DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0);
+    static void DrawArraysInstanced(
+        std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0, uint32_t instanceCount = 0);
+    static void DrawIndexedInstanced(
+        std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0, uint32_t instanceCount = 0);
+
 
 private:
     static RenderAPI s_renderAPI;

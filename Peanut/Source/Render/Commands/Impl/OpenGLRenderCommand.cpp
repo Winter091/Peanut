@@ -44,6 +44,36 @@ void OpenGLRenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray,
     glDrawElements(GL_TRIANGLES, count, dataType, nullptr);
 }
 
+void OpenGLRenderCommand::DrawArraysInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
+{
+    if (count == 0) {
+        count = vertexArray->GetVertexCount();
+    }
+
+    if (instanceCount == 0) {
+        instanceCount = vertexArray->GetInstanceCount();
+    }
+
+    vertexArray->Bind();
+    glDrawArraysInstanced(GL_TRIANGLES, 0, static_cast<GLsizei>(count), instanceCount);
+}
+
+void OpenGLRenderCommand::DrawIndexedInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
+{
+    if (count == 0) {
+        count = vertexArray->GetIndexCount();
+    }
+
+    if (instanceCount == 0) {
+        instanceCount = vertexArray->GetInstanceCount();
+    }
+
+    uint32_t dataType = GetGLDataType(vertexArray->GetIndexDataFormat());
+
+    vertexArray->Bind();
+    glDrawElementsInstanced(GL_TRIANGLES, count, dataType, nullptr, instanceCount);
+}
+
 uint32_t OpenGLRenderCommand::GetGLDataType(IndexBufferDataFormat format)
 {
     switch (format) {

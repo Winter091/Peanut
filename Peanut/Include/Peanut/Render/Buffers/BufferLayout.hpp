@@ -22,7 +22,7 @@ enum class BufferLayoutElementType : uint32_t
 
 struct BufferLayoutElement
 {
-    BufferLayoutElement(BufferLayoutElementType type, uint32_t count, 
+    BufferLayoutElement(uint32_t index, BufferLayoutElementType type, uint32_t count, 
                         std::string name, bool isNormalized = false);
 
     std::string name;

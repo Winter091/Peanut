@@ -3,6 +3,8 @@
 #include <Peanut/Core/Assert.hpp>
 #include <glad/glad.h>
 
+#include <unordered_set>
+
 namespace pn
 {
 
@@ -26,61 +28,57 @@ void OpenGLVertexArray::Unbind()
     glBindVertexArray(0u);
 }
 
-void OpenGLVertexArray::SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferDataUsage usage)
 {
     Bind();
-    m_vertexBuffer = vertexBuffer;
-    ProcessVertexBufferLayout();
+    vertexBuffer->Bind();
+
+    uint32_t bindingIndex = static_cast<uint32_t>(m_vertexBuffers.size());
+    vertexBuffer->BindToBindingIndex(bindingIndex);
+
+    if (usage == BufferDataUsage::PerVertex) {
+        glVertexBindingDivisor(bindingIndex, 0);
+    } else {
+        glVertexBindingDivisor(bindingIndex, 1);
+        UpdateInstanceCount(*vertexBuffer);
+    }
+
+    ProcessVertexBufferLayout(vertexBuffer.get(), bindingIndex);
+    m_vertexBuffers.push_back(vertexBuffer);
+
     Unbind();
+
+#if defined(PN_DEBUG)
+    AssertAllAttributeIndicesAreUnique();
+#endif
 }
 
-void OpenGLVertexArray::ProcessVertexBufferLayout()
+void OpenGLVertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
 {
-    m_vertexBuffer->Bind();
-    
-    const auto& layout = m_vertexBuffer->GetLayout();
+    if (m_instanceCount == 0) {
+        m_instanceCount = vertexBuffer.GetVertexCount();
+        return;
+    }
+
+    if (vertexBuffer.GetVertexCount() != m_instanceCount) {
+        PN_CORE_ASSERT(false, "Instance counts are not equal for vertex buffers in signle vertex array");
+    }
+}
+
+void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex)
+{
+    const auto& layout = vertexBuffer->GetLayout();
     const auto& layoutElements = layout->GetElements();
 
-    for (uint32_t i = 0; i < layoutElements.size(); i++) {
-        ProcessVertexBufferLayoutElement(layoutElements[i], i, layout->GetStride());
-    }
-}
+    for (const auto& elem : layoutElements) {
+        glVertexAttribFormat(
+            elem.index, elem.count, MapToGLType(elem.type), 
+            elem.isNormalized, static_cast<GLuint>(elem.offset));
 
-void OpenGLVertexArray::ProcessVertexBufferLayoutElement(
-    const BufferLayoutElement& elem, uint32_t index, uint32_t stride
-)
-{
-    switch (elem.type) {
-        case BufferLayoutElementType::Int8:
-        case BufferLayoutElementType::Int16:
-        case BufferLayoutElementType::Int32:
-        case BufferLayoutElementType::Uint8:
-        case BufferLayoutElementType::Uint16:
-        case BufferLayoutElementType::Uint32:
-        {
-            glVertexAttribIPointer(
-                index, static_cast<int32_t>(elem.count), MapToGLType(elem.type), 
-                static_cast<int32_t>(stride), (const void*)elem.offset
-            );
-            break;
-        }
-        case BufferLayoutElementType::Float:
-        case BufferLayoutElementType::Double:
-        {
-            glVertexAttribPointer(
-                index, static_cast<int32_t>(elem.count), MapToGLType(elem.type), elem.isNormalized, 
-                static_cast<int32_t>(stride), (const void*)elem.offset
-            );
-            break;
-        }
-        default:
-        {
-            PN_CORE_ASSERT(false, "Unknown element type: {}", static_cast<uint32_t>(elem.type));
-            break;
-        }
-    }
+        glVertexAttribBinding(elem.index, bindingIndex);
 
-    glEnableVertexAttribArray(index);
+        glEnableVertexAttribArray(elem.index);
+    }
 }
 
 uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
@@ -101,6 +99,21 @@ uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
     return 0u;
 }
 
+void OpenGLVertexArray::AssertAllAttributeIndicesAreUnique() const
+{
+    std::unordered_set<uint32_t> seenIndices;
+
+    for (const auto& buffer : m_vertexBuffers) {
+        const auto& bufferAttributes = buffer->GetLayout()->GetElements();
+
+        for (const BufferLayoutElement& elem : bufferAttributes) {
+            if (!seenIndices.insert(elem.index).second) {
+                PN_CORE_ASSERT(false, "At least 2 attributes in vertex array have the same index = {}", elem.index);
+            }
+        }
+    }
+}
+
 void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 {
     m_indexBuffer = indexBuffer;
@@ -110,16 +123,10 @@ void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& index
     Unbind();
 }
 
-uint32_t OpenGLVertexArray::GetSize() const 
-{
-    PN_CORE_ASSERT(m_vertexBuffer, "Vertex buffer is not set");
-    return m_vertexBuffer->GetSize();
-}
-
 uint32_t OpenGLVertexArray::GetVertexCount() const 
 {
-    PN_CORE_ASSERT(m_vertexBuffer, "Vertex buffer is not set");
-    return m_vertexBuffer->GetVertexCount();
+    PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to vertex array");
+    return m_vertexBuffers.front()->GetVertexCount();
 }
 
 uint32_t OpenGLVertexArray::GetIndexCount() const 
@@ -132,6 +139,11 @@ IndexBufferDataFormat OpenGLVertexArray::GetIndexDataFormat() const
 {
     PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set");
     return m_indexBuffer->GetDataFormat();
+}
+
+uint32_t OpenGLVertexArray::GetInstanceCount() const 
+{
+    return m_instanceCount == 0 ? 1 : m_instanceCount;
 }
 
 }

@@ -7,6 +7,8 @@ namespace pn
 {
 
 OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size, const void* data)
+    : m_handle(0)
+    , m_size(0)
 {
     PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
     
@@ -22,6 +24,11 @@ OpenGLVertexBuffer::~OpenGLVertexBuffer()
 void OpenGLVertexBuffer::Bind()
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_handle);
+}
+
+void OpenGLVertexBuffer::BindToBindingIndex(uint32_t index)
+{
+    glBindVertexBuffer(index, m_handle, 0, GetVertexSize());
 }
 
 void OpenGLVertexBuffer::Unbind()
