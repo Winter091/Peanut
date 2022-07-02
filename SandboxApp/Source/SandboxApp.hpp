@@ -2,7 +2,6 @@
 #define __SANDBOXAPP_H__
 
 #include <Peanut/Peanut.hpp>
-#include <glad/glad.h>
 
 class SandboxApp final : public pn::Application
 {
@@ -17,7 +16,6 @@ public:
 
 private:
     std::shared_ptr<pn::VertexArray> m_rectangleVAO;
-    GLuint vertexBuffer, vertexArray, indexBuffer;
     std::shared_ptr<pn::Shader> m_shader;
 };
 
