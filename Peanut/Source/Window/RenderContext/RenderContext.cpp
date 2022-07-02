@@ -1,7 +1,6 @@
 #include <Peanut/Window/RenderContext/RenderContext.hpp>
 
 #include <Window/RenderContext/Impl/OpenGLGLFWRenderContext.hpp>
-#include <Core/PlatformDetection.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Window/Window/Window.hpp>
 #include <Peanut/Core/Assert.hpp>

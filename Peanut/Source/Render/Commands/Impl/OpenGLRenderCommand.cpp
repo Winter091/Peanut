@@ -9,7 +9,6 @@ namespace pn {
 
 OpenGLRenderCommand::OpenGLRenderCommand()
 {
-    PN_CORE_INFO("Using OpenGL Renderer");
 }
 
 void OpenGLRenderCommand::SetClearColor(const glm::vec4& color)

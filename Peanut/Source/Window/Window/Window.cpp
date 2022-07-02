@@ -1,7 +1,6 @@
 #include <Peanut/Window/Window/Window.hpp>
 
 #include <Window/Window/Impl/GLFWWindow.hpp>
-#include <Core/PlatformDetection.hpp>
 #include <Peanut/Core/Assert.hpp>
 
 namespace pn {
@@ -23,10 +22,13 @@ void Window::Init()
     PN_CORE_ASSERT(!s_isInitialized, "You can init window only once");
     s_isInitialized = true;
 
-#if defined(PN_PLATFORM_WINDOWS)
+#if defined(PN_WINDOW_GLFW)
     s_windowProvider = WindowProvider::GLFW;
-#elif defined(PN_PLATFORM_LINUX)
-    s_windowProvider = WindowProvider::GLFW;
+    PN_CORE_INFO("Using GLFW Window");
+#elif defined(PN_WINDOW_WINAPI)
+    PN_CORE_ASSERT(false, "Window: winapi window is currently not supported");
+#else
+    PN_CORE_ASSERT(false, "Window: cannot determine rendering backend")
 #endif
 }
 

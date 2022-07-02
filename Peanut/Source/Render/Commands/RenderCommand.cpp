@@ -1,7 +1,6 @@
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 
 #include <Peanut/Core/Assert.hpp>
-#include <Core/PlatformDetection.hpp>
 #include <Render/Commands/Impl/OpenGLRenderCommand.hpp>
 
 namespace pn
@@ -19,14 +18,14 @@ void RenderCommand::Init()
     PN_CORE_ASSERT(!s_isInitialized, "RenderCommand can be initialized only once");
     s_isInitialized = true;
 
-#if defined(PN_PLATFORM_WINDOWS)
+#if defined(PN_RENDERING_OPENGL)
     s_renderAPI = RenderAPI::OpenGL;
     s_renderCommandImpl = std::make_unique<OpenGLRenderCommand>();
-#elif defined(PN_PLATFORM_LINUX)
-    s_renderAPI = RenderAPI::OpenGL;
-    s_renderCommandImpl = std::make_unique<OpenGLRenderCommand>();
+    PN_CORE_INFO("Using OpenGL Renderer");
+#elif defined(PN_RENDERING_DIRECTX)
+    PN_CORE_ASSERT("RenderCommand: directx backend is currently not supported");
 #else
-    PN_CORE_ASSERT("RenderCommand: platform is not supported");
+    PN_CORE_ASSERT("RenderCommand: cannot determine rendering backend");
 #endif
 }
 

@@ -14,9 +14,6 @@ int GLFWWindow::s_windowCount = 0;
 GLFWWindow::GLFWWindow(const WindowSettings& settings)
     : Window()
 {
-    PN_CORE_INFO("Using GLFW Window: {}x{}, title: {}", 
-        settings.width, settings.height, settings.title);
-
     m_data.width = settings.width;
     m_data.height = settings.height;
     m_data.title = settings.title;

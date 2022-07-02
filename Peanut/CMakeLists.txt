@@ -36,6 +36,18 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(Peanut PUBLIC PN_DEBUG)
 endif()
 
+# In future (ha-ha) DirectX and WinAPI window will be supported
+target_compile_definitions(Peanut PUBLIC PN_RENDERING_OPENGL)
+target_compile_definitions(Peanut PUBLIC PN_WINDOW_GLFW)
+
+if (UNIX)
+    target_compile_definitions(Peanut PUBLIC PN_PLATFORM_LINUX)
+elseif (WIN32 OR MINGW OR CYGWIN)
+    target_compile_definitions(Peanut PUBLIC PN_PLATFORM_WINDOWS)
+else()
+    message(FATAL_ERROR "Platform is not supported by Peanut")
+endif()
+
 # Useful Warnings
 if(MSVC)
     target_compile_options(
