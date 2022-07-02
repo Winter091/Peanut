@@ -4,10 +4,10 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
     float vertices[] = {
-        -0.005f, -0.005f,  0.0f,    0.0f, 0.0f,
-        -0.005f,  0.005f,  0.0f,    0.0f, 0.0f,
-         0.005f,  0.005f,  0.0f,    0.0f, 0.0f,
-         0.005f, -0.005f,  0.0f,    0.0f, 0.0f,
+        -0.05f, -0.05f,  0.0f,    1.0f, 0.0f, 0.0f,
+        -0.05f,  0.05f,  0.0f,    0.0f, 1.0f, 0.0f,
+         0.05f,  0.05f,  0.0f,    0.0f, 0.0f, 1.0f,
+         0.05f, -0.05f,  0.0f,    1.0f, 0.0f, 1.0f,
     };
 
     uint8_t indices[] = {
@@ -16,10 +16,10 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     };
 
     std::vector<float> offsets;
-    float step = 1.8f / 99.0f;
+    float step = 1.8f / 9.0f;
 
-    for (int i = 0; i < 100; i++) {
-        for (int j = 0; j < 100; j++) {
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
             float x = -0.9f + step * i;
             float y = -0.9f + step * j;
             offsets.push_back(x);
@@ -33,7 +33,7 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     auto vertexBuffer = pn::VertexBuffer::Create(sizeof(vertices), vertices);
     auto layout = pn::BufferLayout::Create({
         { 0, pn::BufferLayoutElementType::Float, 3, "position" },
-        { 1, pn::BufferLayoutElementType::Float, 2, "temp" },
+        { 1, pn::BufferLayoutElementType::Float, 3, "color" },
     });
     vertexBuffer->SetLayout(layout);
     m_rectangleVAO->AddVertexBuffer(vertexBuffer, pn::BufferDataUsage::PerVertex);
@@ -68,7 +68,7 @@ void SandboxApp::OnUpdate()
     m_shader->Bind();
 
     m_rectangleVAO->Bind();
-    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, nullptr, 10000);
+    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, nullptr, 100);
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
