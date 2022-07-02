@@ -51,7 +51,7 @@ else()
 endif()
 
 target_include_directories(
-    Peanut PRIVATE 
+    Peanut PUBLIC 
     Source
     Deps/glad/include
     Deps/glfw/include

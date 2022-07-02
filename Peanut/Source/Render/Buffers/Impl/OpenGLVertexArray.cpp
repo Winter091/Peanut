@@ -26,61 +26,35 @@ void OpenGLVertexArray::Unbind()
     glBindVertexArray(0u);
 }
 
-void OpenGLVertexArray::SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferDataUsage usage)
 {
     Bind();
-    m_vertexBuffer = vertexBuffer;
-    ProcessVertexBufferLayout();
+    vertexBuffer->Bind();
+
+    int bindingIndex = m_vertexBuffers.size();
+    int divisor = (usage == BufferDataUsage::PerVertex ? 0 : 1);
+    vertexBuffer->BindToBindingIndex(bindingIndex);
+    glVertexBindingDivisor(bindingIndex, divisor);
+
+    ProcessVertexBufferLayout(vertexBuffer.get(), bindingIndex);
+    m_vertexBuffers.push_back(vertexBuffer);
+
     Unbind();
 }
 
-void OpenGLVertexArray::ProcessVertexBufferLayout()
+void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, int bindingIndex)
 {
-    m_vertexBuffer->Bind();
-    
-    const auto& layout = m_vertexBuffer->GetLayout();
+    const auto& layout = vertexBuffer->GetLayout();
     const auto& layoutElements = layout->GetElements();
 
     for (uint32_t i = 0; i < layoutElements.size(); i++) {
-        ProcessVertexBufferLayoutElement(layoutElements[i], i, layout->GetStride());
-    }
-}
+        const auto& elem = layoutElements[i];
 
-void OpenGLVertexArray::ProcessVertexBufferLayoutElement(
-    const BufferLayoutElement& elem, uint32_t index, uint32_t stride
-)
-{
-    switch (elem.type) {
-        case BufferLayoutElementType::Int8:
-        case BufferLayoutElementType::Int16:
-        case BufferLayoutElementType::Int32:
-        case BufferLayoutElementType::Uint8:
-        case BufferLayoutElementType::Uint16:
-        case BufferLayoutElementType::Uint32:
-        {
-            glVertexAttribIPointer(
-                index, static_cast<int32_t>(elem.count), MapToGLType(elem.type), 
-                static_cast<int32_t>(stride), (const void*)elem.offset
-            );
-            break;
-        }
-        case BufferLayoutElementType::Float:
-        case BufferLayoutElementType::Double:
-        {
-            glVertexAttribPointer(
-                index, static_cast<int32_t>(elem.count), MapToGLType(elem.type), elem.isNormalized, 
-                static_cast<int32_t>(stride), (const void*)elem.offset
-            );
-            break;
-        }
-        default:
-        {
-            PN_CORE_ASSERT(false, "Unknown element type: {}", static_cast<uint32_t>(elem.type));
-            break;
-        }
-    }
+        glVertexAttribFormat(elem.index, elem.count, MapToGLType(elem.type), elem.isNormalized, elem.offset);
+        glVertexAttribBinding(elem.index, bindingIndex);
 
-    glEnableVertexAttribArray(index);
+        glEnableVertexAttribArray(elem.index);
+    }
 }
 
 uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
@@ -112,14 +86,14 @@ void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& index
 
 uint32_t OpenGLVertexArray::GetSize() const 
 {
-    PN_CORE_ASSERT(m_vertexBuffer, "Vertex buffer is not set");
-    return m_vertexBuffer->GetSize();
+    PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to vertex array");
+    return m_vertexBuffers.front()->GetSize();
 }
 
 uint32_t OpenGLVertexArray::GetVertexCount() const 
 {
-    PN_CORE_ASSERT(m_vertexBuffer, "Vertex buffer is not set");
-    return m_vertexBuffer->GetVertexCount();
+    PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to vertex array");
+    return m_vertexBuffers.front()->GetVertexCount();
 }
 
 uint32_t OpenGLVertexArray::GetIndexCount() const 

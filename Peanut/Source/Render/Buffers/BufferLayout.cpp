@@ -5,10 +5,10 @@
 namespace pn {
 
 BufferLayoutElement::BufferLayoutElement(
-    BufferLayoutElementType type, uint32_t count, std::string name, bool isNormalized
+    uint32_t index, BufferLayoutElementType type, uint32_t count, std::string name, bool isNormalized
 )
     : name(std::move(name)), 
-    index(0), 
+    index(index), 
     size(0), 
     offset(0), 
     type(type), 
@@ -30,7 +30,7 @@ BufferLayout::BufferLayout(std::initializer_list<BufferLayoutElement> elements)
     for (auto& element : elements) {
         m_elements.emplace_back(element);
         
-        m_elements[i].index = i;
+        // m_elements[i].index = i;
         m_elements[i].size = m_elements[i].count * GetTypeSize(m_elements[i].type);
         m_elements[i].offset = currOffset;
 

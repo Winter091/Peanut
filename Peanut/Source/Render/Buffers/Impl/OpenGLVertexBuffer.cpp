@@ -24,6 +24,11 @@ void OpenGLVertexBuffer::Bind()
     glBindBuffer(GL_ARRAY_BUFFER, m_handle);
 }
 
+void OpenGLVertexBuffer::BindToBindingIndex(int index)
+{
+    glBindVertexBuffer(index, m_handle, 0, GetVertexSize());
+}
+
 void OpenGLVertexBuffer::Unbind()
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0u);

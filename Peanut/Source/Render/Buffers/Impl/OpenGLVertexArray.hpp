@@ -3,6 +3,8 @@
 
 #include <Peanut/Render/Buffers/VertexArray.hpp>
 
+#include <vector>
+
 namespace pn {
 
 class OpenGLVertexArray final : public VertexArray
@@ -14,7 +16,7 @@ public:
     void Bind() override;
     void Unbind() override;
 
-    void SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) override;
+    void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferDataUsage usage) override;
     void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) override;
 
     uint32_t GetSize() const override;
@@ -24,12 +26,11 @@ public:
 
 private:
     uint32_t m_handle = 0u;
-    std::shared_ptr<VertexBuffer> m_vertexBuffer;
+    std::vector<std::shared_ptr<VertexBuffer>> m_vertexBuffers;
     std::shared_ptr<IndexBuffer> m_indexBuffer;
 
 private:
-    void ProcessVertexBufferLayout();
-    void ProcessVertexBufferLayoutElement(const BufferLayoutElement& elem, uint32_t index, uint32_t stride);
+    void ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, int bindingIndex);
     uint32_t MapToGLType(BufferLayoutElementType type) const;
 };
 
