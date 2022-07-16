@@ -12,9 +12,10 @@ namespace pn
 OpenGLShader::OpenGLShader(const ShaderPaths& paths, std::string name)
     : m_name(std::move(name))
 {
-    ShaderSources sources;
-    sources.vertexSource = ReadFile(paths.vertexPath);
-    sources.fragmentSource = ReadFile(paths.fragmentPath);
+    ShaderSources sources = {
+        .vertexSource = ReadFile(paths.vertexPath),
+        .fragmentSource = ReadFile(paths.fragmentPath)
+    };
 
     m_handler = CreateShaderProgram(sources);
 }

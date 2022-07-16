@@ -49,10 +49,11 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     auto indexBuffer = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint8, sizeof(indices), indices);
     m_rectangleVAO->SetIndexBuffer(indexBuffer);
 
-    pn::ShaderPaths paths(
-        "Peanut/Assets/Shaders/test.vert", 
-        "Peanut/Assets/Shaders/test.frag"
-    );
+    pn::ShaderPaths paths = {
+        .vertexPath = "Peanut/Assets/Shaders/test.vert",
+        .fragmentPath = "Peanut/Assets/Shaders/test.frag"
+    };
+
     m_shader = pn::Shader::Create(paths, "Test Shader");
 }
 
