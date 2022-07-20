@@ -1,4 +1,4 @@
-permissions: read-all|write-all
+permissions: write-all
 
 name: Render plantuml diagrams
 on: push
