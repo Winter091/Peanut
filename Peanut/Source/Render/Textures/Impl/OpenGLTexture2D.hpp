@@ -21,6 +21,10 @@ private:
     std::string m_name;
     uint32_t m_descriptor;
     uint32_t m_slot = 0;
+
+private:
+    size_t GetFileSize(FILE* f);
+    void InitializeFromData(const TextureData& data);
 };
 
 }
