@@ -22,7 +22,7 @@ public:
 
     virtual const std::string& GetName() const = 0;
 
-    virtual void Bind() = 0;
+    virtual void BindToSlot(uint32_t slot = 0) = 0;
     virtual void Unbind() = 0;
 
     static std::shared_ptr<Texture2D> Create(const std::string& path, const std::string& name = "");

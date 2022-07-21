@@ -14,11 +14,13 @@ public:
 
     const std::string& GetName() const override { return m_name; }
 
-    void Bind() override;
+    void BindToSlot(uint32_t slot = 0) override;
     void Unbind() override;
 
 private:
     std::string m_name;
+    uint32_t m_descriptor;
+    uint32_t m_slot = 0;
 };
 
 }
