@@ -1,12 +1,12 @@
-#include <Peanut/Render/Textures/Texture.hpp>
+#include <Peanut/Render/Textures/Texture2D.hpp>
 
-#include <Render/Textures/Impl/OpenGLTexture.hpp>
+#include <Render/Textures/Impl/OpenGLTexture2D.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
 
 namespace pn {
 
-std::shared_ptr<Texture> Texture::Create(const std::string& path, const std::string& name)
+std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path, const std::string& name)
 {
     auto renderApi = RenderCommand::GetRenderAPI();
 
@@ -15,7 +15,7 @@ std::shared_ptr<Texture> Texture::Create(const std::string& path, const std::str
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
         case RenderAPI::OpenGL:
-            return std::make_shared<OpenGLTexture>(path, name);
+            return std::make_shared<OpenGLTexture2D>(path, name);
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;
@@ -24,7 +24,7 @@ std::shared_ptr<Texture> Texture::Create(const std::string& path, const std::str
     return nullptr;
 }
 
-std::shared_ptr<Texture> Texture::Create(const TextureData& data, const std::string& name)
+std::shared_ptr<Texture2D> Texture2D::Create(const TextureData& data, const std::string& name)
 {
     auto renderApi = RenderCommand::GetRenderAPI();
 
@@ -33,7 +33,7 @@ std::shared_ptr<Texture> Texture::Create(const TextureData& data, const std::str
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
         case RenderAPI::OpenGL:
-            return std::make_shared<OpenGLTexture>(data, name);
+            return std::make_shared<OpenGLTexture2D>(data, name);
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;
