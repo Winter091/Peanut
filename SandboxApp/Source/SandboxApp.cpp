@@ -70,8 +70,7 @@ void SandboxApp::OnUpdate()
     pn::RenderCommand::Clear();
 
     m_shader->Bind();
-    m_texture->BindToSlot(3);
-    m_shader->SetInt1("u_tex_sampler", 3);
+    m_texture->BindToSlot(0);
     
     pn::RenderCommand::DrawIndexedInstanced(m_rectangleVAO);
 }
