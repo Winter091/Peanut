@@ -21,6 +21,7 @@
 #include "Render/Commands/RenderCommandImpl.hpp"
 #include "Render/RenderAPI.hpp"
 #include "Render/Shaders/Shader.hpp"
+#include "Render/Textures/Texture2D.hpp"
 
 #include "Window/RenderContext/RenderContext.hpp"
 #include "Window/Window/Window.hpp"

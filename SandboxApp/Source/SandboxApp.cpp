@@ -4,10 +4,10 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
     float vertices[] = {
-        -0.05f, -0.05f,  0.0f,    1.0f, 0.0f, 0.0f,
-        -0.05f,  0.05f,  0.0f,    0.0f, 1.0f, 0.0f,
-         0.05f,  0.05f,  0.0f,    0.0f, 0.0f, 1.0f,
-         0.05f, -0.05f,  0.0f,    1.0f, 0.0f, 1.0f,
+        -0.05f, -0.05f,  0.0f,    0.0f, 0.0f,
+        -0.05f,  0.05f,  0.0f,    0.0f, 1.0f,
+         0.05f,  0.05f,  0.0f,    1.0f, 1.0f,
+         0.05f, -0.05f,  0.0f,    1.0f, 0.0f,
     };
 
     uint8_t indices[] = {
@@ -33,7 +33,7 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     auto vertexBuffer = pn::VertexBuffer::Create(sizeof(vertices), vertices);
     auto layout = pn::BufferLayout::Create({
         { 0, pn::BufferLayoutElementType::Float, 3, "position" },
-        { 1, pn::BufferLayoutElementType::Float, 3, "color" },
+        { 1, pn::BufferLayoutElementType::Float, 2, "tex_coord" },
     });
     vertexBuffer->SetLayout(layout);
     m_rectangleVAO->AddVertexBuffer(vertexBuffer, pn::BufferDataUsage::PerVertex);
@@ -53,7 +53,15 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
         "Peanut/Assets/Shaders/test.vert", 
         "Peanut/Assets/Shaders/test.frag"
     );
+
     m_shader = pn::Shader::Create(paths, "Test Shader");
+
+    m_texture = pn::Texture2D::Create("Peanut/Assets/Textures/container.jpg", pn::Texture2DSettings()
+        .UseFormat(pn::TextureFormat::RGB)
+        .UseMipmapping(false)
+        .UseFiltering(pn::TextureFilter::Linear, pn::TextureFilter::Linear)
+        .UseWrapping(pn::TextureWrap::Repeat, pn::TextureWrap::Repeat)
+    );
 }
 
 void SandboxApp::OnEvent(pn::Event& event)
@@ -67,6 +75,8 @@ void SandboxApp::OnUpdate()
     pn::RenderCommand::Clear();
 
     m_shader->Bind();
+    m_texture->BindToSlot(0);
+    
     pn::RenderCommand::DrawIndexedInstanced(m_rectangleVAO);
 }
 

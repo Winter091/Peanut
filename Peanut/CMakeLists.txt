@@ -26,6 +26,9 @@ add_subdirectory(Deps/glfw)
 # Build spdlog alongside with Peanut
 add_subdirectory(Deps/spdlog)
 
+#Build stb alongside with Peanut
+add_subdirectory(Deps/stb)
+
 add_library(Peanut)
 add_subdirectory(Deps)
 add_subdirectory(Source)
@@ -67,6 +70,7 @@ target_include_directories(
     Source
     Deps/glad/include
     Deps/glfw/include
+    Deps/stb/include
 )
 
 target_include_directories(
@@ -79,5 +83,6 @@ target_include_directories(
 target_link_libraries(
     Peanut PRIVATE 
     glfw
-    spdlog 
+    spdlog
+    stb
 )
