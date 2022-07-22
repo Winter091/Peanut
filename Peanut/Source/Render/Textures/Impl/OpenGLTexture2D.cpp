@@ -1,3 +1,7 @@
+#if defined(PN_PLATFORM_WINDOWS)
+#define _CRT_SECURE_NO_WARNINGS // fuck windows
+#endif
+
 #include "OpenGLTexture2D.hpp"
 
 #include <Peanut/Core/Assert.hpp>
@@ -5,6 +9,7 @@
 #include <glad/glad.h>
 
 #include <cstdio>
+
 
 namespace pn {
 

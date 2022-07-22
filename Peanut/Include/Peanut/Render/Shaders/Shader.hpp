@@ -16,12 +16,26 @@ struct ShaderPaths
 {
     std::string vertexPath;
     std::string fragmentPath;
+
+    ShaderPaths() = default;
+
+    ShaderPaths(std::string vertexPath, std::string fragmentPath)
+        : vertexPath(std::move(vertexPath))
+        , fragmentPath(std::move(fragmentPath))
+    {}
 };
 
 struct ShaderSources
 {
     std::string vertexSource;
     std::string fragmentSource;
+
+    ShaderSources() = default;
+
+    ShaderSources(std::string vertexSource, std::string fragmentSource)
+        : vertexSource(std::move(vertexSource))
+        , fragmentSource(std::move(fragmentSource))
+    {}
 };
 
 class Shader
