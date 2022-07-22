@@ -17,14 +17,25 @@ public:
     void BindToSlot(uint32_t slot = 0) override;
     void Unbind() override;
 
+    size_t GetX() const override { return m_x; }
+    size_t GetY() const override { return m_y; } 
+
+    void SetWrapping(TextureWrap x, TextureWrap y) override;
+    void SetFiltering(TextureFilter min, TextureFilter mag) override;
+    void SetFiltering(TextureMipmapFilter min, TextureMipmapFilter mag) override;
+
 private:
     std::string m_name;
     uint32_t m_descriptor;
     uint32_t m_slot = 0;
+    size_t m_x, m_y;
 
 private:
     size_t GetFileSize(FILE* f);
     void InitializeFromData(const TextureData& data);
+    int ToGlWrap(TextureWrap wrap) const;
+    int ToGlFilter(TextureFilter filter) const;
+    int ToGlFilter(TextureMipmapFilter filter) const;
 };
 
 }

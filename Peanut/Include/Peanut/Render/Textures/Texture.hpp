@@ -7,6 +7,28 @@
 
 namespace pn {
 
+enum class TextureWrap
+{
+    Repeat,
+    MirroredRepeat,
+    ClampToBorder,
+    ClampToEdge
+};
+
+enum class TextureFilter
+{
+    Nearest,
+    Linear,
+};
+
+enum class TextureMipmapFilter
+{
+    NearestMipmapNearest,
+    NearestMipmapLinear,
+    LinearMipmapNearest,
+    LinearMipmapLinear,
+};
+
 struct TextureData
 {
     std::vector<uint8_t> bytes;
