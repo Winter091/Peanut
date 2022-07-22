@@ -62,6 +62,7 @@ void OpenGLTexture2D::InitializeFromData(const TextureData& data)
     int len = static_cast<int>(data.bytes.size());
 
     int x, y, channels;
+    stbi_set_flip_vertically_on_load(1);
     unsigned char* texData = stbi_load_from_memory(&data.bytes[0], len, &x, &y, &channels, 4);
 
     if (channels < 3) {
