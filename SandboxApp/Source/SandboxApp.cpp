@@ -56,7 +56,12 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
     m_shader = pn::Shader::Create(paths, "Test Shader");
 
-    m_texture = pn::Texture2D::Create("Peanut/Assets/Textures/container.jpg");
+    m_texture = pn::Texture2D::Create("Peanut/Assets/Textures/container.jpg", pn::Texture2DSettings()
+        .UseFormat(pn::TextureFormat::RGB)
+        .UseMipmapping(false)
+        .UseFiltering(pn::TextureFilter::Linear, pn::TextureFilter::Linear)
+        .UseWrapping(pn::TextureWrap::Repeat, pn::TextureWrap::Repeat)
+    );
 }
 
 void SandboxApp::OnEvent(pn::Event& event)

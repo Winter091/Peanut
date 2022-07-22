@@ -29,6 +29,12 @@ enum class TextureMipmapFilter
     LinearMipmapLinear,
 };
 
+enum class TextureFormat
+{
+    RGB,
+    RGBA
+};
+
 struct TextureData
 {
     std::vector<uint8_t> bytes;

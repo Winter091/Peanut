@@ -8,8 +8,8 @@ namespace pn {
 class OpenGLTexture2D : public Texture2D
 {
 public:
-    OpenGLTexture2D(const std::string& path, std::string name = "");
-    OpenGLTexture2D(const TextureData& data, std::string name = "");
+    OpenGLTexture2D(const std::string& path, const Texture2DSettings& settings, std::string name = "");
+    OpenGLTexture2D(const TextureData& data, const Texture2DSettings& settings, std::string name = "");
     ~OpenGLTexture2D() override;
 
     const std::string& GetName() const override { return m_name; }
@@ -22,7 +22,7 @@ public:
 
     void SetWrapping(TextureWrap x, TextureWrap y) override;
     void SetFiltering(TextureFilter min, TextureFilter mag) override;
-    void SetFiltering(TextureMipmapFilter min, TextureMipmapFilter mag) override;
+    void SetFiltering(TextureMipmapFilter min, TextureFilter mag) override;
 
 private:
     std::string m_name;
@@ -32,10 +32,12 @@ private:
 
 private:
     size_t GetFileSize(FILE* f);
-    void InitializeFromData(const TextureData& data);
+    void InitializeFromData(const TextureData& data, const Texture2DSettings& settings);
     int ToGlWrap(TextureWrap wrap) const;
     int ToGlFilter(TextureFilter filter) const;
     int ToGlFilter(TextureMipmapFilter filter) const;
+    int ToGlFormat(TextureFormat format) const;
+    int GetNumChannels(TextureFormat format) const;
 };
 
 }
