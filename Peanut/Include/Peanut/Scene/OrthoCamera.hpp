@@ -5,6 +5,7 @@
 #include <glm/vec3.hpp>
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Scene/Camera.hpp>
 
 namespace pn {
 
@@ -104,34 +105,34 @@ public:
     OrthoCameraSettings& SetZoom(float zoom)                { Zoom = zoom; return *this; }
 };
 
-class OrthoCamera
+class OrthoCamera : public Camera
 {
 public:
     OrthoCamera(const OrthoCameraSettings& settings = OrthoCameraSettings());
-    ~OrthoCamera() = default;
+    ~OrthoCamera() override = default;
 
     void SetPosition(const glm::vec3& pos);
-    const glm::vec3& GetPosition() const { return m_position; }
+    const glm::vec3& GetPosition() const override { return m_position; }
 
-    void SetDirection(const glm::vec3& direction);
-    void LookAt(const glm::vec3& point);
-    const glm::vec3& GetDirection() const { return m_direction; }
+    void SetDirection(const glm::vec3& direction) override;
+    void LookAt(const glm::vec3& point) override;
+    const glm::vec3& GetDirection() const override { return m_direction; }
 
-    void SetUp(const glm::vec3& up);
-    const glm::vec3& GetUp() const { return m_up; }
+    void SetUp(const glm::vec3& up) override;
+    const glm::vec3& GetUp() const override { return m_up; }
 
     void SetBoundaries(const OrthoCameraBoundaries& boundaries);
     const OrthoCameraBoundaries& GetBoundaries() const { return m_boundaries; }
 
-    void SetAspectRatio(float aspectRatio);
-    float GetAspectRatio() const { return m_aspectRatio; }
+    void SetAspectRatio(float aspectRatio) override;
+    float GetAspectRatio() const override { return m_aspectRatio; }
 
     void SetZoom(float zoom);
     float GetZoom() const { return m_zoom; }
 
-    const glm::mat4& GetViewMatrix() const { return m_view; }
-    const glm::mat4& GetProjectionMatrix() const { return m_projection; }
-    const glm::mat4& GetViewProjectionMatrix() const { return m_viewProjection; }
+    const glm::mat4& GetViewMatrix() const override { return m_view; }
+    const glm::mat4& GetProjectionMatrix() const override { return m_projection; }
+    const glm::mat4& GetViewProjectionMatrix() const override { return m_viewProjection; }
 
 private:
     glm::mat4 m_view;
