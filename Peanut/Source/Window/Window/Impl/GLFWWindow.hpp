@@ -25,11 +25,16 @@ public:
     void* GetNativeHandle() const override;
     int GetWidth() const override { return m_data.width; }
     int GetHeight() const override { return m_data.height; }
+    float GetAspectRatio() const override { return static_cast<float>(m_data.width) / static_cast<float>(m_data.height); }
 
     const std::string& GetTitle() const override { return m_data.title; }
     void SetTitle(const std::string& title) override;
 
     void SetSwapInterval(int interval) override;
+
+    bool IsKeyPressed(KeyCode key) const override;
+    bool IsMouseButtonPressed(MouseButtonCode button) const override;
+    glm::vec2 GetCursorPosition() const override;
 
 private:
     static int s_windowCount;
@@ -51,6 +56,8 @@ private:
     void SetupGlfwCallbacks();
     static void OnWindowCreate();
     static void OnWindowDestroy();
+    static int KeyCodeToGlfwInt(KeyCode key);
+    static int MouseButtonCodeToGlfwInt(MouseButtonCode button);
 };
 
 }

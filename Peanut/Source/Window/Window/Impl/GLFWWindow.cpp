@@ -14,9 +14,9 @@ int GLFWWindow::s_windowCount = 0;
 GLFWWindow::GLFWWindow(const WindowSettings& settings)
     : Window()
 {
-    m_data.width = settings.width;
-    m_data.height = settings.height;
-    m_data.title = settings.title;
+    m_data.width =  static_cast<int>(settings.Width);
+    m_data.height = static_cast<int>(settings.Height);
+    m_data.title = settings.Title;
 
     OnWindowCreate();
 
@@ -30,7 +30,7 @@ GLFWWindow::GLFWWindow(const WindowSettings& settings)
     GetRenderContext().PostWindowSetup(*this);
     
     SetupGlfwCallbacks();
-    SetSwapInterval(settings.swapInterval);
+    SetSwapInterval(static_cast<int>(settings.SwapInterval));
 }
 
 void GLFWWindow::OnWindowCreate()
@@ -183,6 +183,33 @@ void GLFWWindow::SetSwapInterval(int interval)
     PN_CORE_ASSERT(interval >= 0, "Negative swap interval is provided: {}", interval);
     m_data.swapInterval = interval;
     GetRenderContext().SetSwapInterval(interval);
+}
+
+bool GLFWWindow::IsKeyPressed(KeyCode key) const 
+{
+    return (glfwGetKey(m_data.glfwHandle, KeyCodeToGlfwInt(key)) == GLFW_PRESS);
+}
+
+bool GLFWWindow::IsMouseButtonPressed(MouseButtonCode button) const 
+{
+    return (glfwGetMouseButton(m_data.glfwHandle, MouseButtonCodeToGlfwInt(button)) == GLFW_PRESS);
+}
+
+int GLFWWindow::KeyCodeToGlfwInt(KeyCode key)
+{
+    return static_cast<int>(key);
+}
+
+int GLFWWindow::MouseButtonCodeToGlfwInt(MouseButtonCode button)
+{
+    return static_cast<int>(button);
+}
+
+glm::vec2 GLFWWindow::GetCursorPosition() const 
+{
+    double x, y;
+    glfwGetCursorPos(m_data.glfwHandle, &x, &y);
+    return glm::vec2(static_cast<float>(x), static_cast<float>(y));
 }
 
 }

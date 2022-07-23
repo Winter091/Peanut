@@ -80,7 +80,7 @@ void SandboxApp::OnEvent(pn::Event& event)
 
 void SandboxApp::OnUpdate()
 {
-    m_camera->SetAspectRatio((float)GetWindow().GetWidth() / (float)GetWindow().GetHeight());
+    m_camera->SetAspectRatio(GetWindow().GetAspectRatio());
 
     glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.01f));
     glm::mat4 mvpMatrix = m_camera->GetViewProjectionMatrix() * modelMatrix;
@@ -99,13 +99,11 @@ pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
 {
     PN_CLIENT_DEBUG("Launch args:");
     for (std::size_t i = 0; i < args.GetSize(); i++) {
-        PN_CLIENT_DEBUG("Arg {}: {}", i, args[i]);
+        PN_CLIENT_DEBUG("   Arg {}: {}", i, args[i]);
     }
 
-    pn::WindowSettings settings;
-    settings.width = 1280;
-    settings.height = 720;
-    settings.title = "Sandbox Application";
-
-    return new SandboxApp(settings);
+    return new SandboxApp(WindowSettings()
+        .SetTitle("Sandbox Application")
+        .SetWidth(1280).SetHeight(720)
+        .UseVsync(true));
 }
