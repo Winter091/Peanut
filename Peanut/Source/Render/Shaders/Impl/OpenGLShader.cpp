@@ -13,14 +13,16 @@ OpenGLShader::OpenGLShader(const ShaderPaths& paths, std::string name)
     : m_name(std::move(name))
 {
     ShaderSources sources;
-    sources.vertexSource = ReadFile(paths.vertexPath);
-    sources.fragmentSource = ReadFile(paths.fragmentPath);
+    sources.VertexSource = ReadFile(paths.VertexPath);
+    sources.FragmentSource = ReadFile(paths.FragmentPath);
 
     m_handler = CreateShaderProgram(sources);
 }
 
 std::string OpenGLShader::ReadFile(const std::string& filePath)
 {
+    PN_CORE_ASSERT(!filePath.empty(), "Empty shader file path");
+
     std::ifstream file(filePath);
 	if (!file) {
 		PN_CORE_CRITICAL("Unable to open shader source file: {}", filePath);
@@ -42,8 +44,8 @@ OpenGLShader::OpenGLShader(const ShaderSources& sources, std::string name)
 
 uint32_t OpenGLShader::CreateShaderProgram(const ShaderSources& sources)
 {
-    uint32_t vertexHandler = CompileShader(sources.vertexSource, GL_VERTEX_SHADER);
-    uint32_t fragmentHandler = CompileShader(sources.fragmentSource, GL_FRAGMENT_SHADER);
+    uint32_t vertexHandler = CompileShader(sources.VertexSource, GL_VERTEX_SHADER);
+    uint32_t fragmentHandler = CompileShader(sources.FragmentSource, GL_FRAGMENT_SHADER);
 
     uint32_t programHandler = glCreateProgram();
 	glAttachShader(programHandler, vertexHandler);

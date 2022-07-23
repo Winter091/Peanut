@@ -31,30 +31,25 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     m_rectangleVAO = pn::VertexArray::Create();
 
     auto vertexBuffer = pn::VertexBuffer::Create(sizeof(vertices), vertices);
-    auto layout = pn::BufferLayout::Create({
+    vertexBuffer->SetLayout(pn::BufferLayout::Create({
         { 0, pn::BufferLayoutElementType::Float, 3, "position" },
         { 1, pn::BufferLayoutElementType::Float, 2, "tex_coord" },
-    });
-    vertexBuffer->SetLayout(layout);
+    }));
     m_rectangleVAO->AddVertexBuffer(vertexBuffer, pn::BufferDataUsage::PerVertex);
 
-    auto instanceBuffer = pn::VertexBuffer::Create(
-        static_cast<uint32_t>(sizeof(offsets[0]) * offsets.size()), &offsets[0]);
-    auto instanceLayout = pn::BufferLayout::Create({
+    auto instanceBuffer = pn::VertexBuffer::Create(static_cast<uint32_t>(sizeof(offsets[0]) * offsets.size()), &offsets[0]);
+    instanceBuffer->SetLayout(pn::BufferLayout::Create({
         { 2, pn::BufferLayoutElementType::Float, 2, "offset" },
-    });
-    instanceBuffer->SetLayout(instanceLayout);
+    }));
     m_rectangleVAO->AddVertexBuffer(instanceBuffer, pn::BufferDataUsage::PerInstance);
 
     auto indexBuffer = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint8, sizeof(indices), indices);
     m_rectangleVAO->SetIndexBuffer(indexBuffer);
 
-    pn::ShaderPaths paths(
-        "Peanut/Assets/Shaders/test.vert", 
-        "Peanut/Assets/Shaders/test.frag"
-    );
-
-    m_shader = pn::Shader::Create(paths, "Test Shader");
+    m_shader = pn::Shader::Create(pn::ShaderPaths()
+        .SetVertexPath("Peanut/Assets/Shaders/test.vert")
+        .SetFragmentPath("Peanut/Assets/Shaders/test.frag"),
+        "Test Shader");
 
     m_texture = pn::Texture2D::Create("Peanut/Assets/Textures/container.jpg", pn::Texture2DSettings()
         .UseFormat(pn::TextureFormat::RGB)
