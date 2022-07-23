@@ -6,9 +6,9 @@ namespace pn {
 
 void Init()
 {
-    pn::Log::Init();
-    pn::Application::Init();
-    pn::RenderCommand::Init();
+    Log::Init();
+    Window::Init();
+    RenderCommand::Init();
 }
 
 }

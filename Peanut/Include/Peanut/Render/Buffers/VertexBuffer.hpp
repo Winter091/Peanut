@@ -29,6 +29,8 @@ public:
     virtual uint32_t GetVertexSize() const = 0;
     virtual uint32_t GetVertexCount() const = 0;
 
+    virtual int GetHandle() const = 0;
+
     static std::shared_ptr<VertexBuffer> Create(uint32_t size, const void* data = nullptr);
 };
 

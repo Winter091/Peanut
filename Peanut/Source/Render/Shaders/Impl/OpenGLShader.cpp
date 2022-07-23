@@ -52,6 +52,12 @@ uint32_t OpenGLShader::CreateShaderProgram(const ShaderSources& sources)
 	glAttachShader(programHandler, fragmentHandler);
 
 	glLinkProgram(programHandler);
+
+    GLchar info[1024];
+    GLsizei len;
+    glGetProgramInfoLog(programHandler, 1024, &len, info);
+    PN_CORE_WARN("{}", info);
+
 	glValidateProgram(programHandler);
 
 	glDetachShader(programHandler, vertexHandler);

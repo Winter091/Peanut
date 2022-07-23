@@ -8,7 +8,7 @@ namespace pn {
 class Shape
 {
 public:
-    Shape(const glm::vec2& pos = {});
+    Shape(const glm::vec2& pos = { 0.0f, 0.0f });
     virtual ~Shape() = default;
 
     virtual const glm::vec2& GetPos() const { return m_pos; }
