@@ -16,6 +16,9 @@
 #include "Events/Event.hpp"
 #include "Events/EventQueue.hpp"
 #include "Events/EventType.hpp"
+#include "Events/KeyEvents.hpp"
+#include "Events/MouseEvents.hpp"
+#include "Events/WindowEvents.hpp"
 
 #include "Render/Buffers/BufferLayout.hpp"
 #include "Render/Buffers/IndexBuffer.hpp"

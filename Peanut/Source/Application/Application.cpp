@@ -1,7 +1,7 @@
 #include <Peanut/Application/Application.hpp>
 
 #include <Core/MethodBinding.hpp>
-#include <Events/Impl/WindowEvents.hpp>
+#include <Peanut/Events/WindowEvents.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 
 namespace pn

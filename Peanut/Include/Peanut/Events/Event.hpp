@@ -33,11 +33,11 @@ private:
     bool m_isProcessed = false;
 };
 
+}
+
 #define PN_DEFINE_EVENT_TYPE(type) \
     EventType GetType() const override { return EventType::type; } \
     const char* GetStringType() const override { return #type; } \
     static EventType GetStaticType() { return EventType::type; }
-
-}
 
 #endif
