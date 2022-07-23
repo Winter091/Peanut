@@ -114,6 +114,7 @@ public:
     const glm::vec3& GetPosition() const { return m_position; }
 
     void SetDirection(const glm::vec3& direction);
+    void LookAt(const glm::vec3& point);
     const glm::vec3& GetDirection() const { return m_direction; }
 
     void SetUp(const glm::vec3& up);

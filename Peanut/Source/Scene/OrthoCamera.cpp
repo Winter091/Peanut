@@ -31,6 +31,11 @@ void OrthoCamera::SetDirection(const glm::vec3& direction)
     RecalculateViewMatrix();
 }
 
+void OrthoCamera::LookAt(const glm::vec3& point)
+{
+    SetDirection(point - m_position);
+}
+
 void OrthoCamera::SetUp(const glm::vec3& up)
 {
     m_up = glm::normalize(up);

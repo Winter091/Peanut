@@ -59,8 +59,9 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     );
 
     m_camera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
-        .SetZoom(0.5f)
-        .SetPosition({ 1.0f, 1.0f, 1.0f })
+        .SetZoom(0.2f)
+        .SetAspectRatio(GetWindow().GetAspectRatio())
+        .SetPosition({ 0.0f, 0.0f, 1.0f })
         .LookAt({ 0.0f, 0.0f, 0.0f })
         .SetBoundaries(pn::OrthoCameraBoundaries()
             .SetCenter({ 0.0f, 0.0f })
@@ -70,24 +71,46 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
 void SandboxApp::OnEvent(pn::Event& event)
 {
-    (void)event;
+    event.Dispatch<pn::EventType::WindowSizeChanged>([this](pn::Event&) {
+        m_camera->SetAspectRatio(GetWindow().GetAspectRatio());
+        return true;
+    });
 }
 
 void SandboxApp::OnUpdate()
 {
-    m_camera->SetAspectRatio(GetWindow().GetAspectRatio());
+    {
+        pn::Window& window = GetWindow();
+        glm::vec3 pos = m_camera->GetPosition();
+        float zoom = m_camera->GetZoom();
+        float delta = 0.001f;
+        float zoomDelta = 0.002f;
 
-    glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.01f));
-    glm::mat4 mvpMatrix = m_camera->GetViewProjectionMatrix() * modelMatrix;
+        if (window.IsKeyPressed(pn::KeyCode::W)) { pos.y += delta; }
+        if (window.IsKeyPressed(pn::KeyCode::S)) { pos.y -= delta; }
+        if (window.IsKeyPressed(pn::KeyCode::A)) { pos.x -= delta; }
+        if (window.IsKeyPressed(pn::KeyCode::D)) { pos.x += delta; }
+        if (window.IsKeyPressed(pn::KeyCode::PageUp)) { zoom -= zoomDelta; }
+        if (window.IsKeyPressed(pn::KeyCode::PageDown)) { zoom += zoomDelta; }
 
-    pn::RenderCommand::SetClearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
-    pn::RenderCommand::Clear();
+        m_camera->SetPosition(pos);
+        m_camera->SetZoom(zoom);
+    }
 
-    m_shader->Bind();
-    m_shader->SetMat4("u_viewProjMatrix", mvpMatrix);
-    m_texture->BindToSlot(0);
-    
-    pn::RenderCommand::DrawIndexedInstanced(m_rectangleVAO);
+    {
+        pn::RenderCommand::SetClearColor({ 0.05f, 0.05f, 0.05f, 1.0f });
+        pn::RenderCommand::Clear();
+
+        m_shader->Bind();
+        
+        glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.01f));
+        glm::mat4 mvpMatrix = m_camera->GetViewProjectionMatrix() * modelMatrix;
+        m_shader->SetMat4("u_viewProjMatrix", mvpMatrix);
+        
+        m_texture->BindToSlot(0);
+        
+        pn::RenderCommand::DrawIndexedInstanced(m_rectangleVAO);
+    }
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
