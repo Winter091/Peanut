@@ -14,6 +14,8 @@ public:
     RenderCommand() = delete;
 
     static void Init();
+    static void Shutdown();
+
     static RenderAPI GetRenderAPI();
 
     static void SetClearColor(const glm::vec4& color);

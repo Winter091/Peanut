@@ -25,6 +25,7 @@ public:
     virtual ~Window() = default;
 
     static void Init();
+    static void Shutdown();
     static std::unique_ptr<Window> Create(const WindowSettings& settings);
     static WindowProvider GetWindowProvider();
     RenderContext& GetRenderContext() { return *m_renderContext; }

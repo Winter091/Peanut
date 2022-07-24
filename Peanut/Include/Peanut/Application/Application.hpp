@@ -15,7 +15,7 @@ public:
     Application(const WindowSettings& settings);
     Application(const Application&) = delete;
     Application& operator=(const Application&) = delete;
-    virtual ~Application();
+    virtual ~Application() = default;
 
     Window& GetWindow() { return *m_window; }
 

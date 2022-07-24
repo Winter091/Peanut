@@ -12,6 +12,7 @@ class Log
 {
 public:
     static void Init();
+    static void Shutdown();
 
     static spdlog::logger& GetCoreLogger();
     static spdlog::logger& GetClientLogger();

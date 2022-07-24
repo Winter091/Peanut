@@ -32,6 +32,13 @@ void Window::Init()
 #endif
 }
 
+void Window::Shutdown()
+{
+    PN_CORE_ASSERT(s_isInitialized, "Window is not initialized, unable to shutdown");
+    s_windowProvider = WindowProvider::None;
+    s_isInitialized = false; 
+}
+
 std::unique_ptr<Window> Window::Create(const WindowSettings& settings)
 {
     PN_CORE_ASSERT(s_isInitialized, "You must init window before trying to create it");
