@@ -5,8 +5,9 @@
 namespace pn {
 
 Rectangle::Rectangle(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color)
-    : Shape(pos, color)
+    : m_pos(pos)
     , m_size(size)
+    , m_color(color)
 {
     RecalculateTransform();
 }
@@ -32,12 +33,6 @@ void Rectangle::RecalculateTransform()
 {
     m_transform = glm::translate(glm::vec3(m_pos + m_size / 2.0f, 0.0f)) *
                   glm::scale(glm::vec3(m_size, 1.0f));
-}
-
-
-const glm::mat4& Rectangle::GetTransformMatrix() const
-{
-    return m_transform;
 }
 
 }
