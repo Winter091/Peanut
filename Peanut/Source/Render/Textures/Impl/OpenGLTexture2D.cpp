@@ -89,14 +89,12 @@ OpenGLTexture2D::~OpenGLTexture2D()
 void OpenGLTexture2D::BindToSlot(uint32_t slot)
 {
     m_slot = slot;
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, m_descriptor);
+    glBindTextureUnit(slot, m_descriptor);
 }
 
 void OpenGLTexture2D::Unbind()
 {
-    glActiveTexture(GL_TEXTURE0 + m_slot);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTextureUnit(m_slot, m_descriptor);
 }
 
 void OpenGLTexture2D::SetWrapping(TextureWrap x, TextureWrap y)
