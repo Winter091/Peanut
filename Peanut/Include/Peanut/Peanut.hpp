@@ -25,12 +25,13 @@
 #include "Render/Buffers/VertexArray.hpp"
 #include "Render/Buffers/VertexBuffer.hpp"
 #include "Render/Commands/RenderCommand.hpp"
-#include "Render/Commands/RenderCommandImpl.hpp"
 #include "Render/RenderAPI.hpp"
 #include "Render/Shaders/Shader.hpp"
+#include "Render/Textures/Texture.hpp"
 #include "Render/Textures/Texture2D.hpp"
 
-#include "Scene/OrthoCamera.hpp"
+#include "Scene/Camera/Camera.hpp"
+#include "Scene/Camera/OrthoCamera.hpp"
 
 #include "Window/RenderContext/RenderContext.hpp"
 #include "Window/Window/Window.hpp"

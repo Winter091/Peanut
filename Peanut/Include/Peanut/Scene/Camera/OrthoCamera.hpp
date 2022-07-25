@@ -5,7 +5,7 @@
 #include <glm/vec3.hpp>
 
 #include <Peanut/Core/Assert.hpp>
-#include <Peanut/Scene/Camera.hpp>
+#include <Peanut/Scene/Camera/Camera.hpp>
 
 namespace pn {
 

@@ -1,7 +1,7 @@
 #ifndef __RENDERER2D_H__
 #define __RENDERER2D_H__
 
-#include <Peanut/Scene/Camera.hpp>
+#include <Peanut/Scene/Camera/Camera.hpp>
 #include <Peanut/2D/Shapes/Rectangle.hpp>
 
 namespace pn {
