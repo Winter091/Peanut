@@ -1,5 +1,4 @@
-#ifndef __EVENTQUEUE_H__
-#define __EVENTQUEUE_H__
+#pragma once
 
 #include <queue>
 #include <memory>
@@ -25,5 +24,3 @@ private:
 };
 
 }
-
-#endif

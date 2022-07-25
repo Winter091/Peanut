@@ -1,5 +1,4 @@
-#ifndef __MOUSECODES_H__
-#define __MOUSECODES_H__
+#pragma once
 
 #include <cstdint>
 
@@ -24,5 +23,3 @@ namespace pn {
 	};
 
 }
-
-#endif

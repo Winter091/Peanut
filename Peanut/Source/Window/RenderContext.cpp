@@ -1,8 +1,8 @@
-#include <Peanut/Window/RenderContext/RenderContext.hpp>
+#include <Peanut/Window/RenderContext.hpp>
 
-#include <Window/RenderContext/Impl/OpenGLGLFWRenderContext.hpp>
+#include <Window/RenderContextImpl/OpenGLGLFWRenderContext.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
-#include <Peanut/Window/Window/Window.hpp>
+#include <Peanut/Window/Window.hpp>
 #include <Peanut/Core/Assert.hpp>
 
 namespace pn

@@ -1,5 +1,4 @@
-#ifndef __OPENGLTEXTURE_H__
-#define __OPENGLTEXTURE_H__
+#pragma once
 
 #include <Peanut/Render/Textures/Texture2D.hpp>
 
@@ -45,5 +44,3 @@ private:
 };
 
 }
-
-#endif

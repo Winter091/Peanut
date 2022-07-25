@@ -1,5 +1,4 @@
-#ifndef __OPENGLVERTEXBUFFER_H__
-#define __OPENGLVERTEXBUFFER_H__
+#pragma once
 
 #include <Peanut/Render/Buffers/VertexBuffer.hpp>
 
@@ -34,5 +33,3 @@ private:
 };
 
 }
-
-#endif

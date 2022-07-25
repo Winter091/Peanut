@@ -1,9 +1,10 @@
-#ifndef __RENDERCOMMAND_H__
-#define __RENDERCOMMAND_H__
+#pragma once
 
 #include <Peanut/Render/RenderAPI.hpp>
-#include <Peanut/Render/Commands/RenderCommandImpl.hpp>
+#include <Peanut/Render/Buffers/VertexArray.hpp>
+
 #include <glm/vec4.hpp>
+
 #include <memory>
 
 namespace pn {
@@ -29,14 +30,6 @@ public:
         std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0, uint32_t instanceCount = 0);
     static void DrawIndexedInstanced(
         std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0, uint32_t instanceCount = 0);
-
-
-private:
-    static RenderAPI s_renderAPI;
-    static bool s_isInitialized;
-    static std::unique_ptr<RenderCommandImpl> s_renderCommandImpl;
 };
 
 }
-
-#endif

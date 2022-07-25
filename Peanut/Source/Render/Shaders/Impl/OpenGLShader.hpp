@@ -1,5 +1,4 @@
-#ifndef __OPENGLSHADER_H__
-#define __OPENGLSHADER_H__
+#pragma once
 
 #include <Peanut/Render/Shaders/Shader.hpp>
 #include <unordered_map>
@@ -47,5 +46,3 @@ private:
 };
 
 }
-
-#endif

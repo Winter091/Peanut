@@ -1,5 +1,4 @@
-#ifndef __PEANUT_H__
-#define __PEANUT_H__
+#pragma once
 
 #include "2D/Render/Renderer2D.hpp"
 #include "2D/Shapes/Rectangle.hpp"
@@ -25,16 +24,15 @@
 #include "Render/Buffers/VertexArray.hpp"
 #include "Render/Buffers/VertexBuffer.hpp"
 #include "Render/Commands/RenderCommand.hpp"
-#include "Render/Commands/RenderCommandImpl.hpp"
 #include "Render/RenderAPI.hpp"
 #include "Render/Shaders/Shader.hpp"
+#include "Render/Textures/Texture.hpp"
 #include "Render/Textures/Texture2D.hpp"
 
-#include "Scene/OrthoCamera.hpp"
+#include "Scene/Camera/Camera.hpp"
+#include "Scene/Camera/OrthoCamera.hpp"
 
-#include "Window/RenderContext/RenderContext.hpp"
-#include "Window/Window/Window.hpp"
-#include "Window/Window/WindowProvider.hpp"
-#include "Window/Window/WindowSettings.hpp"
-
-#endif
+#include "Window/RenderContext.hpp"
+#include "Window/Window.hpp"
+#include "Window/WindowProvider.hpp"
+#include "Window/WindowSettings.hpp"

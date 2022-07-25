@@ -1,5 +1,4 @@
-#ifndef __KEYPRESSEDEVENTS_H__
-#define __KEYPRESSEDEVENTS_H__
+#pragma once
 
 #include <Peanut/Events/Event.hpp>
 #include <Peanut/Core/KeyCodes.hpp>
@@ -73,5 +72,3 @@ private:
 };
 
 }
-
-#endif

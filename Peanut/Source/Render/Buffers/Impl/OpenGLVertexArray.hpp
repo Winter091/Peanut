@@ -1,5 +1,4 @@
-#ifndef __OPENGLVERTEXARRAY_H__
-#define __OPENGLVERTEXARRAY_H__
+#pragma once
 
 #include <Peanut/Render/Buffers/VertexArray.hpp>
 
@@ -38,5 +37,3 @@ private:
 };
 
 }
-
-#endif

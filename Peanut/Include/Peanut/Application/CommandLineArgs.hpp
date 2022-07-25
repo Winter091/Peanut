@@ -1,5 +1,4 @@
-#ifndef __COMMANDLINEARGS_H__
-#define __COMMANDLINEARGS_H__
+#pragma once
 
 #include <vector>
 #include <string>
@@ -31,5 +30,3 @@ private:
 };
 
 }
-
-#endif

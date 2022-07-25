@@ -1,5 +1,4 @@
-#ifndef __EVENT_H__
-#define __EVENT_H__
+#pragma once
 
 #include "EventType.hpp"
 #include <Peanut/Core/Assert.hpp>
@@ -39,5 +38,3 @@ private:
     EventType GetType() const override { return EventType::type; } \
     const char* GetStringType() const override { return #type; } \
     static EventType GetStaticType() { return EventType::type; }
-
-#endif

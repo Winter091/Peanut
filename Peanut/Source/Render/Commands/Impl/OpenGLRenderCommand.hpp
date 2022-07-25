@@ -1,7 +1,6 @@
-#ifndef __OPENGLRENDERCOMMAND_H__
-#define __OPENGLRENDERCOMMAND_H__
+#pragma once
 
-#include <Peanut/Render/Commands/RenderCommandImpl.hpp>
+#include <Render/Commands/RenderCommandImpl.hpp>
 
 namespace pn {
 
@@ -28,5 +27,3 @@ private:
 };
 
 }
-
-#endif

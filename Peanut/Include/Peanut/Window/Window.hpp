@@ -1,10 +1,9 @@
-#ifndef __WINDOW_H__
-#define __WINDOW_H__
+#pragma once
 
-#include <Peanut/Window/RenderContext/RenderContext.hpp>
-#include <Peanut/Window/Window/WindowProvider.hpp>
+#include <Peanut/Window/RenderContext.hpp>
+#include <Peanut/Window/WindowProvider.hpp>
 #include <Peanut/Events/Event.hpp>
-#include <Peanut/Window/Window/WindowSettings.hpp>
+#include <Peanut/Window/WindowSettings.hpp>
 #include <Peanut/Core/KeyCodes.hpp>
 #include <Peanut/Core/MouseCodes.hpp>
 #include <glm/vec2.hpp>
@@ -58,5 +57,3 @@ private:
 };
 
 }
-
-#endif

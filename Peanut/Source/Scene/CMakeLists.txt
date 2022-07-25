@@ -1,4 +1,1 @@
-target_sources(
-    Peanut PRIVATE
-    OrthoCamera.cpp
-)
+add_subdirectory(Camera)

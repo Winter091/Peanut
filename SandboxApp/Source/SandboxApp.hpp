@@ -1,5 +1,4 @@
-#ifndef __SANDBOXAPP_H__
-#define __SANDBOXAPP_H__
+#pragma once
 
 #include <Peanut/Peanut.hpp>
 
@@ -18,5 +17,3 @@ private:
     std::shared_ptr<pn::Texture2D> m_texture;
     std::shared_ptr<pn::OrthoCamera> m_camera;
 };
-
-#endif

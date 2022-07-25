@@ -1,5 +1,4 @@
-#ifndef __WINDOWSETTINGS_H__
-#define __WINDOWSETTINGS_H__
+#pragma once
 
 #include <Peanut/Core/Assert.hpp>
 #include <string>
@@ -22,5 +21,3 @@ public:
 };
 
 }
-
-#endif

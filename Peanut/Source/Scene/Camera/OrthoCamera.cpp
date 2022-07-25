@@ -1,4 +1,4 @@
-#include <Peanut/Scene/OrthoCamera.hpp>
+#include <Peanut/Scene/Camera/OrthoCamera.hpp>
 
 #include <glm/gtc/matrix_transform.hpp>
 

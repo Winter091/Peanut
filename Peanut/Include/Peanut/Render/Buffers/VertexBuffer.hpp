@@ -1,5 +1,4 @@
-#ifndef __VERTEXBUFFER_H__
-#define __VERTEXBUFFER_H__
+#pragma once
 
 #include <Peanut/Render/Buffers/BufferLayout.hpp>
 #include <cstdint>
@@ -35,5 +34,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __OPENGLINDEXBUFFER_H__
-#define __OPENGLINDEXBUFFER_H__
+#pragma once
 
 #include <Peanut/Render/Buffers/IndexBuffer.hpp>
 
@@ -32,5 +31,3 @@ private:
 };
 
 }
-
-#endif

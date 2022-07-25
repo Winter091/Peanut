@@ -1,5 +1,4 @@
-#ifndef __MOUSEEVENTS_H__
-#define __MOUSEEVENTS_H__
+#pragma once
 
 #include <Peanut/Events/Event.hpp>
 #include <Peanut/Core/MouseCodes.hpp>
@@ -99,5 +98,3 @@ private:
 };
 
 }
-
-#endif
