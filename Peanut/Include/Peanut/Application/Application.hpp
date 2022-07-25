@@ -1,8 +1,8 @@
 #ifndef __APPLICATION_H__
 #define __APPLICATION_H__
 
-#include <Peanut/Window/Window/Window.hpp>
-#include <Peanut/Window/Window/WindowSettings.hpp>
+#include <Peanut/Window/Window.hpp>
+#include <Peanut/Window/WindowSettings.hpp>
 #include <Peanut/Events/EventQueue.hpp>
 #include "CommandLineArgs.hpp"
 #include <memory>

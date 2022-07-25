@@ -1,6 +1,6 @@
 #include "OpenGLGLFWRenderContext.hpp"
 
-#include <Window/Window/Impl/GLFWWindow.hpp>
+#include <Window/WindowImpl/GLFWWindow.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 

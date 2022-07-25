@@ -33,9 +33,9 @@
 #include "Scene/Camera/Camera.hpp"
 #include "Scene/Camera/OrthoCamera.hpp"
 
-#include "Window/RenderContext/RenderContext.hpp"
-#include "Window/Window/Window.hpp"
-#include "Window/Window/WindowProvider.hpp"
-#include "Window/Window/WindowSettings.hpp"
+#include "Window/RenderContext.hpp"
+#include "Window/Window.hpp"
+#include "Window/WindowProvider.hpp"
+#include "Window/WindowSettings.hpp"
 
 #endif

@@ -1,6 +1,6 @@
-#include <Peanut/Window/Window/Window.hpp>
+#include <Peanut/Window/Window.hpp>
 
-#include <Window/Window/Impl/GLFWWindow.hpp>
+#include <Window/WindowImpl/GLFWWindow.hpp>
 #include <Peanut/Core/Assert.hpp>
 
 namespace pn {
