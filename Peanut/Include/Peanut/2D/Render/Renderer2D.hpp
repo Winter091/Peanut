@@ -15,7 +15,7 @@ public:
     static void BeginScene(const Camera& camera);
     static void EndScene();
 
-    static void DrawShape(const Rectangle& rectangle);
+    static void DrawRectangle(const Rectangle& rectangle);
 };
 
 }

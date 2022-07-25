@@ -156,7 +156,7 @@ void Renderer2D::EndScene()
     Flush();
 }
 
-void Renderer2D::DrawShape(const Rectangle& rectangle)
+void Renderer2D::DrawRectangle(const Rectangle& rectangle)
 {
     if (s_data->NumRectInstances + 1 > MAX_RECTANGLES_PER_BATCH) {
         Flush();

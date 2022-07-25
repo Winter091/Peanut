@@ -15,8 +15,8 @@ class Shape
 public:
     virtual ~Shape() = default;
 
-    virtual const glm::vec2& GetPos() const = 0;
-    virtual void SetPos(const glm::vec2& pos) = 0;
+    virtual const glm::vec2& GetPosition() const = 0;
+    virtual void SetPosition(const glm::vec2& pos) = 0;
 
     virtual const glm::vec4& GetColor() const = 0;
     virtual void SetColor(const glm::vec4& color) = 0;

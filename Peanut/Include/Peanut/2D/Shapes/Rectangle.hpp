@@ -11,8 +11,8 @@ public:
     Rectangle(const glm::vec2& pos = {0.0f, 0.0f}, const glm::vec2& size = {1.0f, 1.0f}, const glm::vec4& color = glm::vec4(1.0f));
     ~Rectangle() override = default;
 
-    virtual const glm::vec2& GetPos() const override { return m_pos; }
-    void SetPos(const glm::vec2& pos) override;
+    virtual const glm::vec2& GetPosition() const override { return m_pos; }
+    void SetPosition(const glm::vec2& pos) override;
 
     virtual const glm::vec4& GetColor() const override { return m_color; }
     void SetColor(const glm::vec4& color) override;

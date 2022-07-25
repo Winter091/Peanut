@@ -64,11 +64,11 @@ void SandboxApp::OnUpdate()
                     float y = step * static_cast<float>(j);
 
                     pn::Rectangle rect;
-                    rect.SetPos({x, y});
+                    rect.SetPosition({x, y});
                     rect.SetSize({1.0f, 1.0f});
                     rect.SetTexture(m_texture);
 
-                    pn::Renderer2D::DrawShape(rect);
+                    pn::Renderer2D::DrawRectangle(rect);
                 }
             }
         }

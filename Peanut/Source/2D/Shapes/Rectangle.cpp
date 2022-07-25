@@ -12,7 +12,7 @@ Rectangle::Rectangle(const glm::vec2& pos, const glm::vec2& size, const glm::vec
     RecalculateTransform();
 }
 
-void Rectangle::SetPos(const glm::vec2& pos)
+void Rectangle::SetPosition(const glm::vec2& pos)
 {
     m_pos = pos;
     RecalculateTransform();
