@@ -1,5 +1,4 @@
-#ifndef __RENDERAPI_H__
-#define __RENDERAPI_H__
+#pragma once
 
 #include <cstdint>
 
@@ -12,5 +11,3 @@ enum class RenderAPI : uint32_t
 };
 
 }
-
-#endif

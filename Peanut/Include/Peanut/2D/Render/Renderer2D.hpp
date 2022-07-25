@@ -1,5 +1,4 @@
-#ifndef __RENDERER2D_H__
-#define __RENDERER2D_H__
+#pragma once
 
 #include <Peanut/Scene/Camera/Camera.hpp>
 #include <Peanut/2D/Shapes/Rectangle.hpp>
@@ -19,5 +18,3 @@ public:
 };
 
 }
-
-#endif

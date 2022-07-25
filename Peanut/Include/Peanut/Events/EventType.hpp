@@ -1,5 +1,4 @@
-#ifndef __EVENTTYPE_H__
-#define __EVENTTYPE_H__
+#pragma once
 
 #include <cstdint>
 
@@ -18,5 +17,3 @@ enum class EventType : uint32_t
 };
 
 }
-
-#endif

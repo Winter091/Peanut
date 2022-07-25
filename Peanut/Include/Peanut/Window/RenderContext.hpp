@@ -1,5 +1,4 @@
-#ifndef __RENDERCONTEXT_H__
-#define __RENDERCONTEXT_H__
+#pragma once
 
 #include <memory>
 
@@ -27,5 +26,3 @@ protected:
 };
 
 }
-
-#endif

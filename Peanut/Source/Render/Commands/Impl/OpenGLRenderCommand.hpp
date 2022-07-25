@@ -1,5 +1,4 @@
-#ifndef __OPENGLRENDERCOMMAND_H__
-#define __OPENGLRENDERCOMMAND_H__
+#pragma once
 
 #include <Render/Commands/RenderCommandImpl.hpp>
 
@@ -28,5 +27,3 @@ private:
 };
 
 }
-
-#endif

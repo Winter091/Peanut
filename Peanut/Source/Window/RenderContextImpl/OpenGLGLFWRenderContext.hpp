@@ -1,5 +1,4 @@
-#ifndef __OPENGLGLFWRENDERCONTEXT_H__
-#define __OPENGLGLFWRENDERCONTEXT_H__
+#pragma once
 
 #include <Peanut/Window/RenderContext.hpp>
 #include <Peanut/Core/Log.hpp>
@@ -26,5 +25,3 @@ private:
 };
 
 }
-
-#endif

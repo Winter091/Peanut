@@ -1,5 +1,4 @@
-#ifndef __KEYCODES_H__
-#define __KEYCODES_H__
+#pragma once
 
 #include <cstdint>
 
@@ -141,6 +140,3 @@ namespace pn {
 	};
 
 }
-
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __LOG_H__
-#define __LOG_H__
+#pragma once
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
@@ -42,6 +41,3 @@ private:
 #define PN_CLIENT_WARN(...)     ::pn::Log::GetClientLogger().warn(__VA_ARGS__)
 #define PN_CLIENT_ERROR(...)    ::pn::Log::GetClientLogger().error(__VA_ARGS__)
 #define PN_CLIENT_CRITICAL(...) ::pn::Log::GetClientLogger().critical(__VA_ARGS__)
-
-
-#endif

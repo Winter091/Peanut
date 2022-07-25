@@ -1,5 +1,4 @@
-#ifndef __ASSERT_H__
-#define __ASSERT_H__
+#pragma once
 
 #include <Peanut/Core/Log.hpp>
 #include <filesystem>
@@ -20,6 +19,4 @@
 #else
     #define PN_CORE_ASSERT(cond, fmt, ...)
     #define PN_CLIENT_ASSERT(cond, fmt, ...)
-#endif
-
 #endif

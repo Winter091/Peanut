@@ -1,5 +1,4 @@
-#ifndef __ORTHOCAMERA_H__
-#define __ORTHOCAMERA_H__
+#pragma once
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
@@ -154,5 +153,3 @@ private:
 };
 
 }
-
-#endif

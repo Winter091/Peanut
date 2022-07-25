@@ -1,5 +1,4 @@
-#ifndef __RENDERCOMMAND_H__
-#define __RENDERCOMMAND_H__
+#pragma once
 
 #include <Peanut/Render/RenderAPI.hpp>
 #include <Peanut/Render/Buffers/VertexArray.hpp>
@@ -34,5 +33,3 @@ public:
 };
 
 }
-
-#endif

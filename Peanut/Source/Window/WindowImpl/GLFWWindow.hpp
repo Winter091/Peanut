@@ -1,5 +1,4 @@
-#ifndef __GLFWWINDOW_H__
-#define __GLFWWINDOW_H__
+#pragma once
 
 #include <Peanut/Window/Window.hpp>
 #include <glad/glad.h>
@@ -61,5 +60,3 @@ private:
 };
 
 }
-
-#endif

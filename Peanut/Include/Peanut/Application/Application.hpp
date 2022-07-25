@@ -1,5 +1,4 @@
-#ifndef __APPLICATION_H__
-#define __APPLICATION_H__
+#pragma once
 
 #include <Peanut/Window/Window.hpp>
 #include <Peanut/Window/WindowSettings.hpp>
@@ -38,5 +37,3 @@ private:
 };
 
 }
-
-#endif

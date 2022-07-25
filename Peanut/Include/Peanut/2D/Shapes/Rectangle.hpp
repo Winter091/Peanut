@@ -1,5 +1,4 @@
-#ifndef __RECTANGLE_H__
-#define __RECTANGLE_H__
+#pragma once
 
 #include "Shape.hpp"
 
@@ -39,6 +38,3 @@ private:
 };
 
 }
-
-
-#endif

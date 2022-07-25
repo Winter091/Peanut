@@ -1,5 +1,4 @@
-#ifndef __VERTEXARRAY_H__
-#define __VERTEXARRAY_H__
+#pragma once
 
 #include <Peanut/Render/Buffers/VertexBuffer.hpp>
 #include <Peanut/Render/Buffers/IndexBuffer.hpp>
@@ -35,5 +34,3 @@ public:
 };
 
 }
-
-#endif

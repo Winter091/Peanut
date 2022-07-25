@@ -1,5 +1,4 @@
-#ifndef __WINDOWEVENTS_H__
-#define __WINDOWEVENTS_H__
+#pragma once
 
 #include <Peanut/Events/Event.hpp>
 
@@ -30,5 +29,3 @@ private:
 };
 
 }
-
-#endif

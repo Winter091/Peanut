@@ -1,5 +1,4 @@
-#ifndef __PEANUT_H__
-#define __PEANUT_H__
+#pragma once
 
 #include "2D/Render/Renderer2D.hpp"
 #include "2D/Shapes/Rectangle.hpp"
@@ -37,5 +36,3 @@
 #include "Window/Window.hpp"
 #include "Window/WindowProvider.hpp"
 #include "Window/WindowSettings.hpp"
-
-#endif

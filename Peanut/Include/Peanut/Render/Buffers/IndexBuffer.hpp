@@ -1,5 +1,4 @@
-#ifndef __INDEXBUFFER_H__
-#define __INDEXBUFFER_H__
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -34,5 +33,3 @@ public:
 };
 
 }
-
-#endif

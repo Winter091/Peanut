@@ -1,5 +1,4 @@
-#ifndef __BUFFERLAYOUT_H__
-#define __BUFFERLAYOUT_H__
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -55,4 +54,3 @@ private:
 
 }
 
-#endif

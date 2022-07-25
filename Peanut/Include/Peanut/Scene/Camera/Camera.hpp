@@ -1,5 +1,4 @@
-#ifndef __CAMERA_H__
-#define __CAMERA_H__
+#pragma once
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
@@ -31,4 +30,3 @@ public:
 
 }
 
-#endif

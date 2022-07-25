@@ -1,5 +1,4 @@
-#ifndef __INIT_H__
-#define __INIT_H__
+#pragma once
 
 namespace pn::internal {
 
@@ -9,5 +8,3 @@ void ShutdownWithContext();
 void ShutdownWithoutContext();
 
 }
-
-#endif

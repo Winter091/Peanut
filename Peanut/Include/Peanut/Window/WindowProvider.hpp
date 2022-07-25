@@ -1,5 +1,4 @@
-#ifndef __WINDOWPROVIDER_H__
-#define __WINDOWPROVIDER_H__
+#pragma once
 
 #include <cstdint>
 
@@ -12,5 +11,3 @@ enum class WindowProvider : uint32_t
 };
 
 }
-
-#endif
