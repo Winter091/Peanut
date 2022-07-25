@@ -9,6 +9,10 @@ using namespace std::chrono_literals;
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
+    m_texture = pn::Texture2D::Create("Peanut/Assets/Textures/container.jpg", pn::Texture2DSettings()
+        .UseFormat(pn::TextureFormat::RGB)
+        .UseMipmapFiltering(pn::TextureMipmapFilter::LinearMipmapLinear, pn::TextureFilter::Linear));
+
     m_camera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
         .SetZoom(1.0f)
         .SetAspectRatio(GetWindow().GetAspectRatio())
@@ -62,7 +66,7 @@ void SandboxApp::OnUpdate()
                     pn::Rectangle rect;
                     rect.SetPos({x, y});
                     rect.SetSize({1.0f, 1.0f});
-                    rect.SetColor((i + j) % 2 ? glm::vec4(1.0f) : glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+                    rect.SetTexture(m_texture);
 
                     pn::Renderer2D::DrawShape(rect);
                 }

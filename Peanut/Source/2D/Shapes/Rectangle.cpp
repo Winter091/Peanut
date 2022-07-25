@@ -29,6 +29,11 @@ void Rectangle::SetSize(const glm::vec2& size)
     RecalculateTransform();   
 }
 
+void Rectangle::SetTexture(const std::shared_ptr<Texture2D>& texture)
+{
+    m_texture = texture;
+}
+
 void Rectangle::RecalculateTransform()
 {
     m_transform = glm::translate(glm::vec3(m_pos + m_size / 2.0f, 0.0f)) *

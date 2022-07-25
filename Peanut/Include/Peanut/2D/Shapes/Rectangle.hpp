@@ -20,6 +20,10 @@ public:
     const glm::vec2& GetSize() const { return m_size; }
     void SetSize(const glm::vec2& size);
 
+    bool HasTexture() const override { return m_texture != nullptr; }
+    const std::shared_ptr<Texture2D>& GetTexture() const override { return m_texture; }
+    void SetTexture(const std::shared_ptr<Texture2D>& texture) override;
+
     const glm::mat4& GetTransformMatrix() const override { return m_transform; }
 
 private:
@@ -27,6 +31,8 @@ private:
     glm::vec2 m_size;
     glm::vec4 m_color;
     glm::mat4 m_transform;
+
+    std::shared_ptr<Texture2D> m_texture;
 
 private:
     void RecalculateTransform();

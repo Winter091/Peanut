@@ -12,13 +12,17 @@ public:
     OpenGLTexture2D(const TextureData& data, const Texture2DSettings& settings, std::string name = "");
     ~OpenGLTexture2D() override;
 
+    bool operator==(const Texture2D& other) const override { return m_descriptor == other.GetDescriptor(); }
+
+    uint32_t GetDescriptor() const override { return m_descriptor; }
+
     const std::string& GetName() const override { return m_name; }
 
     void BindToSlot(uint32_t slot = 0) override;
     void Unbind() override;
 
-    size_t GetX() const override { return m_x; }
-    size_t GetY() const override { return m_y; } 
+    size_t GetWidth() const override { return m_x; }
+    size_t GetHeight() const override { return m_y; } 
 
     void SetWrapping(TextureWrap x, TextureWrap y) override;
     void SetFiltering(TextureFilter min, TextureFilter mag) override;

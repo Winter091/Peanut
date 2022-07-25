@@ -16,10 +16,6 @@ public:
     static void EndScene();
 
     static void DrawShape(const Rectangle& rectangle);
-
-private:
-    static void Flush();
-    static void ClearBuffers();
 };
 
 }

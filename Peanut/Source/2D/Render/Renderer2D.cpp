@@ -13,9 +13,11 @@
 
 namespace pn {
 
-static constexpr size_t MAX_QUADS_PER_BATCH = 100000;
-static constexpr size_t MAX_VERTICES_PER_BATCH = 4 * MAX_QUADS_PER_BATCH;
-static constexpr size_t MAX_INDICES_PER_BATCH = 6 * MAX_QUADS_PER_BATCH;
+static constexpr size_t MAX_RECTANGLES_PER_BATCH = 100000;
+static constexpr size_t MAX_VERTICES_PER_BATCH = 4 * MAX_RECTANGLES_PER_BATCH;
+static constexpr size_t MAX_INDICES_PER_BATCH = 6 * MAX_RECTANGLES_PER_BATCH;
+
+static constexpr size_t MAX_TEXTURE_SLOTS = 16;
 
 struct Renderer2DPerVertexData
 {
@@ -39,11 +41,64 @@ struct Renderer2DData
     std::shared_ptr<VertexArray> RectangleVAO;
     std::shared_ptr<Shader> RectangleShader;
 
-    uint32_t NumQuadInstances = 0;
+    uint32_t NumRectInstances = 0;
+
+    std::array<std::shared_ptr<Texture2D>, MAX_TEXTURE_SLOTS> Textures;
+    uint32_t NumTextures = 0;
 };
 
 static std::unique_ptr<Renderer2DData> s_data = nullptr;
 static bool s_isInitialized = false;
+
+static void Flush()
+{
+    int vertexHandle = s_data->RectanglePerVertexVBO->GetHandle();
+
+    void* buf = nullptr;
+    size_t bytes = 0;
+    buf = glMapNamedBuffer(vertexHandle, GL_WRITE_ONLY);
+    PN_CORE_ASSERT(buf, "nullptr");
+    bytes = sizeof(Renderer2DPerVertexData) * s_data->RectanglePerVertexData.size();
+    memcpy(buf, &s_data->RectanglePerVertexData[0], bytes);
+    glUnmapNamedBuffer(vertexHandle);
+
+    for (uint32_t i = 0; i < s_data->NumTextures; i++) {
+        s_data->Textures[i]->BindToSlot(i);
+    }
+
+    RenderCommand::DrawIndexed(s_data->RectangleVAO, s_data->NumRectInstances * 6);
+}
+
+static void ClearBuffers()
+{
+    s_data->NumRectInstances = 0;
+    s_data->NumTextures = 0;
+}
+
+static int32_t FindTextureIndex(const Texture2D& texture)
+{
+    for (uint32_t i = 0; i < s_data->NumTextures; i++) {
+        if (texture == (*s_data->Textures[i])) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+static int32_t AddTextureToList(const std::shared_ptr<Texture2D>& texture)
+{
+    int32_t index = FindTextureIndex(*texture);
+    if (index == -1) {
+        if (s_data->NumTextures + 1 >= MAX_TEXTURE_SLOTS) {
+            Flush();
+            ClearBuffers();
+        }
+        index = s_data->NumTextures;
+        s_data->Textures[index] = texture;
+        s_data->NumTextures++;
+    }
+    return index;
+}
 
 void Renderer2D::Init()
 {
@@ -65,7 +120,7 @@ void Renderer2D::Init()
     std::vector<uint32_t> rectIndices;
     rectIndices.reserve(MAX_INDICES_PER_BATCH);
     std::vector<uint32_t> singleRectIndices = { 0, 1, 2, 2, 3, 0 };
-    for (uint32_t i = 0, base = 0; i < MAX_QUADS_PER_BATCH; i++, base += 4) { 
+    for (uint32_t i = 0, base = 0; i < MAX_RECTANGLES_PER_BATCH; i++, base += 4) { 
         for (uint32_t quadIndex : singleRectIndices) {
             rectIndices.push_back(base + quadIndex);
         }
@@ -103,7 +158,7 @@ void Renderer2D::EndScene()
 
 void Renderer2D::DrawShape(const Rectangle& rectangle)
 {
-    if (s_data->NumQuadInstances + 1 > MAX_QUADS_PER_BATCH) {
+    if (s_data->NumRectInstances + 1 > MAX_RECTANGLES_PER_BATCH) {
         Flush();
         ClearBuffers();
     }
@@ -122,38 +177,21 @@ void Renderer2D::DrawShape(const Rectangle& rectangle)
         { 1.0f, 0.0f },
     };
 
-    const glm::mat4& rectTransform = rectangle.GetTransformMatrix();
-    const glm::vec4& rectColor = rectangle.GetColor();
-    size_t base = s_data->NumQuadInstances * 4;
-
-    for (int i = 0; i < 4; i++) {
-        s_data->RectanglePerVertexData[base + i].Position = rectTransform * positions[i];
-        s_data->RectanglePerVertexData[base + i].TexCoord = texCoords[i];
-        s_data->RectanglePerVertexData[base + i].Color = rectColor;
-        s_data->RectanglePerVertexData[base + i].TexIndex = -1;
+    int32_t textureIndex = -1;
+    if (rectangle.HasTexture()) {
+        textureIndex = AddTextureToList(rectangle.GetTexture());
     }
 
-    s_data->NumQuadInstances++;
-}
+    const glm::mat4& rectTransform = rectangle.GetTransformMatrix();
 
-void Renderer2D::Flush()
-{
-    int vertexHandle = s_data->RectanglePerVertexVBO->GetHandle();
+    for (size_t i = 0, base = s_data->NumRectInstances * 4; i < 4; i++) {
+        s_data->RectanglePerVertexData[base + i].Position = rectTransform * positions[i];
+        s_data->RectanglePerVertexData[base + i].TexCoord = texCoords[i];
+        s_data->RectanglePerVertexData[base + i].Color = rectangle.GetColor();
+        s_data->RectanglePerVertexData[base + i].TexIndex = textureIndex;
+    }
 
-    void* buf = nullptr;
-    size_t bytes = 0;
-    buf = glMapNamedBuffer(vertexHandle, GL_WRITE_ONLY);
-    PN_CORE_ASSERT(buf, "nullptr");
-    bytes = sizeof(Renderer2DPerVertexData) * s_data->RectanglePerVertexData.size();
-    memcpy(buf, &s_data->RectanglePerVertexData[0], bytes);
-    glUnmapNamedBuffer(vertexHandle);
-
-    RenderCommand::DrawIndexed(s_data->RectangleVAO, s_data->NumQuadInstances * 6);
-}
-
-void Renderer2D::ClearBuffers()
-{
-    s_data->NumQuadInstances = 0;
+    s_data->NumRectInstances++;
 }
 
 }
