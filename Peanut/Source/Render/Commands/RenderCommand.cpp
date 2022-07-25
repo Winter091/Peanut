@@ -6,12 +6,9 @@
 namespace pn
 {
 
-
-// Static members
-RenderAPI RenderCommand::s_renderAPI;
-bool RenderCommand::s_isInitialized = false;
-std::unique_ptr<RenderCommandImpl> RenderCommand::s_renderCommandImpl;
-
+RenderAPI s_renderAPI;
+bool s_isInitialized = false;
+std::unique_ptr<RenderCommandImpl> s_renderCommandImpl;
 
 void RenderCommand::Init()
 {
