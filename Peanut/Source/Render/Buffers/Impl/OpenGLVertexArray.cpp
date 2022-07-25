@@ -28,7 +28,7 @@ void OpenGLVertexArray::Unbind()
     glBindVertexArray(0u);
 }
 
-void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferDataUsage usage)
+void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferAttributeUsage usage)
 {
     Bind();
     vertexBuffer->Bind();
@@ -36,7 +36,7 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
     uint32_t bindingIndex = static_cast<uint32_t>(m_vertexBuffers.size());
     vertexBuffer->BindToBindingIndex(bindingIndex);
 
-    if (usage == BufferDataUsage::PerVertex) {
+    if (usage == BufferAttributeUsage::PerVertex) {
         glVertexBindingDivisor(bindingIndex, 0);
     } else {
         glVertexBindingDivisor(bindingIndex, 1);

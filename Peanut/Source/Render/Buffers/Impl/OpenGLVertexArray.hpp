@@ -15,7 +15,7 @@ public:
     void Bind() override;
     void Unbind() override;
 
-    void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferDataUsage usage) override;
+    void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferAttributeUsage usage) override;
     void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) override;
 
     uint32_t GetVertexCount() const override;

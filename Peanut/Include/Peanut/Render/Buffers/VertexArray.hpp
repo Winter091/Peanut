@@ -5,7 +5,7 @@
 
 namespace pn {
 
-enum class BufferDataUsage
+enum class BufferAttributeUsage
 {
     PerVertex,
     PerInstance
@@ -22,7 +22,7 @@ public:
     virtual void Bind() = 0;
     virtual void Unbind() = 0;
 
-    virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferDataUsage usage) = 0;
+    virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferAttributeUsage usage) = 0;
     virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) = 0;
 
     virtual uint32_t GetVertexCount() const = 0;

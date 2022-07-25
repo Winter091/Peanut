@@ -9,8 +9,6 @@
 #include <glm/vec4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <glad/glad.h>
-
 namespace pn {
 
 static constexpr size_t MAX_RECTANGLES_PER_BATCH = 100000;
@@ -52,15 +50,10 @@ static bool s_isInitialized = false;
 
 static void Flush()
 {
-    int vertexHandle = s_data->RectanglePerVertexVBO->GetHandle();
-
-    void* buf = nullptr;
-    size_t bytes = 0;
-    buf = glMapNamedBuffer(vertexHandle, GL_WRITE_ONLY);
-    PN_CORE_ASSERT(buf, "nullptr");
-    bytes = sizeof(Renderer2DPerVertexData) * s_data->RectanglePerVertexData.size();
-    memcpy(buf, &s_data->RectanglePerVertexData[0], bytes);
-    glUnmapNamedBuffer(vertexHandle);
+    void* buffer = s_data->RectanglePerVertexVBO->Map(BufferMapAccess::WriteOnly);
+    size_t numBytes = sizeof(Renderer2DPerVertexData) * 4 * s_data->NumRectInstances;
+    memcpy(buffer, &s_data->RectanglePerVertexData[0], numBytes);
+    s_data->RectanglePerVertexVBO->Unmap();
 
     for (uint32_t i = 0; i < s_data->NumTextures; i++) {
         s_data->Textures[i]->BindToSlot(i);
@@ -108,14 +101,15 @@ void Renderer2D::Init()
 
     s_data->RectangleVAO = pn::VertexArray::Create();
 
-    s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(sizeof(Renderer2DPerVertexData) * MAX_VERTICES_PER_BATCH, nullptr);
+    s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(sizeof(Renderer2DPerVertexData) * MAX_VERTICES_PER_BATCH, 
+                                                             nullptr, BufferDataUsage::Dynamic);
     s_data->RectanglePerVertexVBO->SetLayout(pn::BufferLayout::Create({
         { 0, pn::BufferLayoutElementType::Float, 2, "position" },
         { 1, pn::BufferLayoutElementType::Float, 2, "texCoord" },
         { 2, pn::BufferLayoutElementType::Float, 4, "color" },
         { 3, pn::BufferLayoutElementType::Int32, 1, "texIndex" },
     }));
-    s_data->RectangleVAO->AddVertexBuffer(s_data->RectanglePerVertexVBO, pn::BufferDataUsage::PerVertex);
+    s_data->RectangleVAO->AddVertexBuffer(s_data->RectanglePerVertexVBO, pn::BufferAttributeUsage::PerVertex);
 
     std::vector<uint32_t> rectIndices;
     rectIndices.reserve(MAX_INDICES_PER_BATCH);
