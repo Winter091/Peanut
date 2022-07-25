@@ -1,7 +1,10 @@
-permissions: write-all
-
 name: Render plantuml diagrams
-on: push
+
+on:
+  push:
+    branches: [ main ]
+
+permissions: write-all
 
 jobs:
   generate_plantuml:
