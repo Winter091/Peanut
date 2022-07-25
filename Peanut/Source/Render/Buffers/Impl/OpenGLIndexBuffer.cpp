@@ -36,7 +36,6 @@ void OpenGLIndexBuffer::Unbind()
 void OpenGLIndexBuffer::ReplaceData(IndexBufferDataFormat format, const void* data, uint32_t size)
 {
     PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
-    PN_CORE_ASSERT(data, "Buffer data cannot be nullptr");
     
     glNamedBufferData(m_handle, size, data, GL_STATIC_DRAW);
 
@@ -47,7 +46,6 @@ void OpenGLIndexBuffer::ReplaceData(IndexBufferDataFormat format, const void* da
 
 void OpenGLIndexBuffer::UpdateData(const void* data, uint32_t size, uint32_t offset)
 {
-    PN_CORE_ASSERT(data, "Unable to replace data, nullptr is provided");
     PN_CORE_ASSERT(
         offset + size <= m_size, 
         "Trying to update data out of bounds: last buffer index = {}, update range = ({}, {})",

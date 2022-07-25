@@ -1,7 +1,7 @@
 #include <Peanut/Application/Application.hpp>
 
 #include <Core/MethodBinding.hpp>
-#include <Events/Impl/WindowEvents.hpp>
+#include <Peanut/Events/WindowEvents.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 
 namespace pn
@@ -12,11 +12,6 @@ Application::Application(const WindowSettings& settings)
     m_window = Window::Create(settings);
     m_window->SetEventCallbackFunc(PN_BIND_METHOD_CALL(MainOnEvent));
     RenderCommand::SetViewport(0, 0, m_window->GetWidth(), m_window->GetHeight());
-}
-
-void Application::Init()
-{
-    Window::Init();
 }
 
 void Application::Run()

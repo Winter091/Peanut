@@ -1,9 +1,12 @@
 #ifndef __INIT_H__
 #define __INIT_H__
 
-namespace pn {
+namespace pn::internal {
 
-void Init();
+void InitWithoutContext();
+void InitWithContext();
+void ShutdownWithContext();
+void ShutdownWithoutContext();
 
 }
 

@@ -13,14 +13,16 @@ OpenGLShader::OpenGLShader(const ShaderPaths& paths, std::string name)
     : m_name(std::move(name))
 {
     ShaderSources sources;
-    sources.vertexSource = ReadFile(paths.vertexPath);
-    sources.fragmentSource = ReadFile(paths.fragmentPath);
+    sources.VertexSource = ReadFile(paths.VertexPath);
+    sources.FragmentSource = ReadFile(paths.FragmentPath);
 
     m_handler = CreateShaderProgram(sources);
 }
 
 std::string OpenGLShader::ReadFile(const std::string& filePath)
 {
+    PN_CORE_ASSERT(!filePath.empty(), "Empty shader file path");
+
     std::ifstream file(filePath);
 	if (!file) {
 		PN_CORE_CRITICAL("Unable to open shader source file: {}", filePath);
@@ -42,14 +44,16 @@ OpenGLShader::OpenGLShader(const ShaderSources& sources, std::string name)
 
 uint32_t OpenGLShader::CreateShaderProgram(const ShaderSources& sources)
 {
-    uint32_t vertexHandler = CompileShader(sources.vertexSource, GL_VERTEX_SHADER);
-    uint32_t fragmentHandler = CompileShader(sources.fragmentSource, GL_FRAGMENT_SHADER);
+    uint32_t vertexHandler = CompileShader(sources.VertexSource, GL_VERTEX_SHADER);
+    uint32_t fragmentHandler = CompileShader(sources.FragmentSource, GL_FRAGMENT_SHADER);
 
     uint32_t programHandler = glCreateProgram();
 	glAttachShader(programHandler, vertexHandler);
 	glAttachShader(programHandler, fragmentHandler);
 
 	glLinkProgram(programHandler);
+    CheckLinkStatus(programHandler);
+
 	glValidateProgram(programHandler);
 
 	glDetachShader(programHandler, vertexHandler);
@@ -89,6 +93,20 @@ void OpenGLShader::CheckShaderCompileStatus(uint32_t handler)
 
     PN_CORE_CRITICAL("Shader compilation error: {}", &buffer[0]);
     exit(EXIT_FAILURE);
+}
+
+void OpenGLShader::CheckLinkStatus(uint32_t handler)
+{
+    GLint logLen;
+    glGetProgramiv(handler, GL_INFO_LOG_LENGTH, &logLen);
+
+    if (logLen == 0) {
+        return;
+    }
+
+    std::vector<GLchar> log(logLen);
+    glGetProgramInfoLog(handler, 1024, nullptr, &log[0]);
+    PN_CORE_WARN("OpenGL Shader link info: {}", &log[0]);
 }
 
 OpenGLShader::~OpenGLShader()

@@ -29,6 +29,15 @@ void RenderCommand::Init()
 #endif
 }
 
+void RenderCommand::Shutdown()
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand is not initialized, unable to shutdown");
+    s_isInitialized = false;
+
+    s_renderAPI = RenderAPI::None;
+    s_renderCommandImpl.reset(nullptr);
+}
+
 RenderAPI RenderCommand::GetRenderAPI()
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");

@@ -125,15 +125,9 @@ void OpenGLGLFWRenderContext::SetupDebugContext()
 
 void OpenGLGLFWRenderContext::InitializeGlad()
 {
-    static bool isGladInitialized = false;
-
-    if (!isGladInitialized) {
         if (!gladLoadGL()) {
-            PN_CLIENT_ASSERT(false, "Failed to initialize GLAD!");
+            PN_CORE_ASSERT(false, "Failed to initialize GLAD!");
         }
-    }
-
-    isGladInitialized = true;
 }
 
 void OpenGLGLFWRenderContext::SetCurrentContext(Window& window)

@@ -58,9 +58,12 @@ class Texture2D : public Texture
 {
 public:
     virtual ~Texture2D() = default;
+    virtual bool operator==(const Texture2D& other) const = 0;
 
-    virtual size_t GetX() const = 0;
-    virtual size_t GetY() const = 0;
+    virtual uint32_t GetDescriptor() const = 0;
+    
+    virtual size_t GetWidth() const = 0;
+    virtual size_t GetHeight() const = 0;
 
     virtual void SetWrapping(TextureWrap x, TextureWrap y) = 0;
     virtual void SetFiltering(TextureFilter min, TextureFilter mag) = 0;

@@ -4,12 +4,18 @@
 
 int main(int argc, const char** argv)
 {
-    pn::Init();
+    pn::internal::InitWithoutContext();
+    {
+        pn::CommandLineArgs args(argc, argv);
+        pn::Application* app = pn::Application::CreateApplication(args);
 
-    pn::CommandLineArgs args(argc, argv);
+        pn::internal::InitWithContext();    
+        app->Run();
+        pn::internal::ShutdownWithContext();
 
-    auto app = std::unique_ptr<pn::Application>(pn::Application::CreateApplication(args));
-    app->Run();
+        delete app;
+    }
+    pn::internal::ShutdownWithoutContext();
 
     return 0;
 }

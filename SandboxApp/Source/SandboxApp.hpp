@@ -15,9 +15,8 @@ public:
     void OnUpdate() override;
 
 private:
-    std::shared_ptr<pn::VertexArray> m_rectangleVAO;
-    std::shared_ptr<pn::Shader> m_shader;
     std::shared_ptr<pn::Texture2D> m_texture;
+    std::shared_ptr<pn::OrthoCamera> m_camera;
 };
 
 #endif

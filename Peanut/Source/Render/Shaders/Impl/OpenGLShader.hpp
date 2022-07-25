@@ -41,6 +41,7 @@ private:
     uint32_t CreateShaderProgram(const ShaderSources& sources);
     uint32_t CompileShader(const std::string source, uint32_t glShaderType);
     void CheckShaderCompileStatus(uint32_t handler);
+    void CheckLinkStatus(uint32_t handler);
 
     int32_t GetUniformLocation(const std::string& name);
 };

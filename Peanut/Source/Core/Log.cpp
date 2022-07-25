@@ -31,6 +31,14 @@ void Log::Init()
     m_clientLogger->flush_on(spdlog::level::trace);
 }
 
+void Log::Shutdown()
+{
+    assert(s_isInitialized && "Logger is not initialized, unable to shutdown");
+    s_isInitialized = false;
+    m_coreLogger.reset(nullptr);
+    m_clientLogger.reset(nullptr);
+}
+
 spdlog::logger& Log::GetCoreLogger()
 {
     assert(s_isInitialized && "Logger should be initialized before usage");

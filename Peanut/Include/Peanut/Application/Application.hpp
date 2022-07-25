@@ -17,8 +17,6 @@ public:
     Application& operator=(const Application&) = delete;
     virtual ~Application() = default;
 
-    static void Init();
-
     Window& GetWindow() { return *m_window; }
 
     virtual void OnEvent(Event& event) = 0;

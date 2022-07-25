@@ -39,21 +39,19 @@ void OpenGLVertexBuffer::Unbind()
 void OpenGLVertexBuffer::ReplaceData(uint32_t size, const void* data)
 {
     PN_CORE_ASSERT(size > 0u, "Unable to create index buffer with size = 0");
-    PN_CORE_ASSERT(data, "Buffer data cannot be nullptr");
 
-    glNamedBufferData(m_handle, size, data, GL_STATIC_DRAW);
+    glNamedBufferData(m_handle, size, data, GL_DYNAMIC_DRAW);
     m_size = size;
 }
 
 void OpenGLVertexBuffer::UpdateData(uint32_t size, const void* data, uint32_t offset)
 {
-    PN_CORE_ASSERT(data, "Buffer data cannot be nullptr");
     PN_CORE_ASSERT(
         offset + size <= m_size, 
         "Trying to update data out of bounds: last buffer index = {}, update range = ({}, {})",
         m_size - 1u, offset, offset + size - 1u
     );
-    
+
     glNamedBufferSubData(m_handle, offset, size, data);
 }
 

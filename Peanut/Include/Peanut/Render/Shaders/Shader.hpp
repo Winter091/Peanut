@@ -14,28 +14,20 @@ namespace pn {
 
 struct ShaderPaths
 {
-    std::string vertexPath;
-    std::string fragmentPath;
+    std::string VertexPath;
+    std::string FragmentPath;
 
-    ShaderPaths() = default;
-
-    ShaderPaths(std::string vertexPath, std::string fragmentPath)
-        : vertexPath(std::move(vertexPath))
-        , fragmentPath(std::move(fragmentPath))
-    {}
+    ShaderPaths& SetVertexPath(const std::string& path) { VertexPath = path; return *this; }
+    ShaderPaths& SetFragmentPath(const std::string& path) { FragmentPath = path; return *this; }
 };
 
 struct ShaderSources
 {
-    std::string vertexSource;
-    std::string fragmentSource;
+    std::string VertexSource;
+    std::string FragmentSource;
 
-    ShaderSources() = default;
-
-    ShaderSources(std::string vertexSource, std::string fragmentSource)
-        : vertexSource(std::move(vertexSource))
-        , fragmentSource(std::move(fragmentSource))
-    {}
+    ShaderSources& SetVertexSource(const std::string& source) { VertexSource = source; return *this; }
+    ShaderSources& SetFragmentSource(const std::string& source) { FragmentSource = source; return *this; }
 };
 
 class Shader
