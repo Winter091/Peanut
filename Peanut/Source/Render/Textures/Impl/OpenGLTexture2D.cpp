@@ -16,7 +16,7 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSetting
     : m_name(std::move(name))
 {   
     std::ifstream file(path, std::ios::binary | std::ios::ate);
-    PN_CORE_ASSERT(file, "Unable to open texture file {}", path);
+    PN_CORE_ENSURE(file, "Unable to open texture file {}", path);
 
     std::streamsize size = file.tellg();
     file.seekg(0, std::ios::beg);
@@ -24,7 +24,7 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSetting
     TextureData data;
     data.bytes.resize(size);
     if (!file.read(reinterpret_cast<char*>(&data.bytes[0]), size)) {
-        PN_CORE_ASSERT(false, "Unable to read texture data from file {}", path);
+        PN_CORE_ENSURE(false, "Unable to read texture data from file {}", path);
     }
 
     file.close();

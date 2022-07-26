@@ -21,13 +21,8 @@ OpenGLShader::OpenGLShader(const ShaderPaths& paths, std::string name)
 
 std::string OpenGLShader::ReadFile(const std::string& filePath)
 {
-    PN_CORE_ASSERT(!filePath.empty(), "Empty shader file path");
-
     std::ifstream file(filePath);
-	if (!file) {
-		PN_CORE_CRITICAL("Unable to open shader source file: {}", filePath);
-        exit(EXIT_FAILURE);
-	}
+	PN_CORE_ENSURE(file, "Unable to open shader source file: {}", filePath);
 
 	std::stringstream ss;
     ss << file.rdbuf();
