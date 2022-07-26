@@ -158,10 +158,10 @@ void Renderer2D::DrawRectangle(const Rectangle& rectangle)
     }
 
     static glm::vec4 positions[] = {
-        { -0.5f, -0.5f,  0.0f,  1.0f },
-        { -0.5f,  0.5f,  0.0f,  1.0f },
-        {  0.5f,  0.5f,  0.0f,  1.0f },
-        {  0.5f, -0.5f,  0.0f,  1.0f }
+        { 0.0f, 0.0f, 0.0f, 1.0f },
+        { 0.0f, 1.0f, 0.0f, 1.0f },
+        { 1.0f, 1.0f, 0.0f, 1.0f },
+        { 1.0f, 0.0f, 0.0f, 1.0f }
     };
 
     static glm::vec2 texCoords[] = {
