@@ -8,34 +8,27 @@
 #include <stb/stb_image.h>
 #include <glad/glad.h>
 
-#include <cstdio>
-
+#include <fstream>
 
 namespace pn {
 
 OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSettings& settings, std::string name)
     : m_name(std::move(name))
 {   
-    FILE* f = fopen(path.c_str(), "r");
-    PN_CORE_ASSERT(f, "Unable to open texture file {}", path);
+    std::ifstream file(path, std::ios::binary | std::ios::ate);
+    PN_CORE_ASSERT(file, "Unable to open texture file {}", path);
 
-    size_t fileSize = GetFileSize(f);
+    std::streamsize size = file.tellg();
+    file.seekg(0, std::ios::beg);
+
     TextureData data;
-    data.bytes.resize(fileSize);
-    fread(&data.bytes[0], fileSize, 1, f);
+    data.bytes.resize(size);
+    if (!file.read(reinterpret_cast<char*>(&data.bytes[0]), size)) {
+        PN_CORE_ASSERT(false, "Unable to read texture data from file {}", path);
+    }
 
-    fclose(f);
-    
+    file.close();
     InitializeFromData(data, settings);
-}
-
-size_t OpenGLTexture2D::GetFileSize(FILE* f)
-{
-    long prevPos = ftell(f);
-    fseek(f, 0, SEEK_END);
-    size_t size = ftell(f);
-    fseek(f, prevPos, SEEK_SET);
-    return size;
 }
 
 OpenGLTexture2D::OpenGLTexture2D(const TextureData& data, const Texture2DSettings& settings, std::string name)

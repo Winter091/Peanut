@@ -34,7 +34,6 @@ private:
     size_t m_x, m_y;
 
 private:
-    size_t GetFileSize(FILE* f);
     void InitializeFromData(const TextureData& data, const Texture2DSettings& settings);
     int ToGlWrap(TextureWrap wrap) const;
     int ToGlFilter(TextureFilter filter) const;
