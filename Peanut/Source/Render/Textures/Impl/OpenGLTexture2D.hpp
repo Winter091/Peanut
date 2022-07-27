@@ -20,8 +20,9 @@ public:
     void BindToSlot(uint32_t slot = 0) override;
     void Unbind() override;
 
-    size_t GetWidth() const override { return m_x; }
-    size_t GetHeight() const override { return m_y; } 
+    const glm::u32vec2& GetSize() const override { return m_size; }
+
+    void SetData(const TextureData& data) override;
 
     void SetWrapping(TextureWrap x, TextureWrap y) override;
     void SetFiltering(TextureFilter min, TextureFilter mag) override;
@@ -31,15 +32,20 @@ private:
     std::string m_name;
     uint32_t m_descriptor;
     uint32_t m_slot = 0;
-    size_t m_x, m_y;
+    glm::u32vec2 m_size;
+    int m_format;
+    uint32_t m_numChannels;
+    bool m_useMipmaps;
 
 private:
-    void InitializeFromData(const TextureData& data, const Texture2DSettings& settings);
+    void Initialize(const void* data, const glm::u32vec2& size, const Texture2DSettings& settings);
     int ToGlWrap(TextureWrap wrap) const;
     int ToGlFilter(TextureFilter filter) const;
     int ToGlFilter(TextureMipmapFilter filter) const;
+    int ToGlInternalFormat(TextureFormat format) const;
     int ToGlFormat(TextureFormat format) const;
-    int GetNumChannels(TextureFormat format) const;
+    uint32_t GetNumChannels(TextureFormat format) const;
+    uint32_t GetNumTextureLevels(const glm::u32vec2& textureSize) const;
 };
 
 }

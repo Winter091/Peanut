@@ -9,9 +9,13 @@ using namespace std::chrono_literals;
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
-    m_texture = pn::Texture2D::Create("Peanut/Assets/Textures/container.jpg", pn::Texture2DSettings()
+    int w = 100, h = 100;
+    m_textureData.resize(w * h * 3, 255);
+
+    m_texture = pn::Texture2D::Create(m_textureData, pn::Texture2DSettings()
         .UseFormat(pn::TextureFormat::RGB)
-        .UseMipmapFiltering(pn::TextureMipmapFilter::LinearMipmapLinear, pn::TextureFilter::Linear));
+        .SetSize({w, h})
+        .UseMipmapFiltering(pn::TextureMipmapFilter::LinearMipmapLinear, pn::TextureFilter::Nearest));
 
     m_camera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
         .SetZoom(1.0f)
@@ -55,6 +59,17 @@ void SandboxApp::OnUpdate()
         pn::RenderCommand::SetClearColor({ 0.05f, 0.05f, 0.05f, 1.0f });
         pn::RenderCommand::Clear();
 
+        pn::Rectangle rect;
+        rect.SetSize({1.0f, 1.0f});
+        rect.SetTexture(m_texture);
+
+        for (size_t i = 0; i < m_textureData.size(); i += 3) {
+            m_textureData[i + 0] = static_cast<uint8_t>(rand() % 256);
+            m_textureData[i + 1] = static_cast<uint8_t>(rand() % 256);
+            m_textureData[i + 2] = static_cast<uint8_t>(rand() % 256);
+        }
+        m_texture->SetData(m_textureData);
+
         pn::Renderer2D::BeginScene(*m_camera);
         {
             float step = 1.25f;
@@ -62,11 +77,7 @@ void SandboxApp::OnUpdate()
                 for (int j = -50; j <= 50; j++) {
                     float x = step * static_cast<float>(i);
                     float y = step * static_cast<float>(j);
-
-                    pn::Rectangle rect;
                     rect.SetPosition({x, y});
-                    rect.SetSize({1.0f, 1.0f});
-                    rect.SetTexture(m_texture);
 
                     pn::Renderer2D::DrawRectangle(rect);
                 }

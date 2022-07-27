@@ -16,4 +16,5 @@ public:
 private:
     std::shared_ptr<pn::Texture2D> m_texture;
     std::shared_ptr<pn::OrthoCamera> m_camera;
+    pn::TextureData m_textureData;
 };

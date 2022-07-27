@@ -34,10 +34,7 @@ enum class TextureFormat
     RGBA
 };
 
-struct TextureData
-{
-    std::vector<uint8_t> bytes;
-};
+using TextureData = std::vector<uint8_t>;
 
 class Texture
 {
