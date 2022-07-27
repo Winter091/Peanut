@@ -11,6 +11,7 @@ Rectangle::Rectangle(const glm::vec2& pos, const glm::vec2& size, const glm::vec
     , m_origin({0.0f, 0.0f})
     , m_size(size)
     , m_color(color)
+    , m_transform(1.0f)
     , m_transformIsDirty(true)
 {}
 

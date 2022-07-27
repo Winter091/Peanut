@@ -110,7 +110,7 @@ public:
     OrthoCamera(const OrthoCameraSettings& settings = OrthoCameraSettings());
     ~OrthoCamera() override = default;
 
-    void SetPosition(const glm::vec3& pos);
+    void SetPosition(const glm::vec3& pos) override;
     const glm::vec3& GetPosition() const override { return m_position; }
 
     void SetDirection(const glm::vec3& direction) override;

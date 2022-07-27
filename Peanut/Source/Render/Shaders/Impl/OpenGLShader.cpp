@@ -92,7 +92,7 @@ void OpenGLShader::CheckShaderCompileStatus(uint32_t handler)
 
 void OpenGLShader::CheckLinkStatus(uint32_t handler)
 {
-    GLint logLen;
+    GLint logLen = 0;
     glGetProgramiv(handler, GL_INFO_LOG_LENGTH, &logLen);
 
     if (logLen == 0) {

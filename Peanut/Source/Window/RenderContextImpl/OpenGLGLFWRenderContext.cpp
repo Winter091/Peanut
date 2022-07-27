@@ -112,7 +112,7 @@ void OpenGLGLFWRenderContext::PostWindowSetup(Window& window)
 
 void OpenGLGLFWRenderContext::SetupDebugContext()
 {
-    GLint context_flags;
+    GLint context_flags = 0;
     glGetIntegerv(GL_CONTEXT_FLAGS, &context_flags);
     if (context_flags & GL_CONTEXT_FLAG_DEBUG_BIT)
     {

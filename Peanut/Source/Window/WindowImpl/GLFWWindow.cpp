@@ -209,7 +209,7 @@ glm::vec2 GLFWWindow::GetCursorPosition() const
 {
     double x, y;
     glfwGetCursorPos(m_data.glfwHandle, &x, &y);
-    return glm::vec2(static_cast<float>(x), static_cast<float>(y));
+    return { static_cast<float>(x), static_cast<float>(y) };
 }
 
 }

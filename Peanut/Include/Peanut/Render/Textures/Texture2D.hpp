@@ -67,7 +67,7 @@ struct Texture2DSettings
 class Texture2D : public Texture
 {
 public:
-    virtual ~Texture2D() = default;
+    ~Texture2D() override = default;
     virtual bool operator==(const Texture2D& other) const = 0;
 
     virtual uint32_t GetDescriptor() const = 0;

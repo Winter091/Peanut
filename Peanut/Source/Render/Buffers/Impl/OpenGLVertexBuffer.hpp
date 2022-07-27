@@ -27,8 +27,6 @@ public:
     uint32_t GetVertexSize() const override;
     uint32_t GetVertexCount() const override;
 
-    int GetHandle() const override { return m_handle; }
-
 private:
     uint32_t m_handle;
     uint32_t m_size;

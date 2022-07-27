@@ -7,7 +7,6 @@ namespace pn {
 class OpenGLRenderCommand final : public RenderCommandImpl
 {
 public:
-    OpenGLRenderCommand();
     ~OpenGLRenderCommand() override = default;
 
     void SetClearColor(const glm::vec4& color) override;
