@@ -34,7 +34,7 @@ struct Renderer2DPerInstanceData
 
 struct Renderer2DData
 {
-    std::array<Renderer2DPerVertexData, MAX_VERTICES_PER_BATCH> RectanglePerVertexData;
+    Renderer2DPerVertexData* RectanglePerVertexData;
     std::shared_ptr<VertexBuffer> RectanglePerVertexVBO;
     std::shared_ptr<VertexArray> RectangleVAO;
     std::shared_ptr<Shader> RectangleShader;
@@ -50,9 +50,6 @@ static bool s_isInitialized = false;
 
 static void Flush()
 {
-    void* buffer = s_data->RectanglePerVertexVBO->Map();
-    size_t numBytes = sizeof(Renderer2DPerVertexData) * 4 * s_data->NumRectInstances;
-    memcpy(buffer, &s_data->RectanglePerVertexData[0], numBytes);
     s_data->RectanglePerVertexVBO->Unmap();
 
     for (uint32_t i = 0; i < s_data->NumTextures; i++) {
@@ -62,8 +59,9 @@ static void Flush()
     RenderCommand::DrawIndexed(s_data->RectangleVAO, s_data->NumRectInstances * 6);
 }
 
-static void ClearBuffers()
+static void StartBatch()
 {
+    s_data->RectanglePerVertexData = reinterpret_cast<Renderer2DPerVertexData*>(s_data->RectanglePerVertexVBO->Map());
     s_data->NumRectInstances = 0;
     s_data->NumTextures = 0;
 }
@@ -84,7 +82,7 @@ static int32_t AddTextureToList(const std::shared_ptr<Texture2D>& texture)
     if (index == -1) {
         if (s_data->NumTextures + 1 >= MAX_TEXTURE_SLOTS) {
             Flush();
-            ClearBuffers();
+            StartBatch();
         }
         index = s_data->NumTextures;
         s_data->Textures[index] = texture;
@@ -143,7 +141,7 @@ void Renderer2D::BeginScene(const Camera& camera)
 {
     s_data->RectangleShader->Bind();
     s_data->RectangleShader->SetMat4("u_viewProjMatrix", camera.GetViewProjectionMatrix());
-    ClearBuffers();
+    StartBatch();
 }
 
 void Renderer2D::EndScene()
@@ -155,7 +153,7 @@ void Renderer2D::DrawRectangle(const Rectangle& rectangle)
 {
     if (s_data->NumRectInstances + 1 > MAX_RECTANGLES_PER_BATCH) {
         Flush();
-        ClearBuffers();
+        StartBatch();
     }
 
     static glm::vec4 positions[] = {
