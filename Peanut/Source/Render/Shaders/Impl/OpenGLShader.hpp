@@ -13,6 +13,7 @@ public:
     ~OpenGLShader() override;
 
     const std::string& GetName() const override { return m_name; }
+    uint32_t GetNativeHandle() const override { return m_handler; }
 
     void Bind() override;
     void Unbind() override;

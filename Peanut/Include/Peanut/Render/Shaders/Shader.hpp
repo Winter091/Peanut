@@ -38,6 +38,7 @@ public:
     virtual ~Shader() = default;
 
     virtual const std::string& GetName() const = 0;
+    virtual uint32_t GetNativeHandle() const = 0;
 
     virtual void Bind() = 0;
     virtual void Unbind() = 0;

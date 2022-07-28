@@ -2,6 +2,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Render/Buffers/VertexArray.hpp>
+#include <Peanut/Render/Buffers/ConstantBuffer.hpp>
 #include <Peanut/Render/Shaders/Shader.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 
@@ -32,12 +33,18 @@ struct Renderer2DPerInstanceData
     int32_t TexIndex;
 };
 
+struct Renderer2DRectangleShaderData
+{
+    glm::mat4 ViewProjMatrix;
+};
+
 struct Renderer2DData
 {
     Renderer2DPerVertexData* RectanglePerVertexData;
     std::shared_ptr<VertexBuffer> RectanglePerVertexVBO;
     std::shared_ptr<VertexArray> RectangleVAO;
     std::shared_ptr<Shader> RectangleShader;
+    std::shared_ptr<ConstantBuffer> RectangleConstantBuffer;
 
     uint32_t NumRectInstances = 0;
 
@@ -127,6 +134,8 @@ void Renderer2D::Init()
         .SetFragmentPath("Peanut/Assets/Shaders/Renderer2D/Rect.frag"),
         "Renderer2D Rectangle Shader");
 
+    s_data->RectangleConstantBuffer = pn::ConstantBuffer::Create(pn::BufferMapAccess::WriteOnly, sizeof(Renderer2DRectangleShaderData));
+
     s_isInitialized = true;
 }
 
@@ -140,7 +149,14 @@ void Renderer2D::Shutdown()
 void Renderer2D::BeginScene(const Camera& camera)
 {
     s_data->RectangleShader->Bind();
-    s_data->RectangleShader->SetMat4("u_viewProjMatrix", camera.GetViewProjectionMatrix());
+    
+    s_data->RectangleConstantBuffer->BindToBindingIndex(0);
+    auto* data = reinterpret_cast<Renderer2DRectangleShaderData*>(s_data->RectangleConstantBuffer->Map()); 
+    {
+        data->ViewProjMatrix = camera.GetViewProjectionMatrix();
+    }
+    s_data->RectangleConstantBuffer->Unmap();
+
     StartBatch();
 }
 
