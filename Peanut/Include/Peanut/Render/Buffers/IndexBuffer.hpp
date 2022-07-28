@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Peanut/Render/Buffers/BufferMapAccess.hpp>
 #include <cstdint>
 #include <memory>
 
@@ -23,13 +24,13 @@ public:
     virtual void Bind() = 0;
     virtual void Unbind() = 0;
 
-    virtual void ReplaceData(IndexBufferDataFormat format, const void* data, uint32_t size) = 0;
-    virtual void UpdateData(const void* data, uint32_t size, uint32_t offset = 0) = 0;
+    virtual void* Map() = 0;
+    virtual void Unmap() = 0;
 
     virtual uint32_t GetIndexCount() const = 0;
     virtual IndexBufferDataFormat GetDataFormat() const = 0;
 
-    static std::shared_ptr<IndexBuffer> Create(IndexBufferDataFormat format, uint32_t size, const void* data = nullptr);
+    static std::shared_ptr<IndexBuffer> Create(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data = nullptr);
 };
 
 }

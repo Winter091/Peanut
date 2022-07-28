@@ -7,7 +7,7 @@
 
 namespace pn {
 
-std::shared_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size, const void* data)
+std::shared_ptr<VertexBuffer> VertexBuffer::Create(BufferMapAccess access, uint32_t size, const void* data)
 {
     auto renderApi = RenderCommand::GetRenderAPI();
 
@@ -16,7 +16,7 @@ std::shared_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size, const void* da
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
         case RenderAPI::OpenGL:
-            return std::make_shared<OpenGLVertexBuffer>(size, data);
+            return std::make_shared<OpenGLVertexBuffer>(access, size, data);
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;

@@ -50,7 +50,7 @@ static bool s_isInitialized = false;
 
 static void Flush()
 {
-    void* buffer = s_data->RectanglePerVertexVBO->Map(BufferMapAccess::WriteOnly);
+    void* buffer = s_data->RectanglePerVertexVBO->Map();
     size_t numBytes = sizeof(Renderer2DPerVertexData) * 4 * s_data->NumRectInstances;
     memcpy(buffer, &s_data->RectanglePerVertexData[0], numBytes);
     s_data->RectanglePerVertexVBO->Unmap();
@@ -101,7 +101,8 @@ void Renderer2D::Init()
 
     s_data->RectangleVAO = pn::VertexArray::Create();
 
-    s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(sizeof(Renderer2DPerVertexData) * MAX_VERTICES_PER_BATCH);
+    s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(BufferMapAccess::WriteOnly,
+                                                             sizeof(Renderer2DPerVertexData) * MAX_VERTICES_PER_BATCH);
     s_data->RectanglePerVertexVBO->SetLayout(pn::BufferLayout::Create({
         { 0, pn::BufferLayoutElementType::Float, 2, "position" },
         { 1, pn::BufferLayoutElementType::Float, 2, "texCoord" },
@@ -119,7 +120,8 @@ void Renderer2D::Init()
         }
     }
 
-    auto rectangleIBO = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint32, MAX_INDICES_PER_BATCH * sizeof(rectIndices[0]), &rectIndices[0]);
+    auto rectangleIBO = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint32, BufferMapAccess::NoAccess,
+                                                MAX_INDICES_PER_BATCH * sizeof(rectIndices[0]), &rectIndices[0]);
     s_data->RectangleVAO->SetIndexBuffer(rectangleIBO);
 
     s_data->RectangleShader = pn::Shader::Create(pn::ShaderPaths()

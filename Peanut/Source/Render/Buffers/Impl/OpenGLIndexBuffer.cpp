@@ -1,21 +1,21 @@
 #include "OpenGLIndexBuffer.hpp"
 
-#include <Peanut/Core/Assert.hpp>
-#include <glad/glad.h>
+#include <Render/Buffers/Impl/OpenGLEnumConversions.hpp>
 
 namespace pn
 {
 
-OpenGLIndexBuffer::OpenGLIndexBuffer(IndexBufferDataFormat format, uint32_t size, const void* data)
+OpenGLIndexBuffer::OpenGLIndexBuffer(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data)
     : m_handle(0)
     , m_size(size)
     , m_indexCount(0u)
+    , m_mapAccess(access)
     , m_format(format)
 {
     PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
 
     glCreateBuffers(1, &m_handle);
-    ReplaceData(format, data, size);
+    glNamedBufferStorage(m_handle, size, data, BufferMapAccessToGlStorageAccess(access));
 }
 
 OpenGLIndexBuffer::~OpenGLIndexBuffer()
@@ -33,26 +33,18 @@ void OpenGLIndexBuffer::Unbind()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
 }
 
-void OpenGLIndexBuffer::ReplaceData(IndexBufferDataFormat format, const void* data, uint32_t size)
+void* OpenGLIndexBuffer::Map()
 {
-    PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
-    
-    glNamedBufferData(m_handle, size, data, GL_STATIC_DRAW);
+    PN_CORE_ASSERT(m_mapAccess != BufferMapAccess::NoAccess, "Trying to map buffer with no map access");
 
-    m_size = size;
-    m_format = format;
-    UpdateIndexCount();
+    void* buffer = glMapNamedBuffer(m_handle, BufferMapAccessToGlMapAccess(m_mapAccess));
+    PN_CORE_ASSERT(buffer, "Mapped buffer is nullptr");
+    return buffer;
 }
 
-void OpenGLIndexBuffer::UpdateData(const void* data, uint32_t size, uint32_t offset)
+void OpenGLIndexBuffer::Unmap()
 {
-    PN_CORE_ASSERT(
-        offset + size <= m_size, 
-        "Trying to update data out of bounds: last buffer index = {}, update range = ({}, {})",
-        m_size - 1u, offset, offset + size - 1u
-    );
-    
-    glNamedBufferSubData(m_handle, offset, size, data);
+    glUnmapNamedBuffer(m_handle);
 }
 
 uint32_t OpenGLIndexBuffer::GetGLDataTypeSize() const
