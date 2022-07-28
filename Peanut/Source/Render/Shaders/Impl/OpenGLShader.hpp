@@ -13,23 +13,11 @@ public:
     ~OpenGLShader() override;
 
     const std::string& GetName() const override { return m_name; }
+    uint32_t GetNativeHandle() const override { return m_handler; }
 
     void Bind() override;
     void Unbind() override;
     
-    void SetFloat1(const std::string& name, float scalar) override;
-    void SetFloat2(const std::string& name, const glm::vec2& vec) override;
-    void SetFloat3(const std::string& name, const glm::vec3& vec) override;
-    void SetFloat4(const std::string& name, const glm::vec4& vec) override;
-    
-    void SetInt1(const std::string& name, int scalar) override;
-    void SetInt2(const std::string& name, const glm::ivec2& vec) override;
-    void SetInt3(const std::string& name, const glm::ivec3& vec) override;
-    void SetInt4(const std::string& name, const glm::ivec4& vec) override;
-    
-    void SetMat3(const std::string& name, const glm::mat3& mat) override;
-    void SetMat4(const std::string& name, const glm::mat4& mat) override;
-
 private:
     uint32_t m_handler;
     std::string m_name;
@@ -41,8 +29,6 @@ private:
     uint32_t CompileShader(const std::string source, uint32_t glShaderType);
     void CheckShaderCompileStatus(uint32_t handler);
     void CheckLinkStatus(uint32_t handler);
-
-    int32_t GetUniformLocation(const std::string& name);
 };
 
 }

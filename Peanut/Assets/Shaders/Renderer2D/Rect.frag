@@ -4,7 +4,7 @@ in vec4 v_color;
 in vec2 v_texCoord;
 in flat int v_texIndex;
 
-layout (binding = 0) uniform sampler2D u_texSamplers[32];
+layout (binding = 0) uniform sampler2D u_texSamplers[16];
 
 out vec4 outColor;
 

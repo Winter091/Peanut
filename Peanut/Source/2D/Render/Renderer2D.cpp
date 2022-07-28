@@ -2,6 +2,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Render/Buffers/VertexArray.hpp>
+#include <Peanut/Render/Buffers/ConstantBuffer.hpp>
 #include <Peanut/Render/Shaders/Shader.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 
@@ -17,7 +18,7 @@ static constexpr size_t MAX_INDICES_PER_BATCH = 6 * MAX_RECTANGLES_PER_BATCH;
 
 static constexpr size_t MAX_TEXTURE_SLOTS = 16;
 
-struct Renderer2DPerVertexData
+struct PerVertexData
 {
     glm::vec2 Position;
     glm::vec2 TexCoord;
@@ -26,15 +27,14 @@ struct Renderer2DPerVertexData
     int32_t TexIndex;
 };
 
-struct Renderer2DPerInstanceData
+struct CameraShaderData
 {
-    glm::vec4 Color;
-    int32_t TexIndex;
+    glm::mat4 ViewProjMatrix;
 };
 
 struct Renderer2DData
 {
-    Renderer2DPerVertexData* RectanglePerVertexData;
+    PerVertexData* RectanglePerVertexData;
     std::shared_ptr<VertexBuffer> RectanglePerVertexVBO;
     std::shared_ptr<VertexArray> RectangleVAO;
     std::shared_ptr<Shader> RectangleShader;
@@ -43,6 +43,8 @@ struct Renderer2DData
 
     std::array<std::shared_ptr<Texture2D>, MAX_TEXTURE_SLOTS> Textures;
     uint32_t NumTextures = 0;
+
+    std::shared_ptr<ConstantBuffer> CameraConstantBuffer;
 };
 
 static std::unique_ptr<Renderer2DData> s_data = nullptr;
@@ -61,7 +63,7 @@ static void Flush()
 
 static void StartBatch()
 {
-    s_data->RectanglePerVertexData = reinterpret_cast<Renderer2DPerVertexData*>(s_data->RectanglePerVertexVBO->Map());
+    s_data->RectanglePerVertexData = reinterpret_cast<PerVertexData*>(s_data->RectanglePerVertexVBO->Map());
     s_data->NumRectInstances = 0;
     s_data->NumTextures = 0;
 }
@@ -100,7 +102,7 @@ void Renderer2D::Init()
     s_data->RectangleVAO = pn::VertexArray::Create();
 
     s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(BufferMapAccess::WriteOnly,
-                                                             sizeof(Renderer2DPerVertexData) * MAX_VERTICES_PER_BATCH);
+                                                             sizeof(PerVertexData) * MAX_VERTICES_PER_BATCH);
     s_data->RectanglePerVertexVBO->SetLayout(pn::BufferLayout::Create({
         { 0, pn::BufferLayoutElementType::Float, 2, "position" },
         { 1, pn::BufferLayoutElementType::Float, 2, "texCoord" },
@@ -127,6 +129,8 @@ void Renderer2D::Init()
         .SetFragmentPath("Peanut/Assets/Shaders/Renderer2D/Rect.frag"),
         "Renderer2D Rectangle Shader");
 
+    s_data->CameraConstantBuffer = pn::ConstantBuffer::Create(pn::BufferMapAccess::WriteOnly, sizeof(CameraShaderData));
+
     s_isInitialized = true;
 }
 
@@ -140,7 +144,14 @@ void Renderer2D::Shutdown()
 void Renderer2D::BeginScene(const Camera& camera)
 {
     s_data->RectangleShader->Bind();
-    s_data->RectangleShader->SetMat4("u_viewProjMatrix", camera.GetViewProjectionMatrix());
+    
+    s_data->CameraConstantBuffer->BindToBindingIndex(0);
+    auto* data = reinterpret_cast<CameraShaderData*>(s_data->CameraConstantBuffer->Map()); 
+    {
+        data->ViewProjMatrix = camera.GetViewProjectionMatrix();
+    }
+    s_data->CameraConstantBuffer->Unmap();
+
     StartBatch();
 }
 

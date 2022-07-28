@@ -5,7 +5,10 @@ layout (location = 1) in vec2 a_texCoord;
 layout (location = 2) in vec4 a_color;
 layout (location = 3) in int a_texIndex;
 
-uniform mat4 u_viewProjMatrix;
+layout (std140, binding = 0) uniform Matrices
+{
+    mat4 u_viewProjMatrix;
+};
 
 out vec4 v_color;
 out vec2 v_texCoord;
