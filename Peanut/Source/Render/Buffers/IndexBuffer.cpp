@@ -9,7 +9,7 @@
 namespace pn
 {
 
-std::shared_ptr<IndexBuffer> IndexBuffer::Create(IndexBufferDataFormat format, uint32_t size, const void* data)
+std::shared_ptr<IndexBuffer> IndexBuffer::Create(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data)
 {
     auto renderApi = RenderCommand::GetRenderAPI();
 
@@ -18,7 +18,7 @@ std::shared_ptr<IndexBuffer> IndexBuffer::Create(IndexBufferDataFormat format, u
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
         case RenderAPI::OpenGL:
-            return std::make_shared<OpenGLIndexBuffer>(format, size, data);
+            return std::make_shared<OpenGLIndexBuffer>(format, access, size, data);
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;
