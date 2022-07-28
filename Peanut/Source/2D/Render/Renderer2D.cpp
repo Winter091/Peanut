@@ -27,12 +27,6 @@ struct PerVertexData
     int32_t TexIndex;
 };
 
-struct PerInstanceData
-{
-    glm::vec4 Color;
-    int32_t TexIndex;
-};
-
 struct CameraShaderData
 {
     glm::mat4 ViewProjMatrix;
