@@ -101,8 +101,7 @@ void Renderer2D::Init()
 
     s_data->RectangleVAO = pn::VertexArray::Create();
 
-    s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(sizeof(Renderer2DPerVertexData) * MAX_VERTICES_PER_BATCH, 
-                                                             nullptr, BufferDataUsage::Dynamic);
+    s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(sizeof(Renderer2DPerVertexData) * MAX_VERTICES_PER_BATCH);
     s_data->RectanglePerVertexVBO->SetLayout(pn::BufferLayout::Create({
         { 0, pn::BufferLayoutElementType::Float, 2, "position" },
         { 1, pn::BufferLayoutElementType::Float, 2, "texCoord" },

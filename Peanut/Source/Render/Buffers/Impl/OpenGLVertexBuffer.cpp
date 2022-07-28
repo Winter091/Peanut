@@ -6,14 +6,14 @@
 namespace pn
 {
 
-OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size, const void* data, BufferDataUsage usage)
+OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size, const void* data)
     : m_handle(0)
-    , m_size(0)
+    , m_size(size)
 {
-    PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
+    PN_CORE_ASSERT(m_size > 0u, "Unable to create vertex buffer with size = 0");
     
     glCreateBuffers(1, &m_handle);
-    ReplaceData(size, data, usage);
+    glNamedBufferStorage(m_handle, size, data, GL_MAP_WRITE_BIT);
 }
 
 OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -34,25 +34,6 @@ void OpenGLVertexBuffer::BindToBindingIndex(uint32_t index)
 void OpenGLVertexBuffer::Unbind()
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0u);
-}
-
-void OpenGLVertexBuffer::ReplaceData(uint32_t size, const void* data, BufferDataUsage usage)
-{
-    PN_CORE_ASSERT(size > 0u, "Unable to create index buffer with size = 0");
-
-    glNamedBufferData(m_handle, size, data, ToGlUsage(usage));
-    m_size = size;
-}
-
-void OpenGLVertexBuffer::UpdateData(uint32_t size, const void* data, uint32_t offset)
-{
-    PN_CORE_ASSERT(
-        offset + size <= m_size, 
-        "Trying to update data out of bounds: last buffer index = {}, update range = ({}, {})",
-        m_size - 1u, offset, offset + size - 1u
-    );
-
-    glNamedBufferSubData(m_handle, offset, size, data);
 }
 
 void* OpenGLVertexBuffer::Map(BufferMapAccess access)
@@ -101,18 +82,6 @@ uint32_t OpenGLVertexBuffer::ToGlMapAccess(BufferMapAccess access)
     }
 
     PN_CORE_ASSERT(false, "Unknown BufferMapAccess enum value");
-    return 0;
-}
-
-uint32_t OpenGLVertexBuffer::ToGlUsage(BufferDataUsage usage)
-{
-    switch (usage) {
-        case BufferDataUsage::Static:     return GL_STATIC_DRAW;
-        case BufferDataUsage::Dynamic:    return GL_DYNAMIC_DRAW;
-        default: break;
-    }
-
-    PN_CORE_ASSERT(false, "Unknown BufferDataUsage enum value");
     return 0;
 }
 
