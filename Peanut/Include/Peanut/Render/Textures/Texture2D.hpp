@@ -74,7 +74,7 @@ public:
     
     virtual const glm::u32vec2& GetSize() const = 0;
 
-    virtual void SetData(const TextureData& data) = 0;
+    virtual void SetData(const TextureData& data, const glm::u32vec2& offset = {0, 0}, const glm::u32vec2& size = {0, 0}) = 0;
 
     virtual void SetWrapping(TextureWrap x, TextureWrap y) = 0;
     virtual void SetFiltering(TextureFilter min, TextureFilter mag) = 0;

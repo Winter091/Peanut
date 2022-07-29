@@ -22,7 +22,7 @@ public:
 
     const glm::u32vec2& GetSize() const override { return m_size; }
 
-    void SetData(const TextureData& data) override;
+    void SetData(const TextureData& data, const glm::u32vec2& offset = {0, 0}, const glm::u32vec2& size = {0, 0}) override;
 
     void SetWrapping(TextureWrap x, TextureWrap y) override;
     void SetFiltering(TextureFilter min, TextureFilter mag) override;

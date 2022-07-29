@@ -68,7 +68,7 @@ void SandboxApp::OnUpdate()
             m_textureData[i + 1] = static_cast<uint8_t>(rand() % 256);
             m_textureData[i + 2] = static_cast<uint8_t>(rand() % 256);
         }
-        m_texture->SetData(m_textureData);
+        m_texture->SetData(m_textureData, {1, 1}, {98, 98});
 
         pn::Renderer2D::BeginScene(*m_camera);
         {

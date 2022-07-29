@@ -104,12 +104,20 @@ void OpenGLTexture2D::Unbind()
     glBindTextureUnit(m_slot, m_descriptor);
 }
 
-void OpenGLTexture2D::SetData(const TextureData& data)
+void OpenGLTexture2D::SetData(const TextureData& data, const glm::u32vec2& offset, const glm::u32vec2& size)
 {
     PN_CORE_ASSERT(!data.empty(), "No data to set");
-    PN_CORE_ASSERT(data.size() == m_size.x * m_size.y * m_numChannels, "Provided data size doesn't equal to texture buffer size");
+    PN_CORE_ASSERT(data.size() <= m_size.x * m_size.y * m_numChannels, "Provided data size is larger than the texture can possibly hold");
+    PN_CORE_ASSERT(offset.x + size.x < m_size.x && offset.y + size.y < m_size.y, "Subrectangle defined by offset and size is out of bounds");
+    
+    glm::u32vec2 sz = size;
+    if (size.x == 0 && size.y == 0) {
+        sz = m_size - offset;
+    }
 
-    glTextureSubImage2D(m_descriptor, 0, 0, 0, m_size.x, m_size.y, m_format, GL_UNSIGNED_BYTE, &data[0]);
+    PN_CORE_ASSERT(data.size() >= sz.x * sz.y * m_numChannels, "Provided data size is not enough for specified subrectangle");
+
+    glTextureSubImage2D(m_descriptor, 0, offset.x, offset.y, sz.x, sz.y, m_format, GL_UNSIGNED_BYTE, &data[0]);
     if (m_useMipmaps) {
         glGenerateTextureMipmap(m_descriptor);
     }
