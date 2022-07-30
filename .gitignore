@@ -4,7 +4,13 @@ build
 *.a
 *.o
 
+# ide files
 .vscode
+.vs
+.idea
+
+# logs folder
 [Ll]og[s]*
 
-.idea
+# visual studio cmake cache
+CMakeSettings.json

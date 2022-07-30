@@ -51,11 +51,10 @@ else()
     message(FATAL_ERROR "Platform is not supported by Peanut")
 endif()
 
-# Useful Warnings
 if(MSVC)
     target_compile_options(
-        Peanut PRIVATE 
-        /W4 /WX
+        Peanut PRIVATE
+        /WX /Zc:preprocessor
     )
 else()
     target_compile_options(
