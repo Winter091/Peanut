@@ -1,6 +1,7 @@
 #include "GLFWWindow.hpp"
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Core/TimeProfiler.hpp>
 #include <Peanut/Events/KeyEvents.hpp>
 #include <Peanut/Events/MouseEvents.hpp>
 #include <Peanut/Events/WindowEvents.hpp>
@@ -14,6 +15,8 @@ int GLFWWindow::s_windowCount = 0;
 GLFWWindow::GLFWWindow(const WindowSettings& settings)
     : Window()
 {
+    PN_PROFILE_FUNCTION();
+
     m_data.width =  static_cast<int>(settings.Width);
     m_data.height = static_cast<int>(settings.Height);
     m_data.title = settings.Title;
@@ -35,6 +38,8 @@ GLFWWindow::GLFWWindow(const WindowSettings& settings)
 
 void GLFWWindow::OnWindowCreate()
 {
+    PN_PROFILE_FUNCTION();
+
     if (s_windowCount == 0) {
         glfwInit();
     }
@@ -43,6 +48,8 @@ void GLFWWindow::OnWindowCreate()
 
 void GLFWWindow::SetupGlfwCallbacks()
 {
+    PN_PROFILE_FUNCTION();
+
     glfwSetWindowUserPointer(m_data.glfwHandle, &m_data);
     
     glfwSetKeyCallback(m_data.glfwHandle,
@@ -128,12 +135,16 @@ void GLFWWindow::SetupGlfwCallbacks()
 
 GLFWWindow::~GLFWWindow()
 {
+    PN_PROFILE_FUNCTION();
+
     glfwDestroyWindow(m_data.glfwHandle);
     OnWindowDestroy();
 }
 
 void GLFWWindow::OnWindowDestroy()
 {
+    PN_PROFILE_FUNCTION();
+
     --s_windowCount;
     if (s_windowCount == 0) {
         glfwTerminate();
@@ -142,6 +153,8 @@ void GLFWWindow::OnWindowDestroy()
 
 void GLFWWindow::MakeContextCurrent()
 {
+    PN_PROFILE_FUNCTION();
+
     glfwMakeContextCurrent(m_data.glfwHandle);
 }
 
@@ -152,6 +165,8 @@ void GLFWWindow::SetEventCallbackFunc(const EventCallbackFunc& func)
 
 void GLFWWindow::Update()
 {
+    PN_PROFILE_FUNCTION();
+
     glfwPollEvents();
     GetRenderContext().SwapBuffers(*this);
 }

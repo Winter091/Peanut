@@ -5,6 +5,8 @@
 #include "OpenGLTexture2D.hpp"
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Core/TimeProfiler.hpp>
+
 #include <stb/stb_image.h>
 #include <glad/glad.h>
 
@@ -15,6 +17,8 @@ namespace pn {
 OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSettings& settings, std::string name)
     : m_name(std::move(name))
 {   
+    PN_PROFILE_FUNCTION();
+
     PN_CORE_ASSERT(!settings.SizeIsExplicitlySpecified, "Unable to specify 2d texture size when loading from file");
 
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -47,6 +51,8 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSetting
 OpenGLTexture2D::OpenGLTexture2D(const TextureData& data, const Texture2DSettings& settings, std::string name)
     : m_name(std::move(name))
 {
+    PN_PROFILE_FUNCTION();
+
     PN_CORE_ASSERT(settings.SizeIsExplicitlySpecified, "Size is not specified");
     
     if (!data.empty()) {
@@ -60,6 +66,8 @@ OpenGLTexture2D::OpenGLTexture2D(const TextureData& data, const Texture2DSetting
 
 void OpenGLTexture2D::Initialize(const void* data, const glm::u32vec2& size, const Texture2DSettings& settings)
 {
+    PN_PROFILE_FUNCTION();
+
     glCreateTextures(GL_TEXTURE_2D, 1, &m_descriptor);
 
     m_size = size;
@@ -106,6 +114,8 @@ void OpenGLTexture2D::Unbind()
 
 void OpenGLTexture2D::SetData(const TextureData& data, const glm::u32vec2& offset, const glm::u32vec2& size)
 {
+    PN_PROFILE_FUNCTION();
+
     PN_CORE_ASSERT(!data.empty(), "No data to set");
     PN_CORE_ASSERT(data.size() <= m_size.x * m_size.y * m_numChannels, "Provided data size is larger than the texture can possibly hold");
     PN_CORE_ASSERT(offset.x + size.x < m_size.x && offset.y + size.y < m_size.y, "Subrectangle defined by offset and size is out of bounds");

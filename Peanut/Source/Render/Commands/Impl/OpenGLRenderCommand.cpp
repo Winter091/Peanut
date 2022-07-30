@@ -1,9 +1,10 @@
 #include "OpenGLRenderCommand.hpp"
 
 #include <Peanut/Core/Assert.hpp>
-#include <glad/glad.h>
-
+#include <Peanut/Core/TimeProfiler.hpp>
 #include <Render/Buffers/Impl/OpenGLIndexBuffer.hpp>
+
+#include <glad/glad.h>
 
 namespace pn {
 
@@ -24,6 +25,8 @@ void OpenGLRenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t w
 
 void OpenGLRenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
+    PN_PROFILE_FUNCTION();
+
     if (count == 0) {
         count = vertexArray->GetVertexCount();
     }
@@ -34,6 +37,8 @@ void OpenGLRenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, 
 
 void OpenGLRenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
+    PN_PROFILE_FUNCTION();
+
     if (count == 0) {
         count = vertexArray->GetIndexCount();
     }
@@ -46,6 +51,8 @@ void OpenGLRenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray,
 
 void OpenGLRenderCommand::DrawArraysInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
 {
+    PN_PROFILE_FUNCTION();
+
     if (count == 0) {
         count = vertexArray->GetVertexCount();
     }
@@ -60,6 +67,8 @@ void OpenGLRenderCommand::DrawArraysInstanced(std::shared_ptr<VertexArray>& vert
 
 void OpenGLRenderCommand::DrawIndexedInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
 {
+    PN_PROFILE_FUNCTION();
+
     if (count == 0) {
         count = vertexArray->GetIndexCount();
     }

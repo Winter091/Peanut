@@ -1,6 +1,8 @@
 #include "StoragePath.hpp"
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Core/TimeProfiler.hpp>
+
 #include <filesystem>
 
 namespace pn {
@@ -9,6 +11,8 @@ std::string s_assetsPath;
 
 void StoragePath::SetAssetsPath(const std::string& stringPath)
 {
+    PN_PROFILE_FUNCTION();
+
     auto absolutePath = std::filesystem::absolute(std::filesystem::path(stringPath));
 
     s_assetsPath = absolutePath.string();

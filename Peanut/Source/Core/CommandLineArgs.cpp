@@ -1,11 +1,14 @@
 #include <Peanut/Application/CommandLineArgs.hpp>
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Core/TimeProfiler.hpp>
 
 namespace pn {
 
 CommandLineArgs::CommandLineArgs(int argc, const char** argv)
 {
+    PN_PROFILE_FUNCTION();
+
     m_args.reserve(argc);
     for (int i = 0; i < argc; i++) {
         PN_CORE_ASSERT(argv[i], "Command line argument ptr is nullptr");

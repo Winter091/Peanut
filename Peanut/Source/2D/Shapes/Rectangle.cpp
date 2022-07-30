@@ -1,5 +1,7 @@
 #include <Peanut/2D/Shapes/Rectangle.hpp>
 
+#include <Peanut/Core/TimeProfiler.hpp>
+
 #include <glm/gtx/transform.hpp>
 
 namespace pn {

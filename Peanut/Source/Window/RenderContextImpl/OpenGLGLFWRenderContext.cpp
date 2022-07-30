@@ -1,6 +1,8 @@
 #include "OpenGLGLFWRenderContext.hpp"
 
+#include <Peanut/Core/TimeProfiler.hpp>
 #include <Window/WindowImpl/GLFWWindow.hpp>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -79,6 +81,8 @@ OpenGLGLFWRenderContext::OpenGLGLFWRenderContext()
 
 void OpenGLGLFWRenderContext::PreWindowSetup()
 {
+    PN_PROFILE_FUNCTION();
+
     int major = 4, minor = 5;
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
@@ -94,6 +98,8 @@ void OpenGLGLFWRenderContext::PreWindowSetup()
 
 void OpenGLGLFWRenderContext::PostWindowSetup(Window& window)
 {
+    PN_PROFILE_FUNCTION();
+
     PN_CORE_INFO("==========================================");
 
     SetCurrentContext(window);
@@ -125,9 +131,11 @@ void OpenGLGLFWRenderContext::SetupDebugContext()
 
 void OpenGLGLFWRenderContext::InitializeGlad()
 {
-        if (!gladLoadGL()) {
-            PN_CORE_ASSERT(false, "Failed to initialize GLAD!");
-        }
+    PN_PROFILE_FUNCTION();
+
+    if (!gladLoadGL()) {
+        PN_CORE_ASSERT(false, "Failed to initialize GLAD!");
+    }
 }
 
 void OpenGLGLFWRenderContext::SetCurrentContext(Window& window)
@@ -143,6 +151,8 @@ void OpenGLGLFWRenderContext::SetSwapInterval(int interval)
 
 void OpenGLGLFWRenderContext::SwapBuffers(Window& window)
 {
+    PN_PROFILE_FUNCTION();
+
     auto handle = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
     glfwSwapBuffers(handle);
 }
