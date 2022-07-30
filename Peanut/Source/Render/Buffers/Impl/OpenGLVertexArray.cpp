@@ -57,6 +57,19 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
 #endif
 }
 
+static bool IsIntType(BufferLayoutElementType type)
+{
+    switch (type) {
+        case BufferLayoutElementType::Double:
+        case BufferLayoutElementType::Float:
+        case BufferLayoutElementType::Mat4:
+            return false;
+        default:
+            break;
+    }
+    return true;
+}
+
 void OpenGLVertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
 {
     PN_PROFILE_FUNCTION();
@@ -79,13 +92,28 @@ void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, ui
     const auto& layoutElements = layout->GetElements();
 
     for (const auto& elem : layoutElements) {
-        glVertexAttribFormat(
-            elem.index, elem.count, MapToGLType(elem.type), 
-            elem.isNormalized, static_cast<GLuint>(elem.offset));
+        if (elem.type == BufferLayoutElementType::Mat4) {
+            for (int i = 0; i < 4; i++) {
+                glVertexAttribFormat(
+                    elem.index + i, 4, GL_FLOAT, 
+                    false, static_cast<GLuint>(elem.offset + i * (4 * sizeof(float))));
 
-        glVertexAttribBinding(elem.index, bindingIndex);
+                glVertexAttribBinding(elem.index + i, bindingIndex);
 
-        glEnableVertexAttribArray(elem.index);
+                glEnableVertexAttribArray(elem.index + i);    
+            }
+        } else {
+            if (MapToGLType(elem.type) == GL_DOUBLE) {
+                glVertexAttribLFormat(elem.index, elem.count, GL_DOUBLE, static_cast<GLuint>(elem.offset));
+            } else if (IsIntType(elem.type)) {
+                glVertexAttribIFormat(elem.index, elem.count, MapToGLType(elem.type), static_cast<GLuint>(elem.offset));
+            } else {
+                glVertexAttribFormat(elem.index, elem.count, MapToGLType(elem.type), elem.isNormalized, static_cast<GLuint>(elem.offset));
+            }
+
+            glVertexAttribBinding(elem.index, bindingIndex);
+            glEnableVertexAttribArray(elem.index);
+        }
     }
 }
 
@@ -100,6 +128,7 @@ uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
         case BufferLayoutElementType::Uint32:   return GL_UNSIGNED_INT;
         case BufferLayoutElementType::Float:    return GL_FLOAT;
         case BufferLayoutElementType::Double:   return GL_DOUBLE;
+        // case BufferLayoutElementType::Mat4:     return GL_FLOAT;
         default:                                break;
     }
 

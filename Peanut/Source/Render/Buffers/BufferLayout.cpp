@@ -49,7 +49,7 @@ std::shared_ptr<BufferLayout> BufferLayout::Create(std::initializer_list<BufferL
     return std::make_shared<BufferLayout>(elements);
 }
 
-uint32_t BufferLayout::GetTypeSize(BufferLayoutElementType type)
+uint32_t BufferLayout::GetTypeSize(BufferLayoutElementType type) const
 {
     switch (type) {
         case BufferLayoutElementType::Int8:
@@ -64,6 +64,8 @@ uint32_t BufferLayout::GetTypeSize(BufferLayoutElementType type)
             return 4u;
         case BufferLayoutElementType::Double:
             return 8u;
+        case BufferLayoutElementType::Mat4:
+            return 4u * (4u * 4u);
         default:
             break;
     }

@@ -17,6 +17,7 @@ enum class BufferLayoutElementType : uint32_t
     Uint32,
     Float,
     Double,
+    Mat4
 };
 
 struct BufferLayoutElement
@@ -36,7 +37,6 @@ struct BufferLayoutElement
 class BufferLayout
 {
 public:
-    // BufferLayout() = default;
     BufferLayout(std::initializer_list<BufferLayoutElement> elements);
 
     const std::vector<BufferLayoutElement>& GetElements() const { return m_elements; }
@@ -48,8 +48,8 @@ private:
     std::vector<BufferLayoutElement> m_elements;
     uint32_t m_stride = 0;
 
-private:
-    uint32_t GetTypeSize(BufferLayoutElementType type);
+public:
+    uint32_t GetTypeSize(BufferLayoutElementType type) const;
 };
 
 }
