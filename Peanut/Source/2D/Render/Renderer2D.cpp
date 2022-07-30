@@ -1,6 +1,7 @@
 #include <Peanut/2D/Render/Renderer2D.hpp>
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Core/TimeProfiler.hpp>
 #include <Peanut/Render/Buffers/VertexArray.hpp>
 #include <Peanut/Render/Buffers/ConstantBuffer.hpp>
 #include <Peanut/Render/Shaders/Shader.hpp>
@@ -11,6 +12,8 @@
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include <glad/glad.h>
 
 namespace pn {
 
@@ -54,6 +57,8 @@ static bool s_isInitialized = false;
 
 static void Flush()
 {
+    PN_PROFILE_FUNCTION();
+
     s_data->RectanglePerVertexVBO->Unmap();
 
     for (uint32_t i = 0; i < s_data->NumTextures; i++) {
@@ -65,6 +70,8 @@ static void Flush()
 
 static void StartBatch()
 {
+    PN_PROFILE_FUNCTION();
+
     s_data->RectanglePerVertexData = reinterpret_cast<PerVertexData*>(s_data->RectanglePerVertexVBO->Map());
     s_data->NumRectInstances = 0;
     s_data->NumTextures = 0;
@@ -97,6 +104,8 @@ static int32_t AddTextureToList(const std::shared_ptr<Texture2D>& texture)
 
 void Renderer2D::Init()
 {
+    PN_PROFILE_FUNCTION();
+
     PN_CORE_ASSERT(!s_isInitialized, "Renderer2D can be initialized only once");
     
     s_data = std::make_unique<Renderer2DData>();
@@ -138,6 +147,8 @@ void Renderer2D::Init()
 
 void Renderer2D::Shutdown()
 {
+    PN_PROFILE_FUNCTION();
+
     PN_CORE_ASSERT(s_isInitialized, "Renderer2D is not initialized");
     s_data.reset(nullptr);
     s_isInitialized = false;
@@ -145,6 +156,8 @@ void Renderer2D::Shutdown()
 
 void Renderer2D::BeginScene(const Camera& camera)
 {
+    PN_PROFILE_FUNCTION();
+
     s_data->RectangleShader->Bind();
     
     s_data->CameraConstantBuffer->BindToBindingIndex(0);
@@ -159,6 +172,8 @@ void Renderer2D::BeginScene(const Camera& camera)
 
 void Renderer2D::EndScene()
 {
+    PN_PROFILE_FUNCTION();
+
     Flush();
 }
 

@@ -1,6 +1,7 @@
 #include "Peanut/Render/Buffers/BufferLayout.hpp"
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Core/TimeProfiler.hpp>
 
 namespace pn {
 
@@ -20,6 +21,8 @@ BufferLayoutElement::BufferLayoutElement(
 
 BufferLayout::BufferLayout(std::initializer_list<BufferLayoutElement> elements)
 {
+    PN_PROFILE_FUNCTION();
+
     PN_CORE_ASSERT(elements.size() > 0, "Buffer layout is empty");
     
     m_elements.reserve(elements.size());

@@ -1,14 +1,10 @@
 #include "SandboxApp.hpp"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <thread>
-#include <chrono>
-
-using namespace std::chrono_literals;
-
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
+    PN_PROFILE_FUNCTION();
+
     int w = 100, h = 100;
     m_textureData.resize(w * h * 3, 255);
 
@@ -29,6 +25,8 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
 void SandboxApp::OnEvent(pn::Event& event)
 {
+    PN_PROFILE_FUNCTION();
+
     event.Dispatch<pn::EventType::WindowSizeChanged>([this](pn::Event&) {
         m_camera->SetAspectRatio(GetWindow().GetAspectRatio());
         return true;
@@ -37,6 +35,8 @@ void SandboxApp::OnEvent(pn::Event& event)
 
 void SandboxApp::OnUpdate()
 {
+    PN_PROFILE_FUNCTION();
+
     {
         pn::Window& window = GetWindow();
         glm::vec3 pos = m_camera->GetPosition();
@@ -89,6 +89,8 @@ void SandboxApp::OnUpdate()
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
 {
+    PN_PROFILE_FUNCTION();
+
     PN_CLIENT_DEBUG("Launch args:");
     for (std::size_t i = 0; i < args.GetSize(); i++) {
         PN_CLIENT_DEBUG("   Arg {}: {}", i, args[i]);

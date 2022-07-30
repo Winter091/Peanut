@@ -1,6 +1,8 @@
 #include "OpenGLVertexArray.hpp"
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Core/TimeProfiler.hpp>
+
 #include <glad/glad.h>
 
 #include <unordered_set>
@@ -30,6 +32,8 @@ void OpenGLVertexArray::Unbind()
 
 void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferAttributeUsage usage)
 {
+    PN_PROFILE_FUNCTION();
+
     Bind();
     vertexBuffer->Bind();
 
@@ -55,6 +59,8 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
 
 void OpenGLVertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
 {
+    PN_PROFILE_FUNCTION();
+
     if (m_instanceCount == 0) {
         m_instanceCount = vertexBuffer.GetVertexCount();
         return;
@@ -67,6 +73,8 @@ void OpenGLVertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
 
 void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex)
 {
+    PN_PROFILE_FUNCTION();
+
     const auto& layout = vertexBuffer->GetLayout();
     const auto& layoutElements = layout->GetElements();
 
@@ -101,6 +109,8 @@ uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
 
 void OpenGLVertexArray::AssertAllAttributeIndicesAreUnique() const
 {
+    PN_PROFILE_FUNCTION();
+
     std::unordered_set<uint32_t> seenIndices;
 
     for (const auto& buffer : m_vertexBuffers) {

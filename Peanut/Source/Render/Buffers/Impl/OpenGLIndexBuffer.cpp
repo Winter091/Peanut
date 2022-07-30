@@ -1,5 +1,6 @@
 #include "OpenGLIndexBuffer.hpp"
 
+#include <Peanut/Core/TimeProfiler.hpp>
 #include <Render/Buffers/Impl/OpenGLEnumConversions.hpp>
 
 namespace pn
@@ -12,6 +13,8 @@ OpenGLIndexBuffer::OpenGLIndexBuffer(IndexBufferDataFormat format, BufferMapAcce
     , m_mapAccess(access)
     , m_format(format)
 {
+    PN_PROFILE_FUNCTION();
+
     PN_CORE_ASSERT(size > 0u, "Unable to create vertex buffer with size = 0");
 
     glCreateBuffers(1, &m_handle);
@@ -35,6 +38,8 @@ void OpenGLIndexBuffer::Unbind()
 
 void* OpenGLIndexBuffer::Map()
 {
+    PN_PROFILE_FUNCTION();
+
     PN_CORE_ASSERT(m_mapAccess != BufferMapAccess::NoAccess, "Trying to map buffer with no map access");
 
     void* buffer = glMapNamedBuffer(m_handle, BufferMapAccessToGlMapAccess(m_mapAccess));
@@ -44,6 +49,8 @@ void* OpenGLIndexBuffer::Map()
 
 void OpenGLIndexBuffer::Unmap()
 {
+    PN_PROFILE_FUNCTION();
+
     glUnmapNamedBuffer(m_handle);
 }
 

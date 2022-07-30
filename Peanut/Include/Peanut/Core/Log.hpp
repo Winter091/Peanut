@@ -13,8 +13,8 @@ public:
     static void Init();
     static void Shutdown();
 
-    static spdlog::logger& GetCoreLogger();
-    static spdlog::logger& GetClientLogger();
+    static spdlog::logger* GetCoreLogger();
+    static spdlog::logger* GetClientLogger();
 
     static void SetCoreLoggerLever(spdlog::level::level_enum level) { m_coreLogger->set_level(level); }
     static void SetClientLoggerLever(spdlog::level::level_enum level) { m_clientLogger->set_level(level); }
@@ -28,16 +28,16 @@ private:
 
 }
 
-#define PN_CORE_TRACE(...)      ::pn::Log::GetCoreLogger().trace(__VA_ARGS__)
-#define PN_CORE_DEBUG(...)      ::pn::Log::GetCoreLogger().debug(__VA_ARGS__)
-#define PN_CORE_INFO(...)       ::pn::Log::GetCoreLogger().info(__VA_ARGS__)
-#define PN_CORE_WARN(...)       ::pn::Log::GetCoreLogger().warn(__VA_ARGS__)
-#define PN_CORE_ERROR(...)      ::pn::Log::GetCoreLogger().error(__VA_ARGS__)
-#define PN_CORE_CRITICAL(...)   ::pn::Log::GetCoreLogger().critical(__VA_ARGS__)
+#define PN_CORE_TRACE(...)      ::pn::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define PN_CORE_DEBUG(...)      ::pn::Log::GetCoreLogger()->debug(__VA_ARGS__)
+#define PN_CORE_INFO(...)       ::pn::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define PN_CORE_WARN(...)       ::pn::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define PN_CORE_ERROR(...)      ::pn::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define PN_CORE_CRITICAL(...)   ::pn::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
-#define PN_CLIENT_TRACE(...)    ::pn::Log::GetClientLogger().trace(__VA_ARGS__)
-#define PN_CLIENT_DEBUG(...)    ::pn::Log::GetClientLogger().debug(__VA_ARGS__)
-#define PN_CLIENT_INFO(...)     ::pn::Log::GetClientLogger().info(__VA_ARGS__)
-#define PN_CLIENT_WARN(...)     ::pn::Log::GetClientLogger().warn(__VA_ARGS__)
-#define PN_CLIENT_ERROR(...)    ::pn::Log::GetClientLogger().error(__VA_ARGS__)
-#define PN_CLIENT_CRITICAL(...) ::pn::Log::GetClientLogger().critical(__VA_ARGS__)
+#define PN_CLIENT_TRACE(...)    ::pn::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define PN_CLIENT_DEBUG(...)    ::pn::Log::GetClientLogger()->debug(__VA_ARGS__)
+#define PN_CLIENT_INFO(...)     ::pn::Log::GetClientLogger()->info(__VA_ARGS__)
+#define PN_CLIENT_WARN(...)     ::pn::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define PN_CLIENT_ERROR(...)    ::pn::Log::GetClientLogger()->error(__VA_ARGS__)
+#define PN_CLIENT_CRITICAL(...) ::pn::Log::GetClientLogger()->critical(__VA_ARGS__)

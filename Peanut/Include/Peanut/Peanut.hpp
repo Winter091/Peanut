@@ -11,6 +11,7 @@
 #include "Core/KeyCodes.hpp"
 #include "Core/Log.hpp"
 #include "Core/MouseCodes.hpp"
+#include "Core/TimeProfiler.hpp"
 
 #include "Events/Event.hpp"
 #include "Events/EventQueue.hpp"

@@ -3,6 +3,8 @@
 // Stick to C asserts here, because Peanut asserts 
 // don't work without this logger being initialized
 
+#include <Peanut/Core/TimeProfiler.hpp>
+
 namespace pn {
 
 bool Log::s_isInitialized = false;
@@ -11,6 +13,8 @@ std::unique_ptr<spdlog::logger> Log::m_clientLogger;
 
 void Log::Init()
 {
+    PN_PROFILE_FUNCTION();
+
     assert(!s_isInitialized && "Logger should be initialized only once");
     s_isInitialized = true;
 
@@ -33,22 +37,22 @@ void Log::Init()
 
 void Log::Shutdown()
 {
+    PN_PROFILE_FUNCTION();
+
     assert(s_isInitialized && "Logger is not initialized, unable to shutdown");
     s_isInitialized = false;
     m_coreLogger.reset(nullptr);
     m_clientLogger.reset(nullptr);
 }
 
-spdlog::logger& Log::GetCoreLogger()
+spdlog::logger* Log::GetCoreLogger()
 {
-    assert(s_isInitialized && "Logger should be initialized before usage");
-    return *m_coreLogger;
+    return m_coreLogger.get();
 }
 
-spdlog::logger& Log::GetClientLogger()
+spdlog::logger* Log::GetClientLogger()
 {
-    assert(s_isInitialized && "Logger should be initialized before usage");
-    return *m_clientLogger;
+    return m_clientLogger.get();
 }
 
 }
