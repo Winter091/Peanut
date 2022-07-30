@@ -6,6 +6,8 @@
 #include <Peanut/Render/Shaders/Shader.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 
+#include <Core/StoragePath.hpp>
+
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -125,8 +127,8 @@ void Renderer2D::Init()
     s_data->RectangleVAO->SetIndexBuffer(rectangleIBO);
 
     s_data->RectangleShader = pn::Shader::Create(pn::ShaderPaths()
-        .SetVertexPath("Peanut/Assets/Shaders/Renderer2D/Rect.vert")
-        .SetFragmentPath("Peanut/Assets/Shaders/Renderer2D/Rect.frag"),
+        .SetVertexPath(StoragePath::GetAssetsPath() + "/Shaders/Renderer2D/Rect.vert")
+        .SetFragmentPath(StoragePath::GetAssetsPath() + "/Shaders/Renderer2D/Rect.frag"),
         "Renderer2D Rectangle Shader");
 
     s_data->CameraConstantBuffer = pn::ConstantBuffer::Create(pn::BufferMapAccess::WriteOnly, sizeof(CameraShaderData));

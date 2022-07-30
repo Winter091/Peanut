@@ -4,4 +4,5 @@ target_sources(
     EntryPoint.cpp
     Init.cpp
     Log.cpp
+    StoragePath.cpp
 )
