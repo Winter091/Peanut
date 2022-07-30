@@ -17,11 +17,10 @@ add_subdirectory(Peanut)
 add_executable(SandboxSolution)
 add_subdirectory(SandboxApp)
 
-# Useful Warnings
 if(MSVC)
     target_compile_options(
         SandboxSolution PRIVATE 
-        /W4 /WX
+        /WX /Zc:preprocessor
     )
 else()
     target_compile_options(
