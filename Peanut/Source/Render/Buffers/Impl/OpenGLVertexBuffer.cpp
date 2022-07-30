@@ -47,7 +47,7 @@ void* OpenGLVertexBuffer::Map()
 
     PN_CORE_ASSERT(m_mapAccess != BufferMapAccess::NoAccess, "Trying to map buffer with no map access");
 
-    void* buffer = glMapNamedBuffer(m_handle, BufferMapAccessToGlMapAccess(m_mapAccess));
+    void* buffer = glMapNamedBufferRange(m_handle, 0, m_size, BufferMapAccessToGlMapAccess(m_mapAccess));
     PN_CORE_ASSERT(buffer, "Mapped buffer is nullptr");
     return buffer;
 }

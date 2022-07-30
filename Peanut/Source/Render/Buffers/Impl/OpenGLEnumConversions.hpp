@@ -26,9 +26,9 @@ inline uint32_t BufferMapAccessToGlMapAccess(BufferMapAccess access)
     PN_CORE_ASSERT(access != BufferMapAccess::NoAccess, "Buffer has no map access, can't get value");
 
     switch (access) {
-        case BufferMapAccess::ReadOnly:     return GL_READ_ONLY;
-        case BufferMapAccess::WriteOnly:    return GL_WRITE_ONLY;
-        case BufferMapAccess::ReadWrite:    return GL_READ_WRITE;
+        case BufferMapAccess::ReadOnly:     return GL_MAP_READ_BIT;
+        case BufferMapAccess::WriteOnly:    return GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+        case BufferMapAccess::ReadWrite:    return GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
         default: break;
     }
 
