@@ -1,6 +1,7 @@
 #include <Peanut/Window/RenderContext.hpp>
 
 #include <Window/RenderContextImpl/OpenGLGLFWRenderContext.hpp>
+#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Window/Window.hpp>
 #include <Peanut/Core/Assert.hpp>
@@ -27,6 +28,8 @@ std::unique_ptr<RenderContext> RenderContext::Create()
                     return nullptr;
                 case RenderAPI::OpenGL:
                     return std::make_unique<OpenGLGLFWRenderContext>();
+                case RenderAPI::Dx11:
+                    return std::make_unique<Dx11GLFWRenderContext>();
             }
         }
     }

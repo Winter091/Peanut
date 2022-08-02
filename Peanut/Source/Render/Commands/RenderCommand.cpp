@@ -2,6 +2,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Render/Commands/Impl/OpenGLRenderCommand.hpp>
+#include <Render/Commands/Impl/Dx11RenderCommand.hpp>
 
 namespace pn
 {
@@ -19,10 +20,12 @@ void RenderCommand::Init()
     s_renderAPI = RenderAPI::OpenGL;
     s_renderCommandImpl = std::make_unique<OpenGLRenderCommand>();
     PN_CORE_INFO("Using OpenGL Renderer");
-#elif defined(PN_RENDERING_DIRECTX)
-    PN_CORE_ASSERT("RenderCommand: directx backend is currently not supported");
+#elif defined(PN_RENDERING_DX11)
+    s_renderAPI = RenderAPI::Dx11;
+    s_renderCommandImpl = std::make_unique<Dx11RenderCommand>();
+    PN_CORE_INFO("Using DirectX 11 Renderer");
 #else
-    PN_CORE_ASSERT("RenderCommand: cannot determine rendering backend");
+    PN_CORE_ASSERT(false, "RenderCommand: cannot determine rendering backend");
 #endif
 }
 

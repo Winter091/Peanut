@@ -39,30 +39,12 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(Peanut PUBLIC PN_DEBUG)
 endif()
 
-# In future (ha-ha) DirectX and WinAPI window will be supported
-target_compile_definitions(Peanut PUBLIC PN_RENDERING_OPENGL)
-target_compile_definitions(Peanut PUBLIC PN_WINDOW_GLFW)
-
-if (UNIX)
-    target_compile_definitions(Peanut PUBLIC PN_PLATFORM_LINUX)
-elseif (WIN32 OR MINGW OR CYGWIN)
-    target_compile_definitions(Peanut PUBLIC PN_PLATFORM_WINDOWS)
-else()
-    message(FATAL_ERROR "Platform is not supported by Peanut")
-endif()
-
-if(MSVC)
-    target_compile_options(
-        Peanut PRIVATE
-        /WX /Zc:preprocessor
-    )
-else()
-    target_compile_options(
-        Peanut PRIVATE
-        -Wall -Wextra -Wduplicated-branches -Wduplicated-cond -Wconversion
-        $<$<COMPILE_LANGUAGE:CXX>: -Wnon-virtual-dtor -Wsign-promo>
-    )
-endif()
+target_link_libraries(
+    Peanut PRIVATE 
+    glfw
+    spdlog
+    stb
+)
 
 target_include_directories(
     Peanut PUBLIC 
@@ -79,9 +61,29 @@ target_include_directories(
     Deps/spdlog/include
 )
 
-target_link_libraries(
-    Peanut PRIVATE 
-    glfw
-    spdlog
-    stb
-)
+if (UNIX)
+    target_compile_definitions(Peanut PUBLIC PN_PLATFORM_LINUX)
+    target_compile_definitions(Peanut PUBLIC PN_WINDOW_GLFW)
+    target_compile_definitions(Peanut PUBLIC PN_RENDERING_OPENGL)
+elseif (WIN32 OR MINGW OR CYGWIN)
+    target_compile_definitions(Peanut PUBLIC PN_PLATFORM_WINDOWS)
+    target_compile_definitions(Peanut PUBLIC PN_WINDOW_GLFW)
+    target_compile_definitions(Peanut PUBLIC PN_RENDERING_DX11)
+
+    target_link_libraries(Peanut PUBLIC d3d11 dxguid DXGI)
+else()
+    message(FATAL_ERROR "Platform is not supported by Peanut")
+endif()
+
+if(MSVC)
+    target_compile_options(
+        Peanut PRIVATE
+        /WX /Zc:preprocessor
+    )
+else()
+    target_compile_options(
+        Peanut PRIVATE
+        -Wall -Wextra -Wduplicated-branches -Wduplicated-cond -Wconversion
+        $<$<COMPILE_LANGUAGE:CXX>: -Wnon-virtual-dtor -Wsign-promo>
+    )
+endif()

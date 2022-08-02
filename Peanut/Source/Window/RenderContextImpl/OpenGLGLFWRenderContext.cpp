@@ -157,4 +157,8 @@ void OpenGLGLFWRenderContext::SwapBuffers(Window& window)
     glfwSwapBuffers(handle);
 }
 
+void OpenGLGLFWRenderContext::OnWindowResize(Window& /*window*/)
+{
+}
+
 }

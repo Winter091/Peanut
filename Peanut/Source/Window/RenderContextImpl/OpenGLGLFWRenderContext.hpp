@@ -18,6 +18,7 @@ public:
     void SetCurrentContext(Window& window) override;
     void SetSwapInterval(int interval) override;
     void SwapBuffers(Window& window) override;
+    void OnWindowResize(Window& window) override;
 
 private:
     void InitializeGlad();

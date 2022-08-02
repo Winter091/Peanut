@@ -8,10 +8,10 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     int w = 100, h = 100;
     m_textureData.resize(w * h * 3, 255);
 
-    m_texture = pn::Texture2D::Create(m_textureData, pn::Texture2DSettings()
+    /*m_texture = pn::Texture2D::Create(m_textureData, pn::Texture2DSettings()
         .UseFormat(pn::TextureFormat::RGB)
         .SetSize({w, h})
-        .UseMipmapFiltering(pn::TextureMipmapFilter::LinearMipmapLinear, pn::TextureFilter::Nearest));
+        .UseMipmapFiltering(pn::TextureMipmapFilter::LinearMipmapLinear, pn::TextureFilter::Nearest));*/
 
     m_camera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
         .SetZoom(1.0f)
@@ -26,6 +26,8 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 void SandboxApp::OnEvent(pn::Event& event)
 {
     PN_PROFILE_FUNCTION();
+
+    // PN_CORE_TRACE("Event: {}", event.ToString());
 
     event.Dispatch<pn::EventType::WindowSizeChanged>([this](pn::Event&) {
         m_camera->SetAspectRatio(GetWindow().GetAspectRatio());
@@ -56,34 +58,34 @@ void SandboxApp::OnUpdate()
     }
 
     {
-        pn::RenderCommand::SetClearColor({ 0.05f, 0.05f, 0.05f, 1.0f });
+        pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
         pn::RenderCommand::Clear();
 
-        pn::Rectangle rect;
-        rect.SetSize({1.0f, 1.0f});
-        rect.SetTexture(m_texture);
+        //pn::Rectangle rect;
+        //rect.SetSize({1.0f, 1.0f});
+        //rect.SetTexture(m_texture);
 
-        for (size_t i = 0; i < m_textureData.size(); i += 3) {
-            m_textureData[i + 0] = static_cast<uint8_t>(rand() % 256);
-            m_textureData[i + 1] = static_cast<uint8_t>(rand() % 256);
-            m_textureData[i + 2] = static_cast<uint8_t>(rand() % 256);
-        }
-        m_texture->SetData(m_textureData, {1, 1}, {98, 98});
+        //for (size_t i = 0; i < m_textureData.size(); i += 3) {
+        //    m_textureData[i + 0] = static_cast<uint8_t>(rand() % 256);
+        //    m_textureData[i + 1] = static_cast<uint8_t>(rand() % 256);
+        //    m_textureData[i + 2] = static_cast<uint8_t>(rand() % 256);
+        //}
+        //m_texture->SetData(m_textureData, {1, 1}, {98, 98});
 
-        pn::Renderer2D::BeginScene(*m_camera);
-        {
-            float step = 1.25f;
-            for (int i = -50; i <= 50; i++) {
-                for (int j = -50; j <= 50; j++) {
-                    float x = step * static_cast<float>(i);
-                    float y = step * static_cast<float>(j);
-                    rect.SetPosition({x, y});
+        //pn::Renderer2D::BeginScene(*m_camera);
+        //{
+        //    float step = 1.25f;
+        //    for (int i = -50; i <= 50; i++) {
+        //        for (int j = -50; j <= 50; j++) {
+        //            float x = step * static_cast<float>(i);
+        //            float y = step * static_cast<float>(j);
+        //            rect.SetPosition({x, y});
 
-                    pn::Renderer2D::DrawRectangle(rect);
-                }
-            }
-        }
-        pn::Renderer2D::EndScene();
+        //            pn::Renderer2D::DrawRectangle(rect);
+        //        }
+        //    }
+        //}
+        //pn::Renderer2D::EndScene();
     }
 }
 
