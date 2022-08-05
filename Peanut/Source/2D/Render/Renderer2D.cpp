@@ -112,7 +112,7 @@ void Renderer2D::Init()
 
     s_data->RectangleVAO = pn::VertexArray::Create();
 
-    s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(BufferMapAccess::WriteOnly,
+    s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(BufferMapAccess::WriteDiscard,
                                                              sizeof(PerVertexData) * MAX_VERTICES_PER_BATCH);
     s_data->RectanglePerVertexVBO->SetLayout(pn::BufferLayout::Create({
         { 0, pn::BufferLayoutElementType::Float, 2, "position" },
@@ -140,7 +140,7 @@ void Renderer2D::Init()
         .SetFragmentPath(StoragePath::GetAssetsPath() + "/Shaders/Renderer2D/Rect.frag"),
         "Renderer2D Rectangle Shader");
 
-    s_data->CameraConstantBuffer = pn::ConstantBuffer::Create(pn::BufferMapAccess::WriteOnly, sizeof(CameraShaderData));
+    s_data->CameraConstantBuffer = pn::ConstantBuffer::Create(pn::BufferMapAccess::WriteDiscard, sizeof(CameraShaderData));
 
     s_isInitialized = true;
 }

@@ -11,8 +11,9 @@ inline uint32_t BufferMapAccessToGlStorageAccess(BufferMapAccess access)
 {
     switch (access) {
         case BufferMapAccess::NoAccess:     return 0u;
-        case BufferMapAccess::ReadOnly:     return GL_MAP_READ_BIT;
-        case BufferMapAccess::WriteOnly:    return GL_MAP_WRITE_BIT;
+        case BufferMapAccess::Read:         return GL_MAP_READ_BIT;
+        case BufferMapAccess::Write:        return GL_MAP_WRITE_BIT;
+        case BufferMapAccess::WriteDiscard: return GL_MAP_WRITE_BIT;
         case BufferMapAccess::ReadWrite:    return GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
         default: break;
     }
@@ -26,8 +27,9 @@ inline uint32_t BufferMapAccessToGlMapAccess(BufferMapAccess access)
     PN_CORE_ASSERT(access != BufferMapAccess::NoAccess, "Buffer has no map access, can't get value");
 
     switch (access) {
-        case BufferMapAccess::ReadOnly:     return GL_MAP_READ_BIT;
-        case BufferMapAccess::WriteOnly:    return GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+        case BufferMapAccess::Read:         return GL_MAP_READ_BIT;
+        case BufferMapAccess::Write:        return GL_MAP_WRITE_BIT;
+        case BufferMapAccess::WriteDiscard: return GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
         case BufferMapAccess::ReadWrite:    return GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
         default: break;
     }

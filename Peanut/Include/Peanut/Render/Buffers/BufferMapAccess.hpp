@@ -7,8 +7,9 @@ namespace pn {
 enum class BufferMapAccess : uint32_t
 {
     NoAccess = 0,
-    ReadOnly,
-    WriteOnly,
+    Read,
+    Write,
+    WriteDiscard,
     ReadWrite,
 };
 
