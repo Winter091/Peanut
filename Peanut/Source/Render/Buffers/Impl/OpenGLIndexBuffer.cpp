@@ -19,6 +19,8 @@ OpenGLIndexBuffer::OpenGLIndexBuffer(IndexBufferDataFormat format, BufferMapAcce
 
     glCreateBuffers(1, &m_handle);
     glNamedBufferStorage(m_handle, size, data, BufferMapAccessToGlStorageAccess(access));
+
+    UpdateIndexCount();
 }
 
 OpenGLIndexBuffer::~OpenGLIndexBuffer()

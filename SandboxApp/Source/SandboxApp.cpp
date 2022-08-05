@@ -5,22 +5,45 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 {
     PN_PROFILE_FUNCTION();
 
-    int w = 100, h = 100;
-    m_textureData.resize(w * h * 3, 255);
+    float positions[] = {
+        -0.5f, -0.5f,  0.0f,
+        -0.5f,  0.5f,  0.0f,
+         0.5f,  0.5f,  0.0f,
+         0.5f, -0.5f,  0.0f,
+    };
 
-    /*m_texture = pn::Texture2D::Create(m_textureData, pn::Texture2DSettings()
-        .UseFormat(pn::TextureFormat::RGB)
-        .SetSize({w, h})
-        .UseMipmapFiltering(pn::TextureMipmapFilter::LinearMipmapLinear, pn::TextureFilter::Nearest));*/
+    float colors[] = {
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f,
+    };
 
-    m_camera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
-        .SetZoom(1.0f)
-        .SetAspectRatio(GetWindow().GetAspectRatio())
-        .SetPosition({ 0.0f, 0.0f, 1.0f })
-        .SetDirection({ 0.0f, 0.0f, -1.0f })
-        .SetBoundaries(pn::OrthoCameraBoundaries()
-            .SetCenter({ 0.0f, 0.0f })
-            .SetWidth(150.0f).SetHeight(150.0f)));
+    uint16_t indices[] = { 0, 1, 2, 2, 3, 0 };
+
+    auto posVB = pn::VertexBuffer::Create(pn::BufferMapAccess::NoAccess, sizeof(positions), positions);
+    auto posVBLayout = pn::BufferLayout::Create({
+        { 0, pn::BufferLayoutElementType::Float, 3, "position" },
+    });
+    posVB->SetLayout(posVBLayout);
+
+    auto colorVB = pn::VertexBuffer::Create(pn::BufferMapAccess::NoAccess, sizeof(colors), colors);
+    auto colorVBLayout = pn::BufferLayout::Create({
+        { 1, pn::BufferLayoutElementType::Float, 3, "color" },
+    });
+    colorVB->SetLayout(colorVBLayout);
+
+    auto indexBuffer = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint16, pn::BufferMapAccess::NoAccess, sizeof(indices), indices);
+
+    m_vertexArray = pn::VertexArray::Create();
+    m_vertexArray->AddVertexBuffer(posVB, pn::BufferAttributeUsage::PerVertex);
+    m_vertexArray->AddVertexBuffer(colorVB, pn::BufferAttributeUsage::PerVertex);
+    m_vertexArray->SetIndexBuffer(indexBuffer);
+
+    m_shader = pn::Shader::Create(pn::ShaderPaths()
+        .SetVertexPath("E:/Projects/C++/Peanut/Peanut/Assets/Shaders/test.vert")
+        .SetFragmentPath("E:/Projects/C++/Peanut/Peanut/Assets/Shaders/test.frag"),
+        "Test Shader");
 }
 
 void SandboxApp::OnEvent(pn::Event& event)
@@ -28,65 +51,17 @@ void SandboxApp::OnEvent(pn::Event& event)
     PN_PROFILE_FUNCTION();
 
     // PN_CORE_TRACE("Event: {}", event.ToString());
-
-    event.Dispatch<pn::EventType::WindowSizeChanged>([this](pn::Event&) {
-        m_camera->SetAspectRatio(GetWindow().GetAspectRatio());
-        return true;
-    });
 }
 
 void SandboxApp::OnUpdate()
 {
     PN_PROFILE_FUNCTION();
 
-    {
-        pn::Window& window = GetWindow();
-        glm::vec3 pos = m_camera->GetPosition();
-        float zoom = m_camera->GetZoom();
-        float delta = 2.0f;
-        float zoomDelta = 0.01f;
+    pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
+    pn::RenderCommand::Clear();
 
-        if (window.IsKeyPressed(pn::KeyCode::W)) { pos.y += delta * zoom; }
-        if (window.IsKeyPressed(pn::KeyCode::S)) { pos.y -= delta * zoom; }
-        if (window.IsKeyPressed(pn::KeyCode::A)) { pos.x -= delta * zoom; }
-        if (window.IsKeyPressed(pn::KeyCode::D)) { pos.x += delta * zoom; }
-        if (window.IsKeyPressed(pn::KeyCode::PageUp)) { zoom -= zoomDelta; }
-        if (window.IsKeyPressed(pn::KeyCode::PageDown)) { zoom += zoomDelta; }
-
-        m_camera->SetPosition(pos);
-        m_camera->SetZoom(zoom);
-    }
-
-    {
-        pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
-        pn::RenderCommand::Clear();
-
-        //pn::Rectangle rect;
-        //rect.SetSize({1.0f, 1.0f});
-        //rect.SetTexture(m_texture);
-
-        //for (size_t i = 0; i < m_textureData.size(); i += 3) {
-        //    m_textureData[i + 0] = static_cast<uint8_t>(rand() % 256);
-        //    m_textureData[i + 1] = static_cast<uint8_t>(rand() % 256);
-        //    m_textureData[i + 2] = static_cast<uint8_t>(rand() % 256);
-        //}
-        //m_texture->SetData(m_textureData, {1, 1}, {98, 98});
-
-        //pn::Renderer2D::BeginScene(*m_camera);
-        //{
-        //    float step = 1.25f;
-        //    for (int i = -50; i <= 50; i++) {
-        //        for (int j = -50; j <= 50; j++) {
-        //            float x = step * static_cast<float>(i);
-        //            float y = step * static_cast<float>(j);
-        //            rect.SetPosition({x, y});
-
-        //            pn::Renderer2D::DrawRectangle(rect);
-        //        }
-        //    }
-        //}
-        //pn::Renderer2D::EndScene();
-    }
+    m_shader->Bind();
+    pn::RenderCommand::DrawIndexed(m_vertexArray);
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
