@@ -41,10 +41,10 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
     PN_PROFILE_FUNCTION();
 
     glBindVertexArray(m_vaoHandle);
-    vertexBuffer->Bind();
 
     uint32_t bindingIndex = static_cast<uint32_t>(m_vertexBuffers.size());
-    vertexBuffer->BindToBindingIndex(bindingIndex);
+    uint32_t vertexBufferHandle = *(uint32_t*)vertexBuffer->GetNativeHandle();
+    glBindVertexBuffer(bindingIndex, vertexBufferHandle, 0, vertexBuffer->GetVertexSize());
 
     if (vertexBuffer->GetLayout()->GetUsage() == pn::BufferLayoutAttributeUsage::PerVertex) {
         glVertexBindingDivisor(bindingIndex, 0);

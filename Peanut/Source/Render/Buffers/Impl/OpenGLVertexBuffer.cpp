@@ -26,21 +26,6 @@ OpenGLVertexBuffer::~OpenGLVertexBuffer()
     glDeleteBuffers(1, &m_handle);
 }
 
-void OpenGLVertexBuffer::Bind()
-{
-    glBindBuffer(GL_ARRAY_BUFFER, m_handle);
-}
-
-void OpenGLVertexBuffer::BindToBindingIndex(uint32_t index)
-{
-    glBindVertexBuffer(index, m_handle, 0, GetVertexSize());
-}
-
-void OpenGLVertexBuffer::Unbind()
-{
-    glBindBuffer(GL_ARRAY_BUFFER, 0u);
-}
-
 void* OpenGLVertexBuffer::Map()
 {
     PN_PROFILE_FUNCTION();

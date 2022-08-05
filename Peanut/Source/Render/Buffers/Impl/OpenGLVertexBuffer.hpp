@@ -10,10 +10,6 @@ public:
     OpenGLVertexBuffer(BufferMapAccess access, uint32_t size, const void* data);
     ~OpenGLVertexBuffer() override;
 
-    void Bind() override;
-    void BindToBindingIndex(uint32_t index) override;
-    void Unbind() override;
-
     void* Map() override;
     void Unmap() override;
     
@@ -23,6 +19,8 @@ public:
     uint32_t GetSize() const override { return m_size; }
     uint32_t GetVertexSize() const override;
     uint32_t GetVertexCount() const override;
+
+    void* GetNativeHandle() const override { return (void*)&m_handle; }
 
 private:
     uint32_t m_handle;

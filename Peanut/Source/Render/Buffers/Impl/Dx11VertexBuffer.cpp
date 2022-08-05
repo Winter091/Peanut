@@ -36,18 +36,6 @@ Dx11VertexBuffer::~Dx11VertexBuffer()
 {
 }
 
-void Dx11VertexBuffer::Bind()
-{
-}
-
-void Dx11VertexBuffer::BindToBindingIndex(uint32_t index)
-{
-}
-
-void Dx11VertexBuffer::Unbind()
-{
-}
-
 void* Dx11VertexBuffer::Map()
 {
 	return nullptr;
