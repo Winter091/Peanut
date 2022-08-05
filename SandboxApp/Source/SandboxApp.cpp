@@ -22,28 +22,34 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     uint16_t indices[] = { 0, 1, 2, 2, 3, 0 };
 
     auto posVB = pn::VertexBuffer::Create(pn::BufferMapAccess::NoAccess, sizeof(positions), positions);
-    auto posVBLayout = pn::BufferLayout::Create({
-        { 0, pn::BufferLayoutElementType::Float, 3, "position" },
-    });
+    auto posVBLayout = pn::BufferLayout::Create(
+        pn::BufferLayoutAttributeUsage::PerVertex, {
+            { 0, "position", pn::BufferLayoutElementType::Float, 3, }
+        }
+    );
     posVB->SetLayout(posVBLayout);
 
     auto colorVB = pn::VertexBuffer::Create(pn::BufferMapAccess::NoAccess, sizeof(colors), colors);
-    auto colorVBLayout = pn::BufferLayout::Create({
-        { 1, pn::BufferLayoutElementType::Float, 3, "color" },
-    });
+    auto colorVBLayout = pn::BufferLayout::Create(
+        pn::BufferLayoutAttributeUsage::PerVertex, {
+            { 1, "color", pn::BufferLayoutElementType::Float, 3 }
+        }
+    );
     colorVB->SetLayout(colorVBLayout);
 
     auto indexBuffer = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint16, pn::BufferMapAccess::NoAccess, sizeof(indices), indices);
-
-    m_vertexArray = pn::VertexArray::Create();
-    m_vertexArray->AddVertexBuffer(posVB, pn::BufferAttributeUsage::PerVertex);
-    m_vertexArray->AddVertexBuffer(colorVB, pn::BufferAttributeUsage::PerVertex);
-    m_vertexArray->SetIndexBuffer(indexBuffer);
-
+    
     m_shader = pn::Shader::Create(pn::ShaderPaths()
         .SetVertexPath("E:/Projects/C++/Peanut/Peanut/Assets/Shaders/test.vert")
         .SetFragmentPath("E:/Projects/C++/Peanut/Peanut/Assets/Shaders/test.frag"),
         "Test Shader");
+
+    pn::VertexArrayDescription desc;
+    desc.VertexBuffers = { posVB, colorVB };
+    desc.IndexBuffer = indexBuffer;
+    desc.Shader = m_shader;
+
+    m_vertexArray = pn::VertexArray::Create(desc);
 }
 
 void SandboxApp::OnEvent(pn::Event& event)
@@ -60,7 +66,6 @@ void SandboxApp::OnUpdate()
     pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
     pn::RenderCommand::Clear();
 
-    m_shader->Bind();
     pn::RenderCommand::DrawIndexed(m_vertexArray);
 }
 

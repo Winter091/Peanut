@@ -19,34 +19,40 @@ enum class BufferLayoutElementType : uint32_t
     Double,
 };
 
+enum class BufferLayoutAttributeUsage
+{
+    PerVertex,
+    PerInstance
+};
+
 struct BufferLayoutElement
 {
-    BufferLayoutElement(uint32_t index, BufferLayoutElementType type, uint32_t count, 
-                        std::string name, bool isNormalized = false);
+    BufferLayoutElement(uint32_t index, std::string name, BufferLayoutElementType type, uint32_t count);
 
-    std::string name;
     uint32_t index;
-    uint32_t size;
-    uint64_t offset;
+    std::string name;
     BufferLayoutElementType type;
     uint32_t count;
-    bool isNormalized;
+    uint32_t size;
+    uint64_t offset;
 };
 
 class BufferLayout
 {
 public:
     // BufferLayout() = default;
-    BufferLayout(std::initializer_list<BufferLayoutElement> elements);
+    BufferLayout(BufferLayoutAttributeUsage usage, std::initializer_list<BufferLayoutElement> elements);
 
     const std::vector<BufferLayoutElement>& GetElements() const { return m_elements; }
     uint32_t GetStride() const { return m_stride; }
+    BufferLayoutAttributeUsage GetUsage() const { return m_usage; }
 
-    static std::shared_ptr<BufferLayout> Create(std::initializer_list<BufferLayoutElement> elements);
+    static std::shared_ptr<BufferLayout> Create(BufferLayoutAttributeUsage usage, std::initializer_list<BufferLayoutElement> elements);
 
 private:
     std::vector<BufferLayoutElement> m_elements;
     uint32_t m_stride = 0;
+    BufferLayoutAttributeUsage m_usage;
 
 private:
     uint32_t GetTypeSize(BufferLayoutElementType type);

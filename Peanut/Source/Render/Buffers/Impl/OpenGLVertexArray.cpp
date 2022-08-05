@@ -10,37 +10,43 @@
 namespace pn
 {
 
-OpenGLVertexArray::OpenGLVertexArray()
+OpenGLVertexArray::OpenGLVertexArray(const VertexArrayDescription& description)
 {
-    glCreateVertexArrays(1, &m_handle);
+    glCreateVertexArrays(1, &m_vaoHandle);
+
+    for (const auto& vertexBuffer : description.VertexBuffers) {
+        AddVertexBuffer(vertexBuffer);
+    }
+
+    if (description.IndexBuffer) {
+        SetIndexBuffer(description.IndexBuffer);
+    }
+
+    m_shader = description.Shader;
 }
     
 OpenGLVertexArray::~OpenGLVertexArray()
 {
-    glDeleteVertexArrays(1, &m_handle);
+    glDeleteVertexArrays(1, &m_vaoHandle);
 }
 
 void OpenGLVertexArray::Bind()
 {
-    glBindVertexArray(m_handle);
+    glBindVertexArray(m_vaoHandle);
+    m_shader->Bind();
 }
 
-void OpenGLVertexArray::Unbind()
-{
-    glBindVertexArray(0u);
-}
-
-void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer, BufferAttributeUsage usage)
+void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
 {
     PN_PROFILE_FUNCTION();
 
-    Bind();
+    glBindVertexArray(m_vaoHandle);
     vertexBuffer->Bind();
 
     uint32_t bindingIndex = static_cast<uint32_t>(m_vertexBuffers.size());
     vertexBuffer->BindToBindingIndex(bindingIndex);
 
-    if (usage == BufferAttributeUsage::PerVertex) {
+    if (vertexBuffer->GetLayout()->GetUsage() == pn::BufferLayoutAttributeUsage::PerVertex) {
         glVertexBindingDivisor(bindingIndex, 0);
     } else {
         glVertexBindingDivisor(bindingIndex, 1);
@@ -49,8 +55,6 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
 
     ProcessVertexBufferLayout(vertexBuffer.get(), bindingIndex);
     m_vertexBuffers.push_back(vertexBuffer);
-
-    Unbind();
 
 #if defined(PN_DEBUG)
     AssertAllAttributeIndicesAreUnique();
@@ -81,7 +85,7 @@ void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, ui
     for (const auto& elem : layoutElements) {
         glVertexAttribFormat(
             elem.index, elem.count, MapToGLType(elem.type), 
-            elem.isNormalized, static_cast<GLuint>(elem.offset));
+            false, static_cast<GLuint>(elem.offset));
 
         glVertexAttribBinding(elem.index, bindingIndex);
 
@@ -128,9 +132,8 @@ void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& index
 {
     m_indexBuffer = indexBuffer;
 
-    Bind();
+    glBindVertexArray(m_vaoHandle);
     indexBuffer->Bind();
-    Unbind();
 }
 
 uint32_t OpenGLVertexArray::GetVertexCount() const 

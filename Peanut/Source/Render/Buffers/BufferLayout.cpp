@@ -5,26 +5,24 @@
 
 namespace pn {
 
-BufferLayoutElement::BufferLayoutElement(
-    uint32_t index, BufferLayoutElementType type, uint32_t count, std::string name, bool isNormalized
-)
-    : name(std::move(name)), 
-    index(index), 
-    size(0), 
-    offset(0), 
-    type(type), 
-    count(count),
-    isNormalized(isNormalized)
+BufferLayoutElement::BufferLayoutElement(uint32_t index, std::string name, BufferLayoutElementType type, uint32_t count)
+    : index(index)
+    , name(std::move(name))
+    , type(type)
+    , count(count)
+    , size(0) 
+    , offset(0) 
 {
     PN_CORE_ASSERT(count >= 1 && count <= 4, "Buffer layout: invalid count of elements: {}", count);
 }
 
-BufferLayout::BufferLayout(std::initializer_list<BufferLayoutElement> elements)
+BufferLayout::BufferLayout(BufferLayoutAttributeUsage usage, std::initializer_list<BufferLayoutElement> elements)
 {
     PN_PROFILE_FUNCTION();
 
     PN_CORE_ASSERT(elements.size() > 0, "Buffer layout is empty");
     
+    m_usage = usage;
     m_elements.reserve(elements.size());
 
     uint32_t i = 0;
@@ -44,9 +42,9 @@ BufferLayout::BufferLayout(std::initializer_list<BufferLayoutElement> elements)
     m_stride = currOffset;
 }
 
-std::shared_ptr<BufferLayout> BufferLayout::Create(std::initializer_list<BufferLayoutElement> elements)
+std::shared_ptr<BufferLayout> BufferLayout::Create(BufferLayoutAttributeUsage usage, std::initializer_list<BufferLayoutElement> elements)
 {
-    return std::make_shared<BufferLayout>(elements);
+    return std::make_shared<BufferLayout>(usage, elements);
 }
 
 uint32_t BufferLayout::GetTypeSize(BufferLayoutElementType type)

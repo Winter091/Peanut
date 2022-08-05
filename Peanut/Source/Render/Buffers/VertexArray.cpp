@@ -7,7 +7,7 @@
 namespace pn
 {
 
-std::shared_ptr<VertexArray> VertexArray::Create()
+std::shared_ptr<VertexArray> VertexArray::Create(const VertexArrayDescription& description)
 {
     auto renderApi = RenderCommand::GetRenderAPI();
 
@@ -16,7 +16,7 @@ std::shared_ptr<VertexArray> VertexArray::Create()
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
         case RenderAPI::OpenGL:
-            return std::make_shared<OpenGLVertexArray>();
+            return std::make_shared<OpenGLVertexArray>(description);
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;
