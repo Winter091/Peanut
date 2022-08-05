@@ -19,7 +19,6 @@ public:
     virtual void Unmap() = 0;
 
     virtual const std::shared_ptr<BufferLayout>& GetLayout() const = 0;
-    virtual void SetLayout(const std::shared_ptr<BufferLayout>& layout) = 0;
 
     virtual uint32_t GetSize() const = 0;
     virtual uint32_t GetVertexSize() const = 0;
@@ -27,7 +26,7 @@ public:
 
     virtual void* GetNativeHandle() const = 0;
 
-    static std::shared_ptr<VertexBuffer> Create(BufferMapAccess access, uint32_t size, const void* data = nullptr);
+    static std::shared_ptr<VertexBuffer> Create(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data = nullptr);
 };
 
 }

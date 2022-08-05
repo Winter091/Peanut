@@ -7,15 +7,15 @@ namespace pn {
 class OpenGLVertexBuffer final : public VertexBuffer
 {
 public:
-    OpenGLVertexBuffer(BufferMapAccess access, uint32_t size, const void* data);
+    OpenGLVertexBuffer(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data);
     ~OpenGLVertexBuffer() override;
 
     void* Map() override;
     void Unmap() override;
     
     const std::shared_ptr<BufferLayout>& GetLayout() const override;
-    void SetLayout(const std::shared_ptr<BufferLayout>& layout) override;
 
+public:
     uint32_t GetSize() const override { return m_size; }
     uint32_t GetVertexSize() const override;
     uint32_t GetVertexCount() const override;

@@ -8,10 +8,11 @@
 namespace pn
 {
 
-OpenGLVertexBuffer::OpenGLVertexBuffer(BufferMapAccess access, uint32_t size, const void* data)
+OpenGLVertexBuffer::OpenGLVertexBuffer(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data)
     : m_handle(0)
     , m_size(size)
     , m_mapAccess(access)
+    , m_layout(layout)
 {
     PN_PROFILE_FUNCTION();
 
@@ -48,12 +49,6 @@ const std::shared_ptr<BufferLayout>& OpenGLVertexBuffer::GetLayout() const
 {
     PN_CORE_ASSERT(m_layout, "Layout is not specified");
     return m_layout;
-}
-
-void OpenGLVertexBuffer::SetLayout(const std::shared_ptr<BufferLayout>& layout)
-{
-    PN_CORE_ASSERT(layout, "Layout is nullptr");
-    m_layout = layout;
 }
 
 uint32_t OpenGLVertexBuffer::GetVertexSize() const 

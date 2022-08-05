@@ -21,21 +21,25 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
     uint16_t indices[] = { 0, 1, 2, 2, 3, 0 };
 
-    auto posVB = pn::VertexBuffer::Create(pn::BufferMapAccess::NoAccess, sizeof(positions), positions);
-    auto posVBLayout = pn::BufferLayout::Create(
-        pn::BufferLayoutAttributeUsage::PerVertex, {
+    auto posVB = pn::VertexBuffer::Create(
+        pn::BufferMapAccess::NoAccess, 
+        sizeof(positions), 
+        pn::BufferLayout::Create(
+            pn::BufferLayoutAttributeUsage::PerVertex, {
             { 0, "position", pn::BufferLayoutElementType::Float, 3, }
-        }
+        }), 
+        positions
     );
-    posVB->SetLayout(posVBLayout);
 
-    auto colorVB = pn::VertexBuffer::Create(pn::BufferMapAccess::NoAccess, sizeof(colors), colors);
-    auto colorVBLayout = pn::BufferLayout::Create(
-        pn::BufferLayoutAttributeUsage::PerVertex, {
+    auto colorVB = pn::VertexBuffer::Create(
+        pn::BufferMapAccess::NoAccess, 
+        sizeof(colors), 
+        pn::BufferLayout::Create(
+            pn::BufferLayoutAttributeUsage::PerVertex, {
             { 1, "color", pn::BufferLayoutElementType::Float, 3 }
-        }
+        }), 
+        colors
     );
-    colorVB->SetLayout(colorVBLayout);
 
     auto indexBuffer = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint16, pn::BufferMapAccess::NoAccess, sizeof(indices), indices);
     
