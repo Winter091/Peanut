@@ -2,6 +2,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
+#include <Render/Buffers/Impl/OpenGLEnumConversions.hpp>
 
 #include <glad/glad.h>
 
@@ -83,31 +84,16 @@ void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, ui
     const auto& layoutElements = layout->GetElements();
 
     for (const auto& elem : layoutElements) {
-        glVertexAttribFormat(
-            elem.index, elem.count, MapToGLType(elem.type), 
-            false, static_cast<GLuint>(elem.offset));
+        if (IsBufferLayoutElementTypeInt(elem.type)) {
+            glVertexAttribIFormat(elem.index, elem.count, BufferLayoutElementTypeToGlType(elem.type), static_cast<GLuint>(elem.offset));
+        }
+        else {
+            glVertexAttribFormat(elem.index, elem.count, BufferLayoutElementTypeToGlType(elem.type), false, static_cast<GLuint>(elem.offset));
+        }
 
         glVertexAttribBinding(elem.index, bindingIndex);
-
         glEnableVertexAttribArray(elem.index);
     }
-}
-
-uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
-{
-    switch (type) {
-        case BufferLayoutElementType::Int8:     return GL_BYTE;
-        case BufferLayoutElementType::Int16:    return GL_SHORT;
-        case BufferLayoutElementType::Int32:    return GL_INT;
-        case BufferLayoutElementType::Uint8:    return GL_UNSIGNED_BYTE;
-        case BufferLayoutElementType::Uint16:   return GL_UNSIGNED_SHORT;
-        case BufferLayoutElementType::Uint32:   return GL_UNSIGNED_INT;
-        case BufferLayoutElementType::Float:    return GL_FLOAT;
-        default:                                break;
-    }
-
-    PN_CORE_ASSERT(false, "Unknown element type: {}", static_cast<uint32_t>(type));
-    return 0u;
 }
 
 void OpenGLVertexArray::AssertAllAttributeIndicesAreUnique() const

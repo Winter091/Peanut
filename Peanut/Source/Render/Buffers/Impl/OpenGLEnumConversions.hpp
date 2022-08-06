@@ -2,6 +2,8 @@
 
 #include <Peanut/Render/Buffers/BufferMapAccess.hpp>
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Render/Buffers/BufferLayout.hpp>
+
 #include <cstdint>
 #include <glad/glad.h>
 
@@ -36,6 +38,34 @@ inline uint32_t BufferMapAccessToGlMapAccess(BufferMapAccess access)
 
     PN_CORE_ASSERT(false, "Unknown BufferMapAccess enum value");
     return 0;
+}
+
+inline uint32_t BufferLayoutElementTypeToGlType(BufferLayoutElementType type)
+{
+    switch (type) {
+        case BufferLayoutElementType::Int8:     return GL_BYTE;
+        case BufferLayoutElementType::Int16:    return GL_SHORT;
+        case BufferLayoutElementType::Int32:    return GL_INT;
+        case BufferLayoutElementType::Uint8:    return GL_UNSIGNED_BYTE;
+        case BufferLayoutElementType::Uint16:   return GL_UNSIGNED_SHORT;
+        case BufferLayoutElementType::Uint32:   return GL_UNSIGNED_INT;
+        case BufferLayoutElementType::Float:    return GL_FLOAT;
+        default:                                break;
+    }
+
+    PN_CORE_ASSERT(false, "Unknown BufferLayoutElementType enum value: {}", static_cast<uint32_t>(type));
+    return 0u;
+}
+
+inline uint32_t IsBufferLayoutElementTypeInt(BufferLayoutElementType type)
+{
+    switch (type) {
+        case BufferLayoutElementType::Float:
+            return false;
+        default:
+            break;
+    }
+    return true;
 }
 
 }

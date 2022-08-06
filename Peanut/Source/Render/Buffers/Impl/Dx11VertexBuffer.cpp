@@ -10,7 +10,6 @@ namespace pn {
 
 Dx11VertexBuffer::Dx11VertexBuffer(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data)
 	: m_handle(nullptr)
-	, m_isDataInitialized(false)
 	, m_layout(layout)
 	, m_size(size)
 	, m_mapAccess(access)
@@ -48,7 +47,6 @@ void* Dx11VertexBuffer::Map()
 	PN_CORE_ASSERT(res == S_OK, "Unable to map vertex buffer");
 
 	return mappedBuffer.pData;
-
 }
 
 void Dx11VertexBuffer::Unmap()

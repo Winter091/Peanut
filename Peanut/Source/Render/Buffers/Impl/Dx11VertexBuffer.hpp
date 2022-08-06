@@ -26,9 +26,8 @@ public:
 
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_handle = nullptr;
-    uint32_t m_size;
     std::shared_ptr<BufferLayout> m_layout;
-    bool m_isDataInitialized;
+    uint32_t m_size;
     BufferMapAccess m_mapAccess;
 };
 

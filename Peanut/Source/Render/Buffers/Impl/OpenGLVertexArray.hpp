@@ -14,10 +14,6 @@ public:
 
     void Bind() override;
 
-private:
-    void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
-    void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer);
-
 public:
 
     uint32_t GetVertexCount() const override;
@@ -33,8 +29,9 @@ private:
     std::shared_ptr<Shader> m_shader;
 
 private:
+    void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
+    void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer);
     void ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex);
-    uint32_t MapToGLType(BufferLayoutElementType type) const;
     void AssertAllAttributeIndicesAreUnique() const;
     void UpdateInstanceCount(const VertexBuffer& vertexBuffer);
 };
