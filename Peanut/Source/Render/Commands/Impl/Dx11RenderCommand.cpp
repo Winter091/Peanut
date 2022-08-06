@@ -1,6 +1,7 @@
 #include "DX11RenderCommand.hpp"
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Application/Application.hpp>
 #include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
 
 #include <d3d11.h>
@@ -31,9 +32,11 @@ void Dx11RenderCommand::Clear()
 
 void Dx11RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height)
 {
+    Application& app = Application::GetInstance();
+
     D3D11_VIEWPORT viewport;
     viewport.TopLeftX = static_cast<float>(leftX);
-    viewport.TopLeftY = static_cast<float>(bottomY + height);
+    viewport.TopLeftY = static_cast<float>(app.GetWindow().GetHeight() - bottomY - height);
     viewport.Width = static_cast<float>(width);
     viewport.Height = static_cast<float>(height);
     viewport.MinDepth = 0.0f;
@@ -44,14 +47,30 @@ void Dx11RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t wid
     deviceContext->RSSetViewports(1, &viewport);
 }
 
-void Dx11RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& /*vertexArray*/, uint32_t /*count*/)
+void Dx11RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
-    PN_CORE_ASSERT(false, "DX11RenderCommand::DrawArrays() is not implemented");
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+
+    if (count == 0) {
+        count = vertexArray->GetVertexCount();
+    }
+
+    vertexArray->Bind();
+    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    deviceContext->Draw(count, 0);
 }
 
-void Dx11RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& /*vertexArray*/, uint32_t /*count*/)
+void Dx11RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
-    PN_CORE_ASSERT(false, "DX11RenderCommand::DrawIndexed() is not implemented");
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+
+    if (count == 0) {
+        count = vertexArray->GetIndexCount();
+    }
+
+    vertexArray->Bind();
+    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    deviceContext->DrawIndexed(count, 0, 0);
 }
 
 void Dx11RenderCommand::DrawArraysInstanced(

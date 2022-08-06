@@ -103,7 +103,6 @@ uint32_t OpenGLVertexArray::MapToGLType(BufferLayoutElementType type) const
         case BufferLayoutElementType::Uint16:   return GL_UNSIGNED_SHORT;
         case BufferLayoutElementType::Uint32:   return GL_UNSIGNED_INT;
         case BufferLayoutElementType::Float:    return GL_FLOAT;
-        case BufferLayoutElementType::Double:   return GL_DOUBLE;
         default:                                break;
     }
 

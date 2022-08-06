@@ -16,7 +16,6 @@ enum class BufferLayoutElementType : uint32_t
     Int32,
     Uint32,
     Float,
-    Double,
 };
 
 enum class BufferLayoutAttributeUsage

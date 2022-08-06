@@ -6,10 +6,10 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     PN_PROFILE_FUNCTION();
 
     float positions[] = {
-        -0.5f, -0.5f,  0.0f,
-        -0.5f,  0.5f,  0.0f,
-         0.5f,  0.5f,  0.0f,
-         0.5f, -0.5f,  0.0f,
+        -0.5f, -0.5f,  0.0f, 
+        -0.5f,  0.5f,  0.0f, 
+         0.5f,  0.5f,  0.0f, 
+         0.5f, -0.5f,  0.0f, 
     };
 
     float colors[] = {
@@ -19,14 +19,14 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
         1.0f, 0.0f, 1.0f,
     };
 
-    uint16_t indices[] = { 0, 1, 2, 2, 3, 0 };
+    uint32_t indices[] = { 0, 1, 2, 2, 3, 0 };
 
     auto posVB = pn::VertexBuffer::Create(
         pn::BufferMapAccess::NoAccess, 
         sizeof(positions), 
         pn::BufferLayout::Create(
             pn::BufferLayoutAttributeUsage::PerVertex, {
-            { 0, "position", pn::BufferLayoutElementType::Float, 3, }
+            { 0, "Position", pn::BufferLayoutElementType::Float, 3, }
         }), 
         positions
     );
@@ -36,12 +36,12 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
         sizeof(colors), 
         pn::BufferLayout::Create(
             pn::BufferLayoutAttributeUsage::PerVertex, {
-            { 1, "color", pn::BufferLayoutElementType::Float, 3 }
+            { 1, "Color", pn::BufferLayoutElementType::Float, 3, }
         }), 
         colors
     );
 
-    auto indexBuffer = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint16, pn::BufferMapAccess::NoAccess, sizeof(indices), indices);
+    auto indexBuffer = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint32, pn::BufferMapAccess::NoAccess, sizeof(indices), indices);
     
     m_shader = pn::Shader::Create(pn::ShaderPaths()
         .SetVertexPath(pn::StoragePath::GetAssetsPath() + "/Shaders/test.vert")

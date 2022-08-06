@@ -79,10 +79,10 @@ void Dx11Shader::InitShaders(const ShaderSources& sources)
 {
 	auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
 
-	auto vertexShaderBlob = CompileShader(sources.VertexSource, "vs_5_0");
+	m_vertexShaderBlob = CompileShader(sources.VertexSource, "vs_5_0");
 	HRESULT res = device->CreateVertexShader(
-		vertexShaderBlob->GetBufferPointer(),
-		vertexShaderBlob->GetBufferSize(),
+		m_vertexShaderBlob->GetBufferPointer(),
+		m_vertexShaderBlob->GetBufferSize(),
 		nullptr,
 		m_vertexShader.GetAddressOf()
 	);

@@ -16,9 +16,12 @@ public:
 
     const std::string& GetName() const override { return m_name; }
 
+    ID3DBlob* GetVertexShaderBlob() { return m_vertexShaderBlob.Get(); }
+
     void Bind() override;
 
 private:
+    Microsoft::WRL::ComPtr<ID3DBlob> m_vertexShaderBlob;
     Microsoft::WRL::ComPtr<ID3D11VertexShader> m_vertexShader;
     Microsoft::WRL::ComPtr<ID3D11PixelShader> m_fragmentShader;
     std::string m_name;

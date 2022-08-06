@@ -60,8 +60,6 @@ uint32_t BufferLayout::GetTypeSize(BufferLayoutElementType type)
         case BufferLayoutElementType::Uint32:
         case BufferLayoutElementType::Float:
             return 4u;
-        case BufferLayoutElementType::Double:
-            return 8u;
         default:
             break;
     }

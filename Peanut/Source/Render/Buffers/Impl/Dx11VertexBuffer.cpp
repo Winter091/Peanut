@@ -9,10 +9,10 @@ using Microsoft::WRL::ComPtr;
 namespace pn {
 
 Dx11VertexBuffer::Dx11VertexBuffer(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data)
-	: m_handle(0)
+	: m_handle(nullptr)
 	, m_isDataInitialized(false)
 	, m_layout(layout)
-	, m_size(0)
+	, m_size(size)
 	, m_mapAccess(access)
 {
 	PN_CORE_ASSERT(size > 0, "Unable to create vertex buffer with size = 0");
