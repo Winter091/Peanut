@@ -3,6 +3,7 @@
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
 #include <Render/Buffers/Impl/OpenGLIndexBuffer.hpp>
+#include <Render/Buffers/Impl/Dx11IndexBuffer.hpp>
 
 #include <memory>
 
@@ -19,6 +20,8 @@ std::shared_ptr<IndexBuffer> IndexBuffer::Create(IndexBufferDataFormat format, B
             break;
         case RenderAPI::OpenGL:
             return std::make_shared<OpenGLIndexBuffer>(format, access, size, data);
+        case RenderAPI::Dx11:
+            return std::make_shared<Dx11IndexBuffer>(format, access, size, data);
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;

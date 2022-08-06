@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Peanut/Render/Buffers/VertexBuffer.hpp>
 
 #include <d3d11.h>

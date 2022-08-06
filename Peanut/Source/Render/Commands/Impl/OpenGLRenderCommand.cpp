@@ -86,7 +86,6 @@ void OpenGLRenderCommand::DrawIndexedInstanced(std::shared_ptr<VertexArray>& ver
 uint32_t OpenGLRenderCommand::GetGLDataType(IndexBufferDataFormat format)
 {
     switch (format) {
-        case IndexBufferDataFormat::Uint8:  return GL_UNSIGNED_BYTE;
         case IndexBufferDataFormat::Uint16: return GL_UNSIGNED_SHORT;
         case IndexBufferDataFormat::Uint32: return GL_UNSIGNED_INT;
         default: break;

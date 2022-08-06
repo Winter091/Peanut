@@ -8,8 +8,7 @@ namespace pn {
 
 enum class IndexBufferDataFormat : uint32_t
 {
-    Uint8 = 0,
-    Uint16,
+    Uint16 = 0,
     Uint32,
 };
 

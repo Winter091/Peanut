@@ -49,7 +49,6 @@ void OpenGLIndexBuffer::Unmap()
 uint32_t OpenGLIndexBuffer::GetGLDataTypeSize() const
 {
     switch (m_format) {
-        case IndexBufferDataFormat::Uint8:  return 1u;
         case IndexBufferDataFormat::Uint16: return 2u;
         case IndexBufferDataFormat::Uint32: return 4u;
         default: break;
