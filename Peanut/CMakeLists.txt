@@ -71,7 +71,7 @@ elseif (WIN32 OR MINGW OR CYGWIN)
     target_compile_definitions(Peanut PUBLIC PN_RENDERING_DX11)
     #target_compile_definitions(Peanut PUBLIC PN_RENDERING_OPENGL)
 
-    target_link_libraries(Peanut PUBLIC d3d11 dxguid DXGI)
+    target_link_libraries(Peanut PUBLIC d3d11 dxguid DXGI D3DCompiler)
 else()
     message(FATAL_ERROR "Platform is not supported by Peanut")
 endif()

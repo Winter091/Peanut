@@ -129,9 +129,4 @@ void OpenGLShader::Bind()
     glUseProgram(m_handler);
 }
 
-void OpenGLShader::Unbind()
-{
-    glUseProgram(0u);
-}
-
 }

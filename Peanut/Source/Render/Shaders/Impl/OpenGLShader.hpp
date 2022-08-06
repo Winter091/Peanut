@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Peanut/Render/Shaders/Shader.hpp>
-#include <unordered_map>
 
 namespace pn {
 
@@ -13,15 +12,12 @@ public:
     ~OpenGLShader() override;
 
     const std::string& GetName() const override { return m_name; }
-    uint32_t GetNativeHandle() const override { return m_handler; }
 
     void Bind() override;
-    void Unbind() override;
-    
+
 private:
     uint32_t m_handler;
     std::string m_name;
-	std::unordered_map<std::string, int32_t> m_uniformLocations;
 
 private:
     std::string ReadFile(const std::string& filePath);

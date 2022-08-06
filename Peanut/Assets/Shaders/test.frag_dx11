@@ -1,0 +1,11 @@
+struct FsInput
+{
+    float4 Position    : SV_Position;
+    float3 Color       : Color;
+};
+
+float4 main(FsInput Input) : SV_Target
+{
+    float4 color = float4(Input.Color, 1.0);
+    return color;
+}
