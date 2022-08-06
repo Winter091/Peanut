@@ -21,14 +21,13 @@ public:
     IndexBuffer& operator=(const IndexBuffer&) = delete;
     virtual ~IndexBuffer() = default;
 
-    virtual void Bind() = 0;
-    virtual void Unbind() = 0;
-
     virtual void* Map() = 0;
     virtual void Unmap() = 0;
 
     virtual uint32_t GetIndexCount() const = 0;
     virtual IndexBufferDataFormat GetDataFormat() const = 0;
+
+    virtual void* GetNativeHandle() const = 0;
 
     static std::shared_ptr<IndexBuffer> Create(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data = nullptr);
 };

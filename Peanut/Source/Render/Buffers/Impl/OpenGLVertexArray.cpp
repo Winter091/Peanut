@@ -132,8 +132,10 @@ void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& index
 {
     m_indexBuffer = indexBuffer;
 
+    uint32_t handle = indexBuffer ? *(uint32_t*)indexBuffer->GetNativeHandle() : 0;
+
     glBindVertexArray(m_vaoHandle);
-    indexBuffer->Bind();
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
 }
 
 uint32_t OpenGLVertexArray::GetVertexCount() const 

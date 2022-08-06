@@ -28,16 +28,6 @@ OpenGLIndexBuffer::~OpenGLIndexBuffer()
     glDeleteBuffers(1, &m_handle);
 }
 
-void OpenGLIndexBuffer::Bind()
-{
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_handle);
-}
-
-void OpenGLIndexBuffer::Unbind()
-{
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
-}
-
 void* OpenGLIndexBuffer::Map()
 {
     PN_PROFILE_FUNCTION();
