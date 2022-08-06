@@ -44,8 +44,8 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     auto indexBuffer = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint16, pn::BufferMapAccess::NoAccess, sizeof(indices), indices);
     
     m_shader = pn::Shader::Create(pn::ShaderPaths()
-        .SetVertexPath("E:/Projects/C++/Peanut/Peanut/Assets/Shaders/test.vert")
-        .SetFragmentPath("E:/Projects/C++/Peanut/Peanut/Assets/Shaders/test.frag"),
+        .SetVertexPath(pn::StoragePath::GetAssetsPath() + "/Shaders/test.vert")
+        .SetFragmentPath(pn::StoragePath::GetAssetsPath() + "/Shaders/test.frag"),
         "Test Shader");
 
     pn::VertexArrayDescription desc;

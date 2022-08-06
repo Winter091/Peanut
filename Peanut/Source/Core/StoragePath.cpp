@@ -1,4 +1,4 @@
-#include "StoragePath.hpp"
+#include <Peanut/Core/StoragePath.hpp>
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
