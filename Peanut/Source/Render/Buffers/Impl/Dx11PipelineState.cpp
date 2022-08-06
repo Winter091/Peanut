@@ -11,7 +11,7 @@
 namespace pn
 {
 
-Dx11PipelineState::Dx11PipelineState(const VertexArrayDescription& description)
+Dx11PipelineState::Dx11PipelineState(const PipelineStateDescription& description)
     : m_vertexBuffers(description.VertexBuffers)
     , m_indexBuffer(description.IndexBuffer)
     , m_shader(description.Shader)
@@ -85,7 +85,7 @@ void Dx11PipelineState::Bind()
 
 uint32_t Dx11PipelineState::GetVertexCount() const
 {
-    PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to vertex array, can't get vertex count");
+    PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to pipeline state, can't get vertex count");
     return m_vertexBuffers.front()->GetVertexCount();
 }
 

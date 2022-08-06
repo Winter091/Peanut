@@ -23,7 +23,7 @@
 
 #include "Render/Buffers/BufferLayout.hpp"
 #include "Render/Buffers/IndexBuffer.hpp"
-#include "Render/Buffers/VertexArray.hpp"
+#include "Render/Buffers/PipelineState.hpp"
 #include "Render/Buffers/VertexBuffer.hpp"
 #include "Render/Commands/RenderCommand.hpp"
 #include "Render/RenderAPI.hpp"

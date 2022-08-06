@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Peanut/Render/RenderAPI.hpp>
-#include <Peanut/Render/Buffers/VertexArray.hpp>
+#include <Peanut/Render/Buffers/PipelineState.hpp>
 
 #include <glm/vec4.hpp>
 
@@ -24,12 +24,12 @@ public:
 
     static void SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height);
     
-    static void DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0);
-    static void DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0);
+    static void DrawArrays(std::shared_ptr<PipelineState>& pipelineState, uint32_t count = 0);
+    static void DrawIndexed(std::shared_ptr<PipelineState>& pipelineState, uint32_t count = 0);
     static void DrawArraysInstanced(
-        std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0, uint32_t instanceCount = 0);
+        std::shared_ptr<PipelineState>& pipelineState, uint32_t count = 0, uint32_t instanceCount = 0);
     static void DrawIndexedInstanced(
-        std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0, uint32_t instanceCount = 0);
+        std::shared_ptr<PipelineState>& pipelineState, uint32_t count = 0, uint32_t instanceCount = 0);
 };
 
 }

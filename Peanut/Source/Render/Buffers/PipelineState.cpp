@@ -1,14 +1,14 @@
-#include <Peanut/Render/Buffers/VertexArray.hpp>
+#include <Peanut/Render/Buffers/PipelineState.hpp>
 
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
-#include <Render/Buffers/Impl/OpenGLVertexArray.hpp>
+#include <Render/Buffers/Impl/OpenGLPipelineState.hpp>
 #include <Render/Buffers/Impl/Dx11PipelineState.hpp>
 
 namespace pn
 {
 
-std::shared_ptr<VertexArray> VertexArray::Create(const VertexArrayDescription& description)
+std::shared_ptr<PipelineState> PipelineState::Create(const PipelineStateDescription& description)
 {
     auto renderApi = RenderCommand::GetRenderAPI();
 
@@ -17,7 +17,7 @@ std::shared_ptr<VertexArray> VertexArray::Create(const VertexArrayDescription& d
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
         case RenderAPI::OpenGL:
-            return std::make_shared<OpenGLVertexArray>(description);
+            return std::make_shared<OpenGLPipelineState>(description);
         case RenderAPI::Dx11:
             return std::make_shared<Dx11PipelineState>(description);
         default:

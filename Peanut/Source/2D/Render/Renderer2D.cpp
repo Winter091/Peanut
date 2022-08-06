@@ -2,7 +2,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
-#include <Peanut/Render/Buffers/VertexArray.hpp>
+#include <Peanut/Render/Buffers/PipelineState.hpp>
 #include <Peanut/Render/Buffers/ConstantBuffer.hpp>
 #include <Peanut/Render/Shaders/Shader.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
@@ -41,7 +41,7 @@ struct Renderer2DData
 {
     PerVertexData* RectanglePerVertexData;
     std::shared_ptr<VertexBuffer> RectanglePerVertexVBO;
-    std::shared_ptr<VertexArray> RectangleVAO;
+    std::shared_ptr<PipelineState> RectangleVAO;
     std::shared_ptr<Shader> RectangleShader;
 
     uint32_t NumRectInstances = 0;
@@ -110,7 +110,7 @@ void Renderer2D::Init()
     
     s_data = std::make_unique<Renderer2DData>();
 
-    s_data->RectangleVAO = pn::VertexArray::Create();
+    s_data->RectangleVAO = pn::PipelineState::Create();
 
     s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(BufferMapAccess::WriteDiscard,
                                                              sizeof(PerVertexData) * MAX_VERTICES_PER_BATCH);

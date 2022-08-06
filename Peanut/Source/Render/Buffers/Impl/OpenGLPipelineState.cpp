@@ -1,4 +1,4 @@
-#include "OpenGLVertexArray.hpp"
+#include "OpenGLPipelineState.hpp"
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
@@ -11,7 +11,7 @@
 namespace pn
 {
 
-OpenGLVertexArray::OpenGLVertexArray(const VertexArrayDescription& description)
+OpenGLPipelineState::OpenGLPipelineState(const PipelineStateDescription& description)
 {
     glCreateVertexArrays(1, &m_vaoHandle);
 
@@ -26,18 +26,18 @@ OpenGLVertexArray::OpenGLVertexArray(const VertexArrayDescription& description)
     m_shader = description.Shader;
 }
     
-OpenGLVertexArray::~OpenGLVertexArray()
+OpenGLPipelineState::~OpenGLPipelineState()
 {
     glDeleteVertexArrays(1, &m_vaoHandle);
 }
 
-void OpenGLVertexArray::Bind()
+void OpenGLPipelineState::Bind()
 {
     glBindVertexArray(m_vaoHandle);
     m_shader->Bind();
 }
 
-void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+void OpenGLPipelineState::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
 {
     PN_PROFILE_FUNCTION();
 
@@ -62,7 +62,7 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
 #endif
 }
 
-void OpenGLVertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
+void OpenGLPipelineState::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
 {
     PN_PROFILE_FUNCTION();
 
@@ -72,11 +72,11 @@ void OpenGLVertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
     }
 
     if (vertexBuffer.GetVertexCount() != m_instanceCount) {
-        PN_CORE_ASSERT(false, "Instance counts are not equal for vertex buffers in signle vertex array");
+        PN_CORE_ASSERT(false, "Instance counts are not equal for vertex buffers in one pipeline state");
     }
 }
 
-void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex)
+void OpenGLPipelineState::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex)
 {
     PN_PROFILE_FUNCTION();
 
@@ -96,7 +96,7 @@ void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, ui
     }
 }
 
-void OpenGLVertexArray::AssertAllAttributeIndicesAreUnique() const
+void OpenGLPipelineState::AssertAllAttributeIndicesAreUnique() const
 {
     PN_PROFILE_FUNCTION();
 
@@ -107,13 +107,13 @@ void OpenGLVertexArray::AssertAllAttributeIndicesAreUnique() const
 
         for (const BufferLayoutElement& elem : bufferAttributes) {
             if (!seenIndices.insert(elem.index).second) {
-                PN_CORE_ASSERT(false, "At least 2 attributes in vertex array have the same index = {}", elem.index);
+                PN_CORE_ASSERT(false, "At least 2 attributes in pipeline state have the same index = {}", elem.index);
             }
         }
     }
 }
 
-void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+void OpenGLPipelineState::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 {
     m_indexBuffer = indexBuffer;
 
@@ -123,25 +123,25 @@ void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& index
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
 }
 
-uint32_t OpenGLVertexArray::GetVertexCount() const 
+uint32_t OpenGLPipelineState::GetVertexCount() const 
 {
-    PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to vertex array");
+    PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to pipeline state");
     return m_vertexBuffers.front()->GetVertexCount();
 }
 
-uint32_t OpenGLVertexArray::GetIndexCount() const 
+uint32_t OpenGLPipelineState::GetIndexCount() const 
 {
     PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set");
     return m_indexBuffer->GetIndexCount();
 }
 
-IndexBufferDataFormat OpenGLVertexArray::GetIndexDataFormat() const 
+IndexBufferDataFormat OpenGLPipelineState::GetIndexDataFormat() const 
 {
     PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set");
     return m_indexBuffer->GetDataFormat();
 }
 
-uint32_t OpenGLVertexArray::GetInstanceCount() const 
+uint32_t OpenGLPipelineState::GetInstanceCount() const 
 {
     return m_instanceCount == 0 ? 1 : m_instanceCount;
 }

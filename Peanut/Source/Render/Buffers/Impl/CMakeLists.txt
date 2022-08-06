@@ -5,6 +5,6 @@ target_sources(
     Dx11VertexBuffer.cpp
     OpenGLConstantBuffer.cpp
     OpenGLIndexBuffer.cpp
-    OpenGLVertexArray.cpp
+    OpenGLPipelineState.cpp
     OpenGLVertexBuffer.cpp
 )

@@ -23,63 +23,63 @@ void OpenGLRenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t w
     glViewport(leftX, bottomY, width, height);
 }
 
-void OpenGLRenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
+void OpenGLRenderCommand::DrawArrays(std::shared_ptr<PipelineState>& pipelineState, uint32_t count)
 {
     PN_PROFILE_FUNCTION();
 
     if (count == 0) {
-        count = vertexArray->GetVertexCount();
+        count = pipelineState->GetVertexCount();
     }
 
-    vertexArray->Bind();
+    pipelineState->Bind();
     glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(count));
 }
 
-void OpenGLRenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
+void OpenGLRenderCommand::DrawIndexed(std::shared_ptr<PipelineState>& pipelineState, uint32_t count)
 {
     PN_PROFILE_FUNCTION();
 
     if (count == 0) {
-        count = vertexArray->GetIndexCount();
+        count = pipelineState->GetIndexCount();
     }
 
-    uint32_t dataType = GetGLDataType(vertexArray->GetIndexDataFormat());
+    uint32_t dataType = GetGLDataType(pipelineState->GetIndexDataFormat());
 
-    vertexArray->Bind();
+    pipelineState->Bind();
     glDrawElements(GL_TRIANGLES, count, dataType, nullptr);
 }
 
-void OpenGLRenderCommand::DrawArraysInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
+void OpenGLRenderCommand::DrawArraysInstanced(std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
 {
     PN_PROFILE_FUNCTION();
 
     if (count == 0) {
-        count = vertexArray->GetVertexCount();
+        count = pipelineState->GetVertexCount();
     }
 
     if (instanceCount == 0) {
-        instanceCount = vertexArray->GetInstanceCount();
+        instanceCount = pipelineState->GetInstanceCount();
     }
 
-    vertexArray->Bind();
+    pipelineState->Bind();
     glDrawArraysInstanced(GL_TRIANGLES, 0, static_cast<GLsizei>(count), instanceCount);
 }
 
-void OpenGLRenderCommand::DrawIndexedInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
+void OpenGLRenderCommand::DrawIndexedInstanced(std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
 {
     PN_PROFILE_FUNCTION();
 
     if (count == 0) {
-        count = vertexArray->GetIndexCount();
+        count = pipelineState->GetIndexCount();
     }
 
     if (instanceCount == 0) {
-        instanceCount = vertexArray->GetInstanceCount();
+        instanceCount = pipelineState->GetInstanceCount();
     }
 
-    uint32_t dataType = GetGLDataType(vertexArray->GetIndexDataFormat());
+    uint32_t dataType = GetGLDataType(pipelineState->GetIndexDataFormat());
 
-    vertexArray->Bind();
+    pipelineState->Bind();
     glDrawElementsInstanced(GL_TRIANGLES, count, dataType, nullptr, instanceCount);
 }
 

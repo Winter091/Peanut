@@ -1,16 +1,16 @@
 #pragma once
 
-#include <Peanut/Render/Buffers/VertexArray.hpp>
+#include <Peanut/Render/Buffers/PipelineState.hpp>
 
 #include <vector>
 
 namespace pn {
 
-class OpenGLVertexArray final : public VertexArray
+class OpenGLPipelineState final : public PipelineState
 {
 public:
-    OpenGLVertexArray(const VertexArrayDescription& description);
-    ~OpenGLVertexArray() override;
+    OpenGLPipelineState(const PipelineStateDescription& description);
+    ~OpenGLPipelineState() override;
 
     void Bind() override;
 

@@ -47,40 +47,40 @@ void Dx11RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t wid
     deviceContext->RSSetViewports(1, &viewport);
 }
 
-void Dx11RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
+void Dx11RenderCommand::DrawArrays(std::shared_ptr<PipelineState>& pipelineState, uint32_t count)
 {
     auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 
     if (count == 0) {
-        count = vertexArray->GetVertexCount();
+        count = pipelineState->GetVertexCount();
     }
 
-    vertexArray->Bind();
+    pipelineState->Bind();
     deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     deviceContext->Draw(count, 0);
 }
 
-void Dx11RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
+void Dx11RenderCommand::DrawIndexed(std::shared_ptr<PipelineState>& pipelineState, uint32_t count)
 {
     auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 
     if (count == 0) {
-        count = vertexArray->GetIndexCount();
+        count = pipelineState->GetIndexCount();
     }
 
-    vertexArray->Bind();
+    pipelineState->Bind();
     deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     deviceContext->DrawIndexed(count, 0, 0);
 }
 
 void Dx11RenderCommand::DrawArraysInstanced(
-    std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
+    std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
 {
 
 }
 
 void Dx11RenderCommand::DrawIndexedInstanced(
-    std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
+    std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
 {
 
 }

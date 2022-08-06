@@ -14,6 +14,6 @@ public:
     void OnUpdate() override;
 
 private:
-    std::shared_ptr<pn::VertexArray> m_vertexArray;
+    std::shared_ptr<pn::PipelineState> m_pipelineState;
     std::shared_ptr<pn::Shader> m_shader;
 };

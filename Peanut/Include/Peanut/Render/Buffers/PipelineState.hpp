@@ -7,7 +7,7 @@
 
 namespace pn {
 
-struct VertexArrayDescription
+struct PipelineStateDescription
 {
 public:
     std::vector<std::shared_ptr<VertexBuffer>> VertexBuffers;
@@ -18,13 +18,13 @@ public:
 
 };
 
-class VertexArray
+class PipelineState
 {
 public:
-    VertexArray() = default;
-    VertexArray(const VertexArray&) = delete;
-    VertexArray& operator=(const VertexArray&) = delete;
-    virtual ~VertexArray() = default;
+    PipelineState() = default;
+    PipelineState(const PipelineState&) = delete;
+    PipelineState& operator=(const PipelineState&) = delete;
+    virtual ~PipelineState() = default;
 
     virtual void Bind() = 0;
 
@@ -33,7 +33,7 @@ public:
     virtual IndexBufferDataFormat GetIndexDataFormat() const = 0;
     virtual uint32_t GetInstanceCount() const = 0;
 
-    static std::shared_ptr<VertexArray> Create(const VertexArrayDescription& description);
+    static std::shared_ptr<PipelineState> Create(const PipelineStateDescription& description);
 };
 
 }

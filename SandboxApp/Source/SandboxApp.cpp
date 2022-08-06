@@ -48,12 +48,12 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
         .SetFragmentPath(pn::StoragePath::GetAssetsPath() + "/Shaders/test.frag"),
         "Test Shader");
 
-    pn::VertexArrayDescription desc;
+    pn::PipelineStateDescription desc;
     desc.VertexBuffers = { posVB, colorVB };
     desc.IndexBuffer = indexBuffer;
     desc.Shader = m_shader;
 
-    m_vertexArray = pn::VertexArray::Create(desc);
+    m_pipelineState = pn::PipelineState::Create(desc);
 }
 
 void SandboxApp::OnEvent(pn::Event& event)
@@ -70,7 +70,7 @@ void SandboxApp::OnUpdate()
     pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
     pn::RenderCommand::Clear();
 
-    pn::RenderCommand::DrawIndexed(m_vertexArray);
+    pn::RenderCommand::DrawIndexed(m_pipelineState);
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)

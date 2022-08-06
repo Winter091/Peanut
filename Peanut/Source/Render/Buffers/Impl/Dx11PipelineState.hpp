@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Peanut/Render/Buffers/VertexArray.hpp>
+#include <Peanut/Render/Buffers/PipelineState.hpp>
 
 #include <vector>
 
@@ -9,10 +9,10 @@
 
 namespace pn {
 
-class Dx11PipelineState final : public VertexArray
+class Dx11PipelineState final : public PipelineState
 {
 public:
-    Dx11PipelineState(const VertexArrayDescription& description);
+    Dx11PipelineState(const PipelineStateDescription& description);
     ~Dx11PipelineState() override;
 
     void Bind() override;
