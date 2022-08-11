@@ -15,9 +15,6 @@ public:
     std::shared_ptr<IndexBuffer> IndexBuffer;
     std::vector<std::shared_ptr<ConstantBuffer>> ConstantBuffers;
     std::shared_ptr<Shader> Shader;
-
-public:
-
 };
 
 class PipelineState
@@ -29,6 +26,11 @@ public:
     virtual ~PipelineState() = default;
 
     virtual void Bind() = 0;
+
+    virtual const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() = 0;
+    virtual std::shared_ptr<IndexBuffer> GetIndexBuffer() = 0;
+    virtual const std::vector<std::shared_ptr<ConstantBuffer>>& GetConstantBuffers() = 0;
+    virtual std::shared_ptr<Shader> GetShader() = 0;
 
     virtual uint32_t GetVertexCount() const = 0;
     virtual uint32_t GetIndexCount() const = 0;

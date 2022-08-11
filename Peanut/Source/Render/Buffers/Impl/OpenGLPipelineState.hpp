@@ -14,6 +14,11 @@ public:
 
     void Bind() override;
 
+    const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() override { return m_vertexBuffers; }
+    std::shared_ptr<IndexBuffer> GetIndexBuffer() override { return m_indexBuffer; }
+    const std::vector<std::shared_ptr<ConstantBuffer>>& GetConstantBuffers() override { return m_constantBuffers; }
+    std::shared_ptr<Shader> GetShader() override { return m_shader; }
+
     uint32_t GetVertexCount() const override;
     uint32_t GetIndexCount() const override;
     IndexBufferDataFormat GetIndexDataFormat() const override;
