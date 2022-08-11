@@ -10,13 +10,11 @@ public:
     OpenGLConstantBuffer(BufferMapAccess access, uint32_t size, const void* data);
     ~OpenGLConstantBuffer() override;
 
-    void BindToBindingIndex(uint32_t index) override;
-    void Unbind() override;
-
     void* Map() override;
     void Unmap() override;
     
     uint32_t GetSize() const override { return m_size; }
+    void* GetNativeHandle() const override { return (void*)&m_handle; }
 
 private:
     uint32_t m_handle;

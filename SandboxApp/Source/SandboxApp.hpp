@@ -15,5 +15,6 @@ public:
 
 private:
     std::shared_ptr<pn::PipelineState> m_pipelineState;
+    std::shared_ptr<pn::ConstantBuffer> m_constantBuffer;
     std::shared_ptr<pn::Shader> m_shader;
 };

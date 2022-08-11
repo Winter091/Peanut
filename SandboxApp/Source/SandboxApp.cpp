@@ -43,6 +43,9 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
     auto indexBuffer = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint32, pn::BufferMapAccess::NoAccess, sizeof(indices), indices);
     
+    float color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+    m_constantBuffer = pn::ConstantBuffer::Create(pn::BufferMapAccess::WriteDiscard, sizeof(color), color);
+
     m_shader = pn::Shader::Create(pn::ShaderPaths()
         .SetVertexPath(pn::StoragePath::GetAssetsPath() + "/Shaders/test.vert")
         .SetFragmentPath(pn::StoragePath::GetAssetsPath() + "/Shaders/test.frag"),
@@ -51,6 +54,7 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     pn::PipelineStateDescription desc;
     desc.VertexBuffers = { posVB, colorVB };
     desc.IndexBuffer = indexBuffer;
+    desc.ConstantBuffers = { m_constantBuffer };
     desc.Shader = m_shader;
 
     m_pipelineState = pn::PipelineState::Create(desc);
@@ -69,6 +73,13 @@ void SandboxApp::OnUpdate()
 
     pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
     pn::RenderCommand::Clear();
+
+    float* bufferData = static_cast<float*>(m_constantBuffer->Map());
+    bufferData[0] = (rand() % 256) / 255.0f;
+    bufferData[1] = (rand() % 256) / 255.0f;
+    bufferData[2] = (rand() % 256) / 255.0f;
+    bufferData[3] = 1.0f;
+    m_constantBuffer->Unmap();
 
     pn::RenderCommand::DrawIndexed(m_pipelineState);
 }

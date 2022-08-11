@@ -14,8 +14,6 @@ public:
 
     void Bind() override;
 
-public:
-
     uint32_t GetVertexCount() const override;
     uint32_t GetIndexCount() const override;
     IndexBufferDataFormat GetIndexDataFormat() const override;
@@ -26,6 +24,7 @@ private:
     uint32_t m_instanceCount = 0u;
     std::vector<std::shared_ptr<VertexBuffer>> m_vertexBuffers;
     std::shared_ptr<IndexBuffer> m_indexBuffer;
+    std::vector<std::shared_ptr<ConstantBuffer>> m_constantBuffers;
     std::shared_ptr<Shader> m_shader;
 
 private:

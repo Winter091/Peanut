@@ -14,6 +14,7 @@ namespace pn
 Dx11PipelineState::Dx11PipelineState(const PipelineStateDescription& description)
     : m_vertexBuffers(description.VertexBuffers)
     , m_indexBuffer(description.IndexBuffer)
+    , m_constantBuffers(description.ConstantBuffers)
     , m_shader(description.Shader)
     , m_inputLayout(nullptr)
 {
@@ -78,6 +79,17 @@ void Dx11PipelineState::Bind()
 
     if (m_indexBuffer) {
         deviceContext->IASetIndexBuffer((ID3D11Buffer*)m_indexBuffer->GetNativeHandle(), IndexBufferFormatToDx11Format(m_indexBuffer->GetDataFormat()), 0);
+    }
+
+    if (!m_constantBuffers.empty()) {
+        std::vector<ID3D11Buffer*> constantBuffers;
+        
+        for (const auto& constantBuffer : m_constantBuffers) {
+            constantBuffers.push_back((ID3D11Buffer*)constantBuffer->GetNativeHandle());
+        }
+
+        deviceContext->VSSetConstantBuffers(0, static_cast<uint32_t>(constantBuffers.size()), &constantBuffers[0]);
+        deviceContext->PSSetConstantBuffers(0, static_cast<uint32_t>(constantBuffers.size()), &constantBuffers[0]);
     }
 
     m_shader->Bind();

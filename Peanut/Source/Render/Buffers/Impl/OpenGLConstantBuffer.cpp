@@ -15,7 +15,7 @@ OpenGLConstantBuffer::OpenGLConstantBuffer(BufferMapAccess access, uint32_t size
 {
     PN_PROFILE_FUNCTION();
 
-    PN_CORE_ASSERT(m_size > 0u, "Unable to create vertex buffer with size = 0");
+    PN_CORE_ASSERT(m_size > 0u, "Unable to create constant buffer with size = 0");
     
     glCreateBuffers(1, &m_handle);
     glNamedBufferStorage(m_handle, size, data, BufferMapAccessToGlStorageAccess(access));
@@ -24,16 +24,6 @@ OpenGLConstantBuffer::OpenGLConstantBuffer(BufferMapAccess access, uint32_t size
 OpenGLConstantBuffer::~OpenGLConstantBuffer()
 {
     glDeleteBuffers(1, &m_handle);
-}
-
-void OpenGLConstantBuffer::BindToBindingIndex(uint32_t index)
-{
-    glBindBufferBase(GL_UNIFORM_BUFFER, index, m_handle);
-}
-
-void OpenGLConstantBuffer::Unbind()
-{
-    glBindBuffer(GL_UNIFORM_BUFFER, 0u);
 }
 
 void* OpenGLConstantBuffer::Map()

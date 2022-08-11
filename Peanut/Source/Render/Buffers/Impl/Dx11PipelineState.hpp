@@ -25,6 +25,7 @@ public:
 private:
     std::vector<std::shared_ptr<VertexBuffer>> m_vertexBuffers;
     std::shared_ptr<IndexBuffer> m_indexBuffer;
+    std::vector<std::shared_ptr<ConstantBuffer>> m_constantBuffers;
     std::shared_ptr<Shader> m_shader;
     Microsoft::WRL::ComPtr<ID3D11InputLayout> m_inputLayout;
 

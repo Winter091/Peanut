@@ -12,6 +12,8 @@ namespace pn
 {
 
 OpenGLPipelineState::OpenGLPipelineState(const PipelineStateDescription& description)
+    : m_constantBuffers(description.ConstantBuffers)
+    , m_shader(description.Shader)
 {
     glCreateVertexArrays(1, &m_vaoHandle);
 
@@ -22,8 +24,6 @@ OpenGLPipelineState::OpenGLPipelineState(const PipelineStateDescription& descrip
     if (description.IndexBuffer) {
         SetIndexBuffer(description.IndexBuffer);
     }
-
-    m_shader = description.Shader;
 }
     
 OpenGLPipelineState::~OpenGLPipelineState()
@@ -34,6 +34,12 @@ OpenGLPipelineState::~OpenGLPipelineState()
 void OpenGLPipelineState::Bind()
 {
     glBindVertexArray(m_vaoHandle);
+
+    for (uint32_t i = 0; i < m_constantBuffers.size(); i++) {
+        uint32_t handle = *(uint32_t*)m_constantBuffers[i]->GetNativeHandle();
+        glBindBufferBase(GL_UNIFORM_BUFFER, i, handle);
+    }
+
     m_shader->Bind();
 }
 
