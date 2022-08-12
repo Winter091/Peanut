@@ -24,11 +24,14 @@ static constexpr size_t MAX_INDICES_PER_BATCH = 6 * MAX_RECTANGLES_PER_BATCH;
 
 static constexpr size_t MAX_TEXTURE_SLOTS = 16;
 
-struct PerVertexData
+struct RectPerVertexData
 {
-    glm::vec2 Position;
-    glm::vec2 TexCoord;
+    uint32_t VertexIndex;
+};
 
+struct RectPerInstanceData
+{
+    glm::mat4 ModelMatrix;
     glm::vec4 Color;
     int32_t TexIndex;
 };
@@ -40,8 +43,10 @@ struct CameraShaderData
 
 struct Renderer2DData
 {
-    PerVertexData* RectanglePerVertexData;
-    std::shared_ptr<VertexBuffer> RectanglePerVertexVBO;
+    RectPerVertexData* RectanglePerVertexDataPtr;
+    RectPerInstanceData* RectanglePerInstanceDataPtr;
+    std::shared_ptr<VertexBuffer> RectanglePerVertexBuffer;
+    std::shared_ptr<VertexBuffer> RectanglePerInstanceBuffer;
     std::shared_ptr<ConstantBuffer> CameraConstantBuffer;
     std::shared_ptr<PipelineState> RectanglePipelineState;
     std::shared_ptr<Shader> RectangleShader;
@@ -60,20 +65,22 @@ static void Flush()
 {
     PN_PROFILE_FUNCTION();
 
-    s_data->RectanglePerVertexVBO->Unmap();
+    s_data->RectanglePerVertexBuffer->Unmap();
+    s_data->RectanglePerInstanceBuffer->Unmap();
 
     /*for (uint32_t i = 0; i < s_data->NumTextures; i++) {
         s_data->Textures[i]->BindToSlot(i);
     }*/
 
-    RenderCommand::DrawIndexed(s_data->RectanglePipelineState, s_data->NumRectInstances * 6);
+    RenderCommand::DrawIndexedInstanced(s_data->RectanglePipelineState, 6, s_data->NumRectInstances);
 }
 
 static void StartBatch()
 {
     PN_PROFILE_FUNCTION();
 
-    s_data->RectanglePerVertexData = reinterpret_cast<PerVertexData*>(s_data->RectanglePerVertexVBO->Map());
+    s_data->RectanglePerVertexDataPtr = reinterpret_cast<RectPerVertexData*>(s_data->RectanglePerVertexBuffer->Map());
+    s_data->RectanglePerInstanceDataPtr = reinterpret_cast<RectPerInstanceData*>(s_data->RectanglePerInstanceBuffer->Map());
     s_data->NumRectInstances = 0;
     s_data->NumTextures = 0;
 }
@@ -111,17 +118,21 @@ void Renderer2D::Init()
     
     s_data = std::make_unique<Renderer2DData>();
 
-    s_data->RectanglePerVertexVBO = VertexBuffer::Create(
+    s_data->RectanglePerVertexBuffer = VertexBuffer::Create(
         BufferMapAccess::WriteDiscard,
-        sizeof(PerVertexData) * MAX_VERTICES_PER_BATCH,
+        sizeof(RectPerVertexData) * MAX_VERTICES_PER_BATCH,
         BufferLayout::Create(
             BufferLayoutAttributeUsage::PerVertex, {
-            { 0, "position", BufferLayoutElementType::Float, 2, },
-            { 1, "texCoord", BufferLayoutElementType::Float, 2, },
-            { 2, "color",    BufferLayoutElementType::Float, 4, },
-            { 3, "texIndex", BufferLayoutElementType::Int32, 1, },
-        })
-    );
+            { 0, "VertexIndex", BufferLayoutElementType::Uint32, 1 }}));
+
+    s_data->RectanglePerInstanceBuffer = VertexBuffer::Create(
+        BufferMapAccess::WriteDiscard,
+        sizeof(RectPerInstanceData) * MAX_VERTICES_PER_BATCH,
+        BufferLayout::Create(
+            BufferLayoutAttributeUsage::PerInstance, {
+            { 1, "ModelMatrix", BufferLayoutElementType::Mat4, 1 },
+            { 5, "Color",       BufferLayoutElementType::Float, 4 },
+            { 6, "TexIndex",    BufferLayoutElementType::Int32, 1 }}));
 
     std::vector<uint32_t> rectIndices;
     rectIndices.reserve(MAX_INDICES_PER_BATCH);
@@ -132,31 +143,31 @@ void Renderer2D::Init()
         }
     }
 
-    auto rectangleIBO = IndexBuffer::Create(
+    auto rectangleIndexBuffer = IndexBuffer::Create(
         IndexBufferDataFormat::Uint32, 
         BufferMapAccess::NoAccess,
         MAX_INDICES_PER_BATCH * sizeof(rectIndices[0]), 
-        &rectIndices[0]
-    );
+        &rectIndices[0]);
 
     s_data->CameraConstantBuffer = ConstantBuffer::Create(
         BufferMapAccess::WriteDiscard,
-        sizeof(CameraShaderData)
-    );
+        sizeof(CameraShaderData));
 
     s_data->RectangleShader = Shader::Create(ShaderPaths()
         .SetVertexPath(StoragePath::GetAssetsPath() + "/Shaders/Renderer2D/Rect.vert")
         .SetFragmentPath(StoragePath::GetAssetsPath() + "/Shaders/Renderer2D/Rect.frag"),
         "Renderer2D Rectangle Shader");
 
-    auto shaderInputLayout = ShaderInputLayout::Create({ s_data->RectanglePerVertexVBO }, s_data->RectangleShader);
+    auto rectangleShaderInputLayout = ShaderInputLayout::Create(
+        { s_data->RectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer }, 
+        s_data->RectangleShader);
 
     PipelineStateDescription pipelineStateDesc;
-    pipelineStateDesc.VertexBuffers = { s_data->RectanglePerVertexVBO };
-    pipelineStateDesc.IndexBuffer = rectangleIBO;
+    pipelineStateDesc.VertexBuffers = { s_data->RectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer };
+    pipelineStateDesc.IndexBuffer = rectangleIndexBuffer;
     pipelineStateDesc.ConstantBuffers = { s_data->CameraConstantBuffer };
     pipelineStateDesc.Shader = s_data->RectangleShader;
-    pipelineStateDesc.ShaderInputLayout = shaderInputLayout;
+    pipelineStateDesc.ShaderInputLayout = rectangleShaderInputLayout;
     s_data->RectanglePipelineState = PipelineState::Create(pipelineStateDesc);
 
     s_isInitialized = true;
@@ -202,33 +213,18 @@ void Renderer2D::DrawRectangle(const Rectangle& rectangle)
         StartBatch();
     }
 
-    static glm::vec4 positions[] = {
-        { 0.0f, 0.0f, 0.0f, 1.0f },
-        { 0.0f, 1.0f, 0.0f, 1.0f },
-        { 1.0f, 1.0f, 0.0f, 1.0f },
-        { 1.0f, 0.0f, 0.0f, 1.0f }
-    };
-
-    static glm::vec2 texCoords[] = {
-        { 0.0f, 0.0f },
-        { 0.0f, 1.0f },
-        { 1.0f, 1.0f },
-        { 1.0f, 0.0f },
-    };
-
     int32_t textureIndex = -1;
     if (rectangle.HasTexture()) {
         textureIndex = AddTextureToList(rectangle.GetTexture());
     }
 
-    const glm::mat4& rectTransform = rectangle.GetTransformMatrix();
-
-    for (size_t i = 0, base = s_data->NumRectInstances * 4; i < 4; i++) {
-        s_data->RectanglePerVertexData[base + i].Position = rectTransform * positions[i];
-        s_data->RectanglePerVertexData[base + i].TexCoord = texCoords[i];
-        s_data->RectanglePerVertexData[base + i].Color = rectangle.GetColor();
-        s_data->RectanglePerVertexData[base + i].TexIndex = textureIndex;
+    for (size_t i = 0; i < 4; i++) {
+        s_data->RectanglePerVertexDataPtr[s_data->NumRectInstances * 4 + i].VertexIndex = static_cast<uint8_t>(i);
     }
+
+    s_data->RectanglePerInstanceDataPtr[s_data->NumRectInstances].ModelMatrix = rectangle.GetTransformMatrix();
+    s_data->RectanglePerInstanceDataPtr[s_data->NumRectInstances].Color = rectangle.GetColor();
+    s_data->RectanglePerInstanceDataPtr[s_data->NumRectInstances].TexIndex = textureIndex;
 
     s_data->NumRectInstances++;
 }

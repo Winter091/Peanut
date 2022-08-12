@@ -90,14 +90,23 @@ void OpenGLPipelineState::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, 
     const auto& layoutElements = layout->GetElements();
 
     for (const auto& elem : layoutElements) {
-        if (IsBufferLayoutElementTypeInt(elem.type)) {
-            glVertexAttribIFormat(elem.index, elem.count, BufferLayoutElementTypeToGlType(elem.type), static_cast<GLuint>(elem.offset));
+        if (elem.type == BufferLayoutElementType::Mat4) {
+            for (int i = 0; i < 4; i++) {
+                glVertexAttribFormat(elem.index + i, 4, GL_FLOAT, false, static_cast<GLuint>(elem.offset + i * (4 * sizeof(float))));
+                glVertexAttribBinding(elem.index + i, bindingIndex);
+                glEnableVertexAttribArray(elem.index + i);
+            }
         } else {
-            glVertexAttribFormat(elem.index, elem.count, BufferLayoutElementTypeToGlType(elem.type), false, static_cast<GLuint>(elem.offset));
+            if (IsBufferLayoutElementTypeInt(elem.type)) {
+                glVertexAttribIFormat(elem.index, elem.count, BufferLayoutElementTypeToGlType(elem.type), static_cast<GLuint>(elem.offset));
+            } else {
+                glVertexAttribFormat(elem.index, elem.count, BufferLayoutElementTypeToGlType(elem.type), false, static_cast<GLuint>(elem.offset));
+            }
+
+            glVertexAttribBinding(elem.index, bindingIndex);
+            glEnableVertexAttribArray(elem.index);
         }
 
-        glVertexAttribBinding(elem.index, bindingIndex);
-        glEnableVertexAttribArray(elem.index);
     }
 }
 
