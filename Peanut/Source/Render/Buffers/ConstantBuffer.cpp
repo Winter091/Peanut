@@ -11,9 +11,12 @@ namespace pn {
 std::shared_ptr<ConstantBuffer> ConstantBuffer::Create(BufferMapAccess access, uint32_t size, const void* data)
 {
     PN_CORE_ASSERT(size > 0, "Unable to create constant buffer with size = 0");
-    PN_CORE_ASSERT(data, "Unable to create constant without initialization data");
     PN_CORE_ASSERT(size % 16 == 0, "Constant buffer size has to be multiple of 16");
     PN_CORE_ASSERT(access != BufferMapAccess::Read && access != BufferMapAccess::ReadWrite, "Constant buffer cannot be mapped with read permissions");
+
+    if (!data) {
+        PN_CORE_ASSERT(DoesBufferMapAccessAllowWriting(access), "Data for constant buffer without write permissions must be specified on creation");
+    }
 
     auto renderApi = RenderCommand::GetRenderAPI();
 

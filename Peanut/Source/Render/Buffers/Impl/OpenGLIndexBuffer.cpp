@@ -15,8 +15,6 @@ OpenGLIndexBuffer::OpenGLIndexBuffer(IndexBufferDataFormat format, BufferMapAcce
 {
     PN_PROFILE_FUNCTION();
 
-    PN_CORE_ASSERT(size > 0u, "Unable to create buffer with size = 0");
-
     glCreateBuffers(1, &m_handle);
     glNamedBufferStorage(m_handle, size, data, BufferMapAccessToGlStorageAccess(access));
 

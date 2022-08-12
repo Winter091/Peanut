@@ -10,6 +10,10 @@ namespace pn {
 
 std::shared_ptr<VertexBuffer> VertexBuffer::Create(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data)
 {
+    if (!data) {
+        PN_CORE_ASSERT(DoesBufferMapAccessAllowWriting(access), "Data for vertex buffer without write permissions must be specified on creation");
+    }
+
     auto renderApi = RenderCommand::GetRenderAPI();
 
     switch (renderApi) {

@@ -1,0 +1,31 @@
+struct VSInput
+{
+    float2 Position : Position;
+    float2 TexCoord : TexCoord;
+    float4 Color    : Color;
+    int    TexIndex : TexIndex;
+};
+
+cbuffer Matrices : register(b0)
+{
+    row_major float4x4 ViewProjMatrix;
+}
+
+struct VSOutput
+{
+    float4 Position              : SV_Position;
+    float2 TexCoord              : TexCoord;
+    float4 Color                 : Color;
+    nointerpolation int TexIndex : TexIndex;
+};
+
+VSOutput main(VSInput Input)
+{
+    VSOutput Output;
+    Output.Position = mul(float4(Input.Position, 0.0, 1.0), ViewProjMatrix);
+    Output.TexCoord = Input.TexCoord;
+    Output.Color = Input.Color;
+    Output.TexIndex = Input.TexIndex;
+    
+    return Output;
+}

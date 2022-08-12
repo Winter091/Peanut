@@ -19,14 +19,14 @@ void InitWithContext()
 {
     PN_PROFILE_FUNCTION();
 
-    // Renderer2D::Init();
+    Renderer2D::Init();
 }
 
 void ShutdownWithContext()
 {
     PN_PROFILE_FUNCTION();
 
-    // Renderer2D::Shutdown();
+    Renderer2D::Shutdown();
 }
 
 void ShutdownWithoutContext()

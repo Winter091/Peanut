@@ -14,5 +14,7 @@ public:
     void OnUpdate() override;
 
 private:
+    std::vector<pn::Rectangle> m_rectangles;
     std::shared_ptr<pn::PipelineState> m_pipelineState;
+    std::shared_ptr<pn::OrthoCamera> m_camera;
 };

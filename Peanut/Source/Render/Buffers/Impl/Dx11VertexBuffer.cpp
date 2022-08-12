@@ -14,8 +14,6 @@ Dx11VertexBuffer::Dx11VertexBuffer(BufferMapAccess access, uint32_t size, const 
 	, m_size(size)
 	, m_mapAccess(access)
 {
-	PN_CORE_ASSERT(size > 0, "Unable to create vertex buffer with size = 0");
-
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.ByteWidth = size;
 	bufferDesc.Usage = BufferMapAccessToDxCpuUsageFlags(access);
@@ -24,14 +22,21 @@ Dx11VertexBuffer::Dx11VertexBuffer(BufferMapAccess access, uint32_t size, const 
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = m_layout->GetStride();
 
-	D3D11_SUBRESOURCE_DATA bufferSubresourceData;
-	bufferSubresourceData.pSysMem = (void*)data;
-	bufferSubresourceData.SysMemPitch = 0;
-	bufferSubresourceData.SysMemSlicePitch = 0;
-
 	auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
-	HRESULT res = device->CreateBuffer(&bufferDesc, &bufferSubresourceData, m_handle.GetAddressOf());
-	PN_CORE_ASSERT(res == S_OK, "Unable to create vertex buffer\n");
+	HRESULT res = 0;
+	
+	if (!data) {
+		res = device->CreateBuffer(&bufferDesc, nullptr, m_handle.GetAddressOf());
+	} else {
+		D3D11_SUBRESOURCE_DATA bufferSubresourceData;
+		bufferSubresourceData.pSysMem = (void*)data;
+		bufferSubresourceData.SysMemPitch = 0;
+		bufferSubresourceData.SysMemSlicePitch = 0;
+
+		res = device->CreateBuffer(&bufferDesc, &bufferSubresourceData, m_handle.GetAddressOf());
+	}
+
+	PN_CORE_ASSERT(res == S_OK, "Unable to create vertex buffer");
 }
 
 Dx11VertexBuffer::~Dx11VertexBuffer()

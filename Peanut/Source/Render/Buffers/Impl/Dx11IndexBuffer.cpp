@@ -15,8 +15,6 @@ Dx11IndexBuffer::Dx11IndexBuffer(IndexBufferDataFormat format, BufferMapAccess a
 {
     PN_PROFILE_FUNCTION();
 
-    PN_CORE_ASSERT(size > 0, "Unable to create index buffer with size = 0");
-
     D3D11_BUFFER_DESC bufferDesc;
     bufferDesc.ByteWidth = size;
     bufferDesc.Usage = BufferMapAccessToDxCpuUsageFlags(access);
@@ -25,13 +23,20 @@ Dx11IndexBuffer::Dx11IndexBuffer(IndexBufferDataFormat format, BufferMapAccess a
     bufferDesc.MiscFlags = 0;
     bufferDesc.StructureByteStride = GetDxDataTypeSize(format);
 
-    D3D11_SUBRESOURCE_DATA bufferSubresourceData;
-    bufferSubresourceData.pSysMem = (void*)data;
-    bufferSubresourceData.SysMemPitch = 0;
-    bufferSubresourceData.SysMemSlicePitch = 0;
-
     auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
-    HRESULT res = device->CreateBuffer(&bufferDesc, &bufferSubresourceData, m_handle.GetAddressOf());
+    HRESULT res = 0;
+
+    if (!data) {
+        res = device->CreateBuffer(&bufferDesc, nullptr, m_handle.GetAddressOf());
+    } else {
+        D3D11_SUBRESOURCE_DATA bufferSubresourceData;
+        bufferSubresourceData.pSysMem = (void*)data;
+        bufferSubresourceData.SysMemPitch = 0;
+        bufferSubresourceData.SysMemSlicePitch = 0;
+
+        res = device->CreateBuffer(&bufferDesc, &bufferSubresourceData, m_handle.GetAddressOf());
+    }
+
     PN_CORE_ASSERT(res == S_OK, "Unable to create index buffer\n");
 
     UpdateIndexCount();

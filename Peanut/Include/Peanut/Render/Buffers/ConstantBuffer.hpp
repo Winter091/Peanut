@@ -21,7 +21,7 @@ public:
     virtual uint32_t GetSize() const = 0;
     virtual void* GetNativeHandle() const = 0;
 
-    static std::shared_ptr<ConstantBuffer> Create(BufferMapAccess access, uint32_t size, const void* data);
+    static std::shared_ptr<ConstantBuffer> Create(BufferMapAccess access, uint32_t size, const void* data = nullptr);
 };
 
 }

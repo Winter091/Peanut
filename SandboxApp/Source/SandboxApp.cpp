@@ -58,6 +58,26 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     desc.Shader = shader;
 
     m_pipelineState = pn::PipelineState::Create(desc);
+
+    m_camera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
+        .SetZoom(1.0f)
+        .SetAspectRatio(GetWindow().GetAspectRatio())
+        .SetPosition({ 0.0f, 0.0f, 1.0f })
+        .SetDirection({ 0.0f, 0.0f, -1.0f })
+        .SetBoundaries(pn::OrthoCameraBoundaries()
+            .SetCenter({ 0.0f, 0.0f })
+            .SetWidth(150.0f).SetHeight(150.0f)));
+
+    float step = 1.25f;
+    for (int i = -50; i <= 50; i++) {
+        for (int j = -50; j <= 50; j++) {
+            float x = step * static_cast<float>(i);
+            float y = step * static_cast<float>(j);
+            pn::Rectangle rect;
+            rect.SetPosition({ x, y });
+            m_rectangles.push_back(rect);
+        }
+    }
 }
 
 void SandboxApp::OnEvent(pn::Event& event)
@@ -71,17 +91,40 @@ void SandboxApp::OnUpdate()
 {
     PN_PROFILE_FUNCTION();
 
-    pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
-    pn::RenderCommand::Clear();
+    {
+        pn::Window& window = GetWindow();
+        glm::vec3 pos = m_camera->GetPosition();
+        float zoom = m_camera->GetZoom();
+        float delta = 2.0f;
+        float zoomDelta = 0.01f;
 
-    float* bufferData = static_cast<float*>(m_pipelineState->GetConstantBuffers()[0]->Map());
-    bufferData[0] = (rand() % 256) / 255.0f;
-    bufferData[1] = (rand() % 256) / 255.0f;
-    bufferData[2] = (rand() % 256) / 255.0f;
-    bufferData[3] = 1.0f;
-    m_pipelineState->GetConstantBuffers()[0]->Unmap();
+        if (window.IsKeyPressed(pn::KeyCode::W)) { pos.y += delta * zoom; }
+        if (window.IsKeyPressed(pn::KeyCode::S)) { pos.y -= delta * zoom; }
+        if (window.IsKeyPressed(pn::KeyCode::A)) { pos.x -= delta * zoom; }
+        if (window.IsKeyPressed(pn::KeyCode::D)) { pos.x += delta * zoom; }
+        if (window.IsKeyPressed(pn::KeyCode::PageUp)) { zoom -= zoomDelta; }
+        if (window.IsKeyPressed(pn::KeyCode::PageDown)) { zoom += zoomDelta; }
 
-    pn::RenderCommand::DrawIndexed(m_pipelineState);
+        m_camera->SetPosition(pos);
+        m_camera->SetZoom(zoom);
+    }
+
+    {
+        pn::RenderCommand::SetClearColor({ 0.05f, 0.05f, 0.05f, 1.0f });
+        pn::RenderCommand::Clear();
+
+        pn::Rectangle rect;
+        rect.SetSize({ 1.0f, 1.0f });
+
+        pn::Renderer2D::BeginScene(*m_camera);
+        {
+            for (const auto& rect : m_rectangles) {
+                pn::Renderer2D::DrawRectangle(rect);
+            }
+        }
+        pn::Renderer2D::EndScene();
+    }
+
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)

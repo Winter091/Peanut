@@ -7,7 +7,7 @@
 #include <Peanut/Render/Shaders/Shader.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 
-#include <Core/StoragePath.hpp>
+#include <Peanut/Core/StoragePath.hpp>
 
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
@@ -41,7 +41,8 @@ struct Renderer2DData
 {
     PerVertexData* RectanglePerVertexData;
     std::shared_ptr<VertexBuffer> RectanglePerVertexVBO;
-    std::shared_ptr<PipelineState> RectangleVAO;
+    std::shared_ptr<ConstantBuffer> CameraConstantBuffer;
+    std::shared_ptr<PipelineState> RectanglePipelineState;
     std::shared_ptr<Shader> RectangleShader;
 
     uint32_t NumRectInstances = 0;
@@ -49,7 +50,6 @@ struct Renderer2DData
     std::array<std::shared_ptr<Texture2D>, MAX_TEXTURE_SLOTS> Textures;
     uint32_t NumTextures = 0;
 
-    std::shared_ptr<ConstantBuffer> CameraConstantBuffer;
 };
 
 static std::unique_ptr<Renderer2DData> s_data = nullptr;
@@ -61,11 +61,11 @@ static void Flush()
 
     s_data->RectanglePerVertexVBO->Unmap();
 
-    for (uint32_t i = 0; i < s_data->NumTextures; i++) {
+    /*for (uint32_t i = 0; i < s_data->NumTextures; i++) {
         s_data->Textures[i]->BindToSlot(i);
-    }
+    }*/
 
-    RenderCommand::DrawIndexed(s_data->RectangleVAO, s_data->NumRectInstances * 6);
+    RenderCommand::DrawIndexed(s_data->RectanglePipelineState, s_data->NumRectInstances * 6);
 }
 
 static void StartBatch()
@@ -110,17 +110,17 @@ void Renderer2D::Init()
     
     s_data = std::make_unique<Renderer2DData>();
 
-    s_data->RectangleVAO = pn::PipelineState::Create();
-
-    s_data->RectanglePerVertexVBO = pn::VertexBuffer::Create(BufferMapAccess::WriteDiscard,
-                                                             sizeof(PerVertexData) * MAX_VERTICES_PER_BATCH);
-    s_data->RectanglePerVertexVBO->SetLayout(pn::BufferLayout::Create({
-        { 0, pn::BufferLayoutElementType::Float, 2, "position" },
-        { 1, pn::BufferLayoutElementType::Float, 2, "texCoord" },
-        { 2, pn::BufferLayoutElementType::Float, 4, "color" },
-        { 3, pn::BufferLayoutElementType::Int32, 1, "texIndex" },
-    }));
-    s_data->RectangleVAO->AddVertexBuffer(s_data->RectanglePerVertexVBO, pn::BufferAttributeUsage::PerVertex);
+    s_data->RectanglePerVertexVBO = VertexBuffer::Create(
+        BufferMapAccess::WriteDiscard,
+        sizeof(PerVertexData) * MAX_VERTICES_PER_BATCH,
+        BufferLayout::Create(
+            BufferLayoutAttributeUsage::PerVertex, {
+            { 0, "position", BufferLayoutElementType::Float, 2, },
+            { 1, "texCoord", BufferLayoutElementType::Float, 2, },
+            { 2, "color",    BufferLayoutElementType::Float, 4, },
+            { 3, "texIndex", BufferLayoutElementType::Int32, 1, },
+        })
+    );
 
     std::vector<uint32_t> rectIndices;
     rectIndices.reserve(MAX_INDICES_PER_BATCH);
@@ -131,16 +131,29 @@ void Renderer2D::Init()
         }
     }
 
-    auto rectangleIBO = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint32, BufferMapAccess::NoAccess,
-                                                MAX_INDICES_PER_BATCH * sizeof(rectIndices[0]), &rectIndices[0]);
-    s_data->RectangleVAO->SetIndexBuffer(rectangleIBO);
+    auto rectangleIBO = IndexBuffer::Create(
+        IndexBufferDataFormat::Uint32, 
+        BufferMapAccess::NoAccess,
+        MAX_INDICES_PER_BATCH * sizeof(rectIndices[0]), 
+        &rectIndices[0]
+    );
 
-    s_data->RectangleShader = pn::Shader::Create(pn::ShaderPaths()
+    s_data->CameraConstantBuffer = ConstantBuffer::Create(
+        BufferMapAccess::WriteDiscard,
+        sizeof(CameraShaderData)
+    );
+
+    s_data->RectangleShader = Shader::Create(ShaderPaths()
         .SetVertexPath(StoragePath::GetAssetsPath() + "/Shaders/Renderer2D/Rect.vert")
         .SetFragmentPath(StoragePath::GetAssetsPath() + "/Shaders/Renderer2D/Rect.frag"),
         "Renderer2D Rectangle Shader");
 
-    s_data->CameraConstantBuffer = pn::ConstantBuffer::Create(pn::BufferMapAccess::WriteDiscard, sizeof(CameraShaderData));
+    PipelineStateDescription pipelineStateDesc;
+    pipelineStateDesc.VertexBuffers = { s_data->RectanglePerVertexVBO };
+    pipelineStateDesc.IndexBuffer = rectangleIBO;
+    pipelineStateDesc.ConstantBuffers = { s_data->CameraConstantBuffer };
+    pipelineStateDesc.Shader = s_data->RectangleShader;
+    s_data->RectanglePipelineState = PipelineState::Create(pipelineStateDesc);
 
     s_isInitialized = true;
 }
@@ -156,11 +169,9 @@ void Renderer2D::Shutdown()
 
 void Renderer2D::BeginScene(const Camera& camera)
 {
+    PN_CORE_ASSERT(s_isInitialized, "Renderer2D is not initialized");
     PN_PROFILE_FUNCTION();
 
-    s_data->RectangleShader->Bind();
-    
-    s_data->CameraConstantBuffer->BindToBindingIndex(0);
     auto* data = reinterpret_cast<CameraShaderData*>(s_data->CameraConstantBuffer->Map()); 
     {
         data->ViewProjMatrix = camera.GetViewProjectionMatrix();
@@ -172,6 +183,7 @@ void Renderer2D::BeginScene(const Camera& camera)
 
 void Renderer2D::EndScene()
 {
+    PN_CORE_ASSERT(s_isInitialized, "Renderer2D is not initialized");
     PN_PROFILE_FUNCTION();
 
     Flush();
@@ -179,6 +191,8 @@ void Renderer2D::EndScene()
 
 void Renderer2D::DrawRectangle(const Rectangle& rectangle)
 {
+    PN_CORE_ASSERT(s_isInitialized, "Renderer2D is not initialized");
+
     if (s_data->NumRectInstances + 1 > MAX_RECTANGLES_PER_BATCH) {
         Flush();
         StartBatch();

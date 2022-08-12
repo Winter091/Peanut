@@ -15,8 +15,6 @@ OpenGLVertexBuffer::OpenGLVertexBuffer(BufferMapAccess access, uint32_t size, co
     , m_layout(layout)
 {
     PN_PROFILE_FUNCTION();
-
-    PN_CORE_ASSERT(m_size > 0u, "Unable to create buffer with size = 0");
     
     glCreateBuffers(1, &m_handle);
     glNamedBufferStorage(m_handle, size, data, BufferMapAccessToGlStorageAccess(access));

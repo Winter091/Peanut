@@ -50,7 +50,7 @@ static Microsoft::WRL::ComPtr<ID3DBlob> CompileShader(const std::string& source,
 		errorBlob.GetAddressOf()
 	);
 	
-	PN_CORE_ASSERT(res == S_OK, "Unable to compile shader : {}", (const char*)errorBlob->GetBufferPointer());
+	PN_CORE_ASSERT(res == S_OK, "Unable to compile shader ({}): {}", profile, (const char*)errorBlob->GetBufferPointer());
 
 	return shaderBlob;
 }

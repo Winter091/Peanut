@@ -14,9 +14,6 @@ Dx11ConstantBuffer::Dx11ConstantBuffer(BufferMapAccess access, uint32_t size, co
 {
     PN_PROFILE_FUNCTION();
 
-    PN_CORE_ASSERT(size > 0, "Unable to create constant buffer with size = 0");
-    PN_CORE_ASSERT(data, "Unable to create constant buffer without initialization data");
-
     D3D11_BUFFER_DESC bufferDesc;
     bufferDesc.ByteWidth = size;
     bufferDesc.Usage = BufferMapAccessToDxCpuUsageFlags(access);
@@ -25,13 +22,20 @@ Dx11ConstantBuffer::Dx11ConstantBuffer(BufferMapAccess access, uint32_t size, co
     bufferDesc.MiscFlags = 0;
     bufferDesc.StructureByteStride = 0;
 
-    D3D11_SUBRESOURCE_DATA bufferSubresourceData;
-    bufferSubresourceData.pSysMem = (void*)data;
-    bufferSubresourceData.SysMemPitch = 0;
-    bufferSubresourceData.SysMemSlicePitch = 0;
-
     auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
-    HRESULT res = device->CreateBuffer(&bufferDesc, &bufferSubresourceData, m_handle.GetAddressOf());
+    HRESULT res = 0;
+
+    if (!data) {
+        res = device->CreateBuffer(&bufferDesc, nullptr, m_handle.GetAddressOf());
+    } else {
+        D3D11_SUBRESOURCE_DATA bufferSubresourceData;
+        bufferSubresourceData.pSysMem = (void*)data;
+        bufferSubresourceData.SysMemPitch = 0;
+        bufferSubresourceData.SysMemSlicePitch = 0;
+
+        res = device->CreateBuffer(&bufferDesc, &bufferSubresourceData, m_handle.GetAddressOf());
+    }
+
     PN_CORE_ASSERT(res == S_OK, "Unable to create buffer\n");
 }
 

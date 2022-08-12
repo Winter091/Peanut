@@ -15,8 +15,6 @@ OpenGLConstantBuffer::OpenGLConstantBuffer(BufferMapAccess access, uint32_t size
 {
     PN_PROFILE_FUNCTION();
 
-    PN_CORE_ASSERT(m_size > 0u, "Unable to create constant buffer with size = 0");
-    
     glCreateBuffers(1, &m_handle);
     glNamedBufferStorage(m_handle, size, data, BufferMapAccessToGlStorageAccess(access));
 }

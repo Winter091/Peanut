@@ -67,10 +67,18 @@ void OrthoCamera::RecalculateViewMatrix()
 
 void OrthoCamera::RecalculateProjectionMatrix()
 {
-    m_projection = glm::ortho(m_boundaries.Left * m_aspectRatio * m_zoom, m_boundaries.Right * m_aspectRatio * m_zoom,
-                              m_boundaries.Bottom * m_zoom, m_boundaries.Top * m_zoom, 
-                              m_boundaries.Near, m_boundaries.Far
-    );
+#ifdef PN_RENDERING_DX11
+    m_projection = glm::orthoRH_ZO(m_boundaries.Left * m_aspectRatio * m_zoom, m_boundaries.Right * m_aspectRatio * m_zoom,
+                                   m_boundaries.Bottom * m_zoom, m_boundaries.Top * m_zoom, 
+                              m_boundaries.Near, m_boundaries.Far);
+#elif PN_RENDERING_OPENGL
+    m_projection = glm::orthoRH_NO(m_boundaries.Left * m_aspectRatio * m_zoom, m_boundaries.Right * m_aspectRatio * m_zoom,
+                                   m_boundaries.Bottom * m_zoom, m_boundaries.Top * m_zoom,
+                                   m_boundaries.Near, m_boundaries.Far);
+#else
+    #error "Can't determine rendering backend"
+#endif
+
     RecalculateViewProjectionMatrix();
 }
 
