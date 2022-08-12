@@ -5,16 +5,17 @@
 #include <Peanut/Render/Buffers/ConstantBuffer.hpp>
 #include <Peanut/Render/Buffers/BufferLayout.hpp>
 #include <Peanut/Render/Shaders/Shader.hpp>
+#include <Peanut/Render/Shaders/ShaderInputLayout.hpp>
 
 namespace pn {
 
 struct PipelineStateDescription
 {
-public:
     std::vector<std::shared_ptr<VertexBuffer>> VertexBuffers;
     std::shared_ptr<IndexBuffer> IndexBuffer;
     std::vector<std::shared_ptr<ConstantBuffer>> ConstantBuffers;
     std::shared_ptr<Shader> Shader;
+    std::shared_ptr<ShaderInputLayout> ShaderInputLayout;
 };
 
 class PipelineState

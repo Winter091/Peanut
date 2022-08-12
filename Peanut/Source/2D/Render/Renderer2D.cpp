@@ -5,6 +5,7 @@
 #include <Peanut/Render/Buffers/PipelineState.hpp>
 #include <Peanut/Render/Buffers/ConstantBuffer.hpp>
 #include <Peanut/Render/Shaders/Shader.hpp>
+#include <Peanut/Render/Shaders/ShaderInputLayout.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 
 #include <Peanut/Core/StoragePath.hpp>
@@ -148,11 +149,14 @@ void Renderer2D::Init()
         .SetFragmentPath(StoragePath::GetAssetsPath() + "/Shaders/Renderer2D/Rect.frag"),
         "Renderer2D Rectangle Shader");
 
+    auto shaderInputLayout = ShaderInputLayout::Create({ s_data->RectanglePerVertexVBO }, s_data->RectangleShader);
+
     PipelineStateDescription pipelineStateDesc;
     pipelineStateDesc.VertexBuffers = { s_data->RectanglePerVertexVBO };
     pipelineStateDesc.IndexBuffer = rectangleIBO;
     pipelineStateDesc.ConstantBuffers = { s_data->CameraConstantBuffer };
     pipelineStateDesc.Shader = s_data->RectangleShader;
+    pipelineStateDesc.ShaderInputLayout = shaderInputLayout;
     s_data->RectanglePipelineState = PipelineState::Create(pipelineStateDesc);
 
     s_isInitialized = true;

@@ -32,11 +32,7 @@ private:
     std::shared_ptr<IndexBuffer> m_indexBuffer;
     std::vector<std::shared_ptr<ConstantBuffer>> m_constantBuffers;
     std::shared_ptr<Shader> m_shader;
-    Microsoft::WRL::ComPtr<ID3D11InputLayout> m_inputLayout;
-
-private:
-    Microsoft::WRL::ComPtr<ID3D11InputLayout> ProcessShaderInputLayout(
-        std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers, const std::shared_ptr<Shader>& shader);
+    std::shared_ptr<ShaderInputLayout> m_inputLayout;
 };
 
 }
