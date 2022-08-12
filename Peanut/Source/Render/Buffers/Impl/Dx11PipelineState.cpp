@@ -59,6 +59,16 @@ void Dx11PipelineState::Bind()
     m_shader->Bind();
 }
 
+void Dx11PipelineState::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+{
+    m_indexBuffer = indexBuffer;
+}
+
+void Dx11PipelineState::SetConstantBuffers(const std::vector<std::shared_ptr<ConstantBuffer>>& constantBuffers)
+{
+    m_constantBuffers = constantBuffers;
+}
+
 uint32_t Dx11PipelineState::GetVertexCount() const
 {
     PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to pipeline state, can't get vertex count");
@@ -71,16 +81,16 @@ uint32_t Dx11PipelineState::GetIndexCount() const
     return m_indexBuffer->GetIndexCount();
 }
 
-IndexBufferDataFormat Dx11PipelineState::GetIndexDataFormat() const
-{
-    PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set, unable to get its data format");
-    return m_indexBuffer->GetDataFormat();
-}
-
 uint32_t Dx11PipelineState::GetInstanceCount() const
 {
     // TODO: fixme
     return 0;
+}
+
+IndexBufferDataFormat Dx11PipelineState::GetIndexDataFormat() const
+{
+    PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set, unable to get its data format");
+    return m_indexBuffer->GetDataFormat();
 }
 
 }

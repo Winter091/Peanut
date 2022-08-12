@@ -92,8 +92,7 @@ void OpenGLPipelineState::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, 
     for (const auto& elem : layoutElements) {
         if (IsBufferLayoutElementTypeInt(elem.type)) {
             glVertexAttribIFormat(elem.index, elem.count, BufferLayoutElementTypeToGlType(elem.type), static_cast<GLuint>(elem.offset));
-        }
-        else {
+        } else {
             glVertexAttribFormat(elem.index, elem.count, BufferLayoutElementTypeToGlType(elem.type), false, static_cast<GLuint>(elem.offset));
         }
 
@@ -129,7 +128,12 @@ void OpenGLPipelineState::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& ind
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
 }
 
-uint32_t OpenGLPipelineState::GetVertexCount() const 
+void OpenGLPipelineState::SetConstantBuffers(const std::vector<std::shared_ptr<ConstantBuffer>>& constantBuffers)
+{
+    m_constantBuffers = constantBuffers;
+}
+
+uint32_t OpenGLPipelineState::GetVertexCount() const
 {
     PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to pipeline state");
     return m_vertexBuffers.front()->GetVertexCount();
@@ -141,15 +145,15 @@ uint32_t OpenGLPipelineState::GetIndexCount() const
     return m_indexBuffer->GetIndexCount();
 }
 
+uint32_t OpenGLPipelineState::GetInstanceCount() const 
+{
+    return m_instanceCount == 0 ? 1 : m_instanceCount;
+}
+
 IndexBufferDataFormat OpenGLPipelineState::GetIndexDataFormat() const 
 {
     PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set");
     return m_indexBuffer->GetDataFormat();
-}
-
-uint32_t OpenGLPipelineState::GetInstanceCount() const 
-{
-    return m_instanceCount == 0 ? 1 : m_instanceCount;
 }
 
 }

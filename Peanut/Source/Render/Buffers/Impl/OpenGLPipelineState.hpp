@@ -14,15 +14,20 @@ public:
 
     void Bind() override;
 
-    const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() override { return m_vertexBuffers; }
-    std::shared_ptr<IndexBuffer> GetIndexBuffer() override { return m_indexBuffer; }
-    const std::vector<std::shared_ptr<ConstantBuffer>>& GetConstantBuffers() override { return m_constantBuffers; }
-    std::shared_ptr<Shader> GetShader() override { return m_shader; }
+    const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const override { return m_vertexBuffers; }
+    std::shared_ptr<Shader> GetShader() const override { return m_shader; }
+    std::shared_ptr<ShaderInputLayout> GetShaderInputLayout() const override { return nullptr; }
+
+    std::shared_ptr<IndexBuffer> GetIndexBuffer() const override { return m_indexBuffer; }
+    void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) override;
+
+    const std::vector<std::shared_ptr<ConstantBuffer>>& GetConstantBuffers() const override { return m_constantBuffers; }
+    void SetConstantBuffers(const std::vector<std::shared_ptr<ConstantBuffer>>& constantBuffers) override;
 
     uint32_t GetVertexCount() const override;
     uint32_t GetIndexCount() const override;
-    IndexBufferDataFormat GetIndexDataFormat() const override;
     uint32_t GetInstanceCount() const override;
+    IndexBufferDataFormat GetIndexDataFormat() const override;
 
 private:
     uint32_t m_vaoHandle = 0u;
@@ -34,7 +39,6 @@ private:
 
 private:
     void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
-    void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer);
     void ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex);
     void AssertAllAttributeIndicesAreUnique() const;
     void UpdateInstanceCount(const VertexBuffer& vertexBuffer);
