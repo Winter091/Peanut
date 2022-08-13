@@ -143,8 +143,8 @@ void Renderer2D::Init()
     PipelineStateDescription pipelineStateDesc;
     pipelineStateDesc.VertexBuffers = { rectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer };
     pipelineStateDesc.ConstantBuffers = { s_data->CameraConstantBuffer };
-    pipelineStateDesc.Shader = s_data->RectangleShader;
-    pipelineStateDesc.ShaderInputLayout = rectangleShaderInputLayout;
+    pipelineStateDesc._Shader = s_data->RectangleShader;
+    pipelineStateDesc._ShaderInputLayout = rectangleShaderInputLayout;
     s_data->RectanglePipelineState = PipelineState::Create(pipelineStateDesc);
 
     s_isInitialized = true;

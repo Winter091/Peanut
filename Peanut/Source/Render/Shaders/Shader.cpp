@@ -3,8 +3,13 @@
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
 
+#if defined(PN_RENDERING_OPENGL)
 #include <Render/Shaders/Impl/OpenGLShader.hpp>
+#endif
+
+#if defined(PN_RENDERING_DX11)
 #include <Render/Shaders/Impl/Dx11Shader.hpp>
+#endif
 
 namespace pn
 {

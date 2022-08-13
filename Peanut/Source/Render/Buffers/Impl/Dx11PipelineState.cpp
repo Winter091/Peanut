@@ -15,10 +15,10 @@ namespace pn
 
 Dx11PipelineState::Dx11PipelineState(const PipelineStateDescription& description)
     : m_vertexBuffers(description.VertexBuffers)
-    , m_indexBuffer(description.IndexBuffer)
+    , m_indexBuffer(description._IndexBuffer)
     , m_constantBuffers(description.ConstantBuffers)
-    , m_shader(description.Shader)
-    , m_inputLayout(description.ShaderInputLayout)
+    , m_shader(description._Shader)
+    , m_inputLayout(description._ShaderInputLayout)
 {
     for (const auto& vertexBuffer : m_vertexBuffers) {
         if (vertexBuffer->GetLayout()->GetUsage() == BufferLayoutAttributeUsage::PerInstance) {

@@ -53,9 +53,9 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
     pn::PipelineStateDescription desc;
     desc.VertexBuffers = { posVB, colorVB };
-    desc.IndexBuffer = indexBuffer;
+    desc._IndexBuffer = indexBuffer;
     desc.ConstantBuffers = { constantBuffer };
-    desc.Shader = shader;
+    desc._Shader = shader;
 
     m_pipelineState = pn::PipelineState::Create(desc);
 
@@ -82,8 +82,7 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
 void SandboxApp::OnEvent(pn::Event& event)
 {
-    PN_PROFILE_FUNCTION();
-
+    (void)event;    
     // PN_CORE_TRACE("Event: {}", event.ToString());
 }
 

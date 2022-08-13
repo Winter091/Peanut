@@ -1,8 +1,14 @@
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 
 #include <Peanut/Core/Assert.hpp>
+
+#if defined(PN_RENDERING_OPENGL)
 #include <Render/Commands/Impl/OpenGLRenderCommand.hpp>
+#endif
+
+#if defined(PN_RENDERING_DX11)
 #include <Render/Commands/Impl/Dx11RenderCommand.hpp>
+#endif
 
 namespace pn
 {

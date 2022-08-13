@@ -1,8 +1,11 @@
 #include <Peanut/Render/Textures/Texture2D.hpp>
 
-#include <Render/Textures/Impl/OpenGLTexture2D.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
+
+#if defined(PN_RENDERING_OPENGL)
+#include <Render/Textures/Impl/OpenGLTexture2D.hpp>
+#endif
 
 namespace pn {
 

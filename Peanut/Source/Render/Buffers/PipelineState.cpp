@@ -2,8 +2,14 @@
 
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
+
+#if defined(PN_RENDERING_OPENGL)
 #include <Render/Buffers/Impl/OpenGLPipelineState.hpp>
+#endif
+
+#if defined(PN_RENDERING_DX11)
 #include <Render/Buffers/Impl/Dx11PipelineState.hpp>
+#endif
 
 namespace pn
 {

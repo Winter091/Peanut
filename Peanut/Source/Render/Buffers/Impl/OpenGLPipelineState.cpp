@@ -13,7 +13,7 @@ namespace pn
 
 OpenGLPipelineState::OpenGLPipelineState(const PipelineStateDescription& description)
     : m_constantBuffers(description.ConstantBuffers)
-    , m_shader(description.Shader)
+    , m_shader(description._Shader)
 {
     glCreateVertexArrays(1, &m_vaoHandle);
 
@@ -21,8 +21,8 @@ OpenGLPipelineState::OpenGLPipelineState(const PipelineStateDescription& descrip
         AddVertexBuffer(vertexBuffer);
     }
 
-    if (description.IndexBuffer) {
-        SetIndexBuffer(description.IndexBuffer);
+    if (description._IndexBuffer) {
+        SetIndexBuffer(description._IndexBuffer);
     }
 }
     

@@ -3,8 +3,13 @@
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
 
-#include <Render/Buffers/Impl/Dx11VertexBuffer.hpp>
+#if defined(PN_RENDERING_OPENGL)
 #include <Render/Buffers/Impl/OpenGLVertexBuffer.hpp>
+#endif
+
+#if defined(PN_RENDERING_DX11)
+#include <Render/Buffers/Impl/Dx11VertexBuffer.hpp>
+#endif
 
 namespace pn {
 

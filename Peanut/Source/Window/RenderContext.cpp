@@ -1,10 +1,16 @@
 #include <Peanut/Window/RenderContext.hpp>
 
-#include <Window/RenderContextImpl/OpenGLGLFWRenderContext.hpp>
-#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Window/Window.hpp>
 #include <Peanut/Core/Assert.hpp>
+
+#if defined(PN_RENDERING_OPENGL)
+#include <Window/RenderContextImpl/OpenGLGLFWRenderContext.hpp>
+#endif
+
+#if defined(PN_RENDERING_DX11)
+#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
+#endif
 
 namespace pn
 {
@@ -36,6 +42,9 @@ std::unique_ptr<RenderContext> RenderContext::Create()
                 case RenderAPI::Dx11:
                     return std::make_unique<Dx11GLFWRenderContext>();
 #endif
+
+                default:
+                    break;
             }
         }
     }
