@@ -16,6 +16,7 @@ enum class BufferLayoutElementType : uint32_t
     Int32,
     Uint32,
     Float,
+    Mat4,
 };
 
 enum class BufferLayoutAttributeUsage
@@ -39,7 +40,6 @@ struct BufferLayoutElement
 class BufferLayout
 {
 public:
-    // BufferLayout() = default;
     BufferLayout(BufferLayoutAttributeUsage usage, std::initializer_list<BufferLayoutElement> elements);
 
     const std::vector<BufferLayoutElement>& GetElements() const { return m_elements; }

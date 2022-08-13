@@ -8,17 +8,23 @@
 #include "Dx11EnumConversions.hpp"
 
 #include <unordered_set>
+#include <algorithm>
 
 namespace pn
 {
 
 Dx11PipelineState::Dx11PipelineState(const PipelineStateDescription& description)
     : m_vertexBuffers(description.VertexBuffers)
-    , m_indexBuffer(description.IndexBuffer)
+    , m_indexBuffer(description._IndexBuffer)
     , m_constantBuffers(description.ConstantBuffers)
-    , m_shader(description.Shader)
-    , m_inputLayout(description.ShaderInputLayout)
+    , m_shader(description._Shader)
+    , m_inputLayout(description._ShaderInputLayout)
 {
+    for (const auto& vertexBuffer : m_vertexBuffers) {
+        if (vertexBuffer->GetLayout()->GetUsage() == BufferLayoutAttributeUsage::PerInstance) {
+            UpdateInstanceCount(*vertexBuffer);
+        }
+    }
 }
 
 Dx11PipelineState::~Dx11PipelineState()
@@ -91,6 +97,15 @@ IndexBufferDataFormat Dx11PipelineState::GetIndexDataFormat() const
 {
     PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set, unable to get its data format");
     return m_indexBuffer->GetDataFormat();
+}
+
+void Dx11PipelineState::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
+{
+    if (m_instanceCount == 0) {
+        m_instanceCount = vertexBuffer.GetVertexCount();
+    } else {
+        m_instanceCount = std::min<uint32_t>(m_instanceCount, vertexBuffer.GetVertexCount());
+    }
 }
 
 }

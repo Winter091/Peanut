@@ -12,10 +12,10 @@ namespace pn {
 struct PipelineStateDescription
 {
     std::vector<std::shared_ptr<VertexBuffer>> VertexBuffers;
-    std::shared_ptr<Shader> Shader;
-    std::shared_ptr<ShaderInputLayout> ShaderInputLayout;
+    std::shared_ptr<Shader> _Shader;
+    std::shared_ptr<ShaderInputLayout> _ShaderInputLayout;
 
-    std::shared_ptr<IndexBuffer> IndexBuffer;
+    std::shared_ptr<IndexBuffer> _IndexBuffer;
     std::vector<std::shared_ptr<ConstantBuffer>> ConstantBuffers;
 };
 

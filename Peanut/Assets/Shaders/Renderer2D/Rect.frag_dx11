@@ -1,8 +1,8 @@
 struct FSInput
 {
     float4 Position              : SV_Position;
-    float2 TexCoord              : TexCoord;
     float4 Color                 : Color;
+    float2 TexCoord              : TexCoord;
     nointerpolation int TexIndex : TexIndex;
 };
 

@@ -1,8 +1,11 @@
 #include <Peanut/Render/Textures/Texture2D.hpp>
 
-#include <Render/Textures/Impl/OpenGLTexture2D.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
+
+#if defined(PN_RENDERING_OPENGL)
+#include <Render/Textures/Impl/OpenGLTexture2D.hpp>
+#endif
 
 namespace pn {
 
@@ -14,8 +17,12 @@ std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path, const Text
         case RenderAPI::None:
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
+
+#if defined(PN_RENDERING_OPENGL)
         case RenderAPI::OpenGL:
             return std::make_shared<OpenGLTexture2D>(path, settings, name);
+#endif
+
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;
@@ -32,8 +39,12 @@ std::shared_ptr<Texture2D> Texture2D::Create(const TextureData& data, const Text
         case RenderAPI::None:
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
+
+#if defined(PN_RENDERING_OPENGL)
         case RenderAPI::OpenGL:
             return std::make_shared<OpenGLTexture2D>(data, settings, name);
+#endif
+
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;

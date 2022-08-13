@@ -2,8 +2,14 @@
 
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
+
+#if defined(PN_RENDERING_OPENGL)
 #include <Render/Buffers/Impl/OpenGLIndexBuffer.hpp>
+#endif
+
+#if defined(PN_RENDERING_DX11)
 #include <Render/Buffers/Impl/Dx11IndexBuffer.hpp>
+#endif
 
 #include <memory>
 
@@ -22,10 +28,17 @@ std::shared_ptr<IndexBuffer> IndexBuffer::Create(IndexBufferDataFormat format, B
         case RenderAPI::None:
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
+
+#if defined(PN_RENDERING_OPENGL)
         case RenderAPI::OpenGL:
             return std::make_shared<OpenGLIndexBuffer>(format, access, size, data);
+#endif
+
+#if defined(PN_RENDERING_DX11)
         case RenderAPI::Dx11:
             return std::make_shared<Dx11IndexBuffer>(format, access, size, data);
+#endif
+
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;
