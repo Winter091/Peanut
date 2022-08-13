@@ -16,14 +16,22 @@ std::shared_ptr<ShaderInputLayout> ShaderInputLayout::Create(const std::vector<s
     case RenderAPI::None:
         PN_CORE_ASSERT(false, "RenderAPI::None is not supported");
         break;
-    case RenderAPI::OpenGL:
-        return std::make_shared<OpenGLShaderInputLayout>();
-    case RenderAPI::Dx11:
-        return std::make_shared<Dx11ShaderInputLayout>(vertexBuffers, shader);
+
+#if defined(PN_RENDERING_OPENGL)
+        case RenderAPI::OpenGL:
+            return std::make_shared<OpenGLShaderInputLayout>();
+#endif
+
+#if defined(PN_RENDERING_DX11)
+        case RenderAPI::Dx11:
+            return std::make_shared<Dx11ShaderInputLayout>(vertexBuffers, shader);
+#endif
+
     default:
         PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi));
         break;
     }
+
 
     return nullptr;
 }

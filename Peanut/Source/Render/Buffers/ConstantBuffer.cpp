@@ -24,10 +24,17 @@ std::shared_ptr<ConstantBuffer> ConstantBuffer::Create(BufferMapAccess access, u
         case RenderAPI::None:
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
+
+#if defined(PN_RENDERING_OPENGL)
         case RenderAPI::OpenGL:
             return std::make_shared<OpenGLConstantBuffer>(access, size, data);
+#endif
+
+#if defined(PN_RENDERING_DX11)
         case RenderAPI::Dx11:
             return std::make_shared<Dx11ConstantBuffer>(access, size, data);
+#endif
+
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;

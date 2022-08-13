@@ -20,14 +20,22 @@ std::shared_ptr<VertexBuffer> VertexBuffer::Create(BufferMapAccess access, uint3
         case RenderAPI::None:
             PN_CORE_ASSERT(false, "RenderAPI::None is not supported"); 
             break;
+
+#if defined(PN_RENDERING_OPENGL)
         case RenderAPI::OpenGL:
             return std::make_shared<OpenGLVertexBuffer>(access, size, layout, data);
+#endif
+
+#if defined(PN_RENDERING_DX11)
         case RenderAPI::Dx11:
             return std::make_shared<Dx11VertexBuffer>(access, size, layout, data);
+#endif
+
         default:
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;
     }
+
 
     return nullptr;
 }

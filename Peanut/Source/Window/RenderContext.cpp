@@ -26,10 +26,16 @@ std::unique_ptr<RenderContext> RenderContext::Create()
                 case RenderAPI::None:
                     PN_CORE_ASSERT(false, "RenderAPI is not supported");
                     return nullptr;
+
+#if defined(PN_RENDERING_OPENGL)
                 case RenderAPI::OpenGL:
                     return std::make_unique<OpenGLGLFWRenderContext>();
+#endif
+
+#if defined(PN_RENDERING_DX11)
                 case RenderAPI::Dx11:
                     return std::make_unique<Dx11GLFWRenderContext>();
+#endif
             }
         }
     }
