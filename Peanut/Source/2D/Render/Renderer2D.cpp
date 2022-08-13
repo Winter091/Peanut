@@ -64,7 +64,7 @@ static void Flush()
         s_data->Textures[i]->BindToSlot(i);
     }*/
 
-    RenderCommand::DrawIndexedInstanced(s_data->RectanglePipelineState, 6, s_data->NumRectInstances);
+    RenderCommand::DrawArraysInstanced(s_data->RectanglePipelineState, 6, s_data->NumRectInstances);
 }
 
 static void StartBatch()
@@ -109,7 +109,7 @@ void Renderer2D::Init()
     
     s_data = std::make_unique<Renderer2DData>();
 
-    uint8_t vertexIndices[4] = { 0, 1, 2, 3 };
+    uint8_t vertexIndices[6] = { 0, 1, 2, 2, 3, 0 };
     auto rectanglePerVertexBuffer = VertexBuffer::Create(
         BufferMapAccess::NoAccess,
         sizeof(vertexIndices),
@@ -127,21 +127,6 @@ void Renderer2D::Init()
             { 5, "Color",       BufferLayoutElementType::Float, 4 },
             { 6, "TexIndex",    BufferLayoutElementType::Int32, 1 }}));
 
-    std::vector<uint32_t> rectIndices;
-    rectIndices.reserve(MAX_INDICES_PER_BATCH);
-    std::vector<uint32_t> singleRectIndices = { 0, 1, 2, 2, 3, 0 };
-    for (uint32_t i = 0, base = 0; i < MAX_RECTANGLES_PER_BATCH; i++, base += 4) { 
-        for (uint32_t quadIndex : singleRectIndices) {
-            rectIndices.push_back(quadIndex);
-        }
-    }
-
-    auto rectangleIndexBuffer = IndexBuffer::Create(
-        IndexBufferDataFormat::Uint32, 
-        BufferMapAccess::NoAccess,
-        MAX_INDICES_PER_BATCH * sizeof(rectIndices[0]), 
-        &rectIndices[0]);
-
     s_data->CameraConstantBuffer = ConstantBuffer::Create(
         BufferMapAccess::WriteDiscard,
         sizeof(CameraShaderData));
@@ -157,7 +142,6 @@ void Renderer2D::Init()
 
     PipelineStateDescription pipelineStateDesc;
     pipelineStateDesc.VertexBuffers = { rectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer };
-    pipelineStateDesc.IndexBuffer = rectangleIndexBuffer;
     pipelineStateDesc.ConstantBuffers = { s_data->CameraConstantBuffer };
     pipelineStateDesc.Shader = s_data->RectangleShader;
     pipelineStateDesc.ShaderInputLayout = rectangleShaderInputLayout;
