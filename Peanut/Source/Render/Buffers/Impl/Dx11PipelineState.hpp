@@ -33,11 +33,15 @@ public:
     IndexBufferDataFormat GetIndexDataFormat() const override;
 
 private:
+    void UpdateInstanceCount(const VertexBuffer& vertexBuffer);
+
+private:
     std::vector<std::shared_ptr<VertexBuffer>> m_vertexBuffers;
     std::shared_ptr<IndexBuffer> m_indexBuffer;
     std::vector<std::shared_ptr<ConstantBuffer>> m_constantBuffers;
     std::shared_ptr<Shader> m_shader;
     std::shared_ptr<ShaderInputLayout> m_inputLayout;
+    uint32_t m_instanceCount = 0u;
 };
 
 }

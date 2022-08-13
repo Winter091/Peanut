@@ -70,15 +70,10 @@ void OpenGLPipelineState::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& v
 
 void OpenGLPipelineState::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
 {
-    PN_PROFILE_FUNCTION();
-
     if (m_instanceCount == 0) {
         m_instanceCount = vertexBuffer.GetVertexCount();
-        return;
-    }
-
-    if (vertexBuffer.GetVertexCount() != m_instanceCount) {
-        PN_CORE_ASSERT(false, "Instance counts are not equal for vertex buffers in one pipeline state");
+    } else {
+        m_instanceCount = std::min(m_instanceCount, vertexBuffer.GetVertexCount());
     }
 }
 
