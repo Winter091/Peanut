@@ -69,8 +69,8 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
             .SetWidth(150.0f).SetHeight(150.0f)));
 
     float step = 1.25f;
-    for (int i = -50; i <= 50; i++) {
-        for (int j = -50; j <= 50; j++) {
+    for (int i = -500; i <= 500; i++) {
+        for (int j = -500; j <= 500; j++) {
             float x = step * static_cast<float>(i);
             float y = step * static_cast<float>(j);
             pn::Rectangle rect;
@@ -113,9 +113,6 @@ void SandboxApp::OnUpdate()
         pn::RenderCommand::SetClearColor({ 0.05f, 0.05f, 0.05f, 1.0f });
         pn::RenderCommand::Clear();
 
-        pn::Rectangle rect;
-        rect.SetSize({ 1.0f, 1.0f });
-
         pn::Renderer2D::BeginScene(*m_camera);
         {
             for (const auto& rect : m_rectangles) {
@@ -139,5 +136,5 @@ pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
     return new SandboxApp(WindowSettings()
         .SetTitle("Sandbox Application")
         .SetWidth(1280).SetHeight(720)
-        .UseVsync(true));
+        .UseVsync(false));
 }

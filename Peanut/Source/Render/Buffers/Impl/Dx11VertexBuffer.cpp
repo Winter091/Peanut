@@ -2,6 +2,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
+#include <Peanut/Core/TimeProfiler.hpp>
 #include "Dx11EnumConversions.hpp"
 
 using Microsoft::WRL::ComPtr;
@@ -14,6 +15,8 @@ Dx11VertexBuffer::Dx11VertexBuffer(BufferMapAccess access, uint32_t size, const 
 	, m_size(size)
 	, m_mapAccess(access)
 {
+	PN_PROFILE_FUNCTION();
+
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.ByteWidth = size;
 	bufferDesc.Usage = BufferMapAccessToDxCpuUsageFlags(access);
@@ -45,6 +48,8 @@ Dx11VertexBuffer::~Dx11VertexBuffer()
 
 void* Dx11VertexBuffer::Map()
 {
+	PN_PROFILE_FUNCTION();
+
 	auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 
 	D3D11_MAPPED_SUBRESOURCE mappedBuffer;

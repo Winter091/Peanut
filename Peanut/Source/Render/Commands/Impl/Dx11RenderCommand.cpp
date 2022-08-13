@@ -82,7 +82,19 @@ void Dx11RenderCommand::DrawArraysInstanced(
 void Dx11RenderCommand::DrawIndexedInstanced(
     std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
 {
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 
+    if (count == 0) {
+        count = pipelineState->GetIndexCount();
+    }
+
+    if (instanceCount == 0) {
+        instanceCount = pipelineState->GetInstanceCount();
+    }
+
+    pipelineState->Bind();
+    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    deviceContext->DrawIndexedInstanced(count, instanceCount, 0, 0, 0);
 }
 
 }

@@ -61,6 +61,8 @@ target_include_directories(
     Deps/spdlog/include
 )
 
+target_compile_definitions(Peanut PUBLIC PN_PROFILE)
+
 if (UNIX)
     target_compile_definitions(Peanut PUBLIC PN_PLATFORM_LINUX)
     target_compile_definitions(Peanut PUBLIC PN_WINDOW_GLFW)
@@ -68,8 +70,8 @@ if (UNIX)
 elseif (WIN32 OR MINGW OR CYGWIN)
     target_compile_definitions(Peanut PUBLIC PN_PLATFORM_WINDOWS)
     target_compile_definitions(Peanut PUBLIC PN_WINDOW_GLFW)
-    #target_compile_definitions(Peanut PUBLIC PN_RENDERING_DX11)
-    target_compile_definitions(Peanut PUBLIC PN_RENDERING_OPENGL)
+    target_compile_definitions(Peanut PUBLIC PN_RENDERING_DX11)
+    #target_compile_definitions(Peanut PUBLIC PN_RENDERING_OPENGL)
 
     target_link_libraries(Peanut PUBLIC d3d11 dxguid DXGI D3DCompiler)
 else()

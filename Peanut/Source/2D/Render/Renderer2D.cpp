@@ -18,16 +18,11 @@
 
 namespace pn {
 
-static constexpr size_t MAX_RECTANGLES_PER_BATCH = 100000;
+static constexpr size_t MAX_RECTANGLES_PER_BATCH = 50000;
 static constexpr size_t MAX_VERTICES_PER_BATCH = 4 * MAX_RECTANGLES_PER_BATCH;
 static constexpr size_t MAX_INDICES_PER_BATCH = 6 * MAX_RECTANGLES_PER_BATCH;
 
 static constexpr size_t MAX_TEXTURE_SLOTS = 16;
-
-struct RectPerVertexData
-{
-    uint32_t VertexIndex;
-};
 
 struct RectPerInstanceData
 {
@@ -43,9 +38,7 @@ struct CameraShaderData
 
 struct Renderer2DData
 {
-    RectPerVertexData* RectanglePerVertexDataPtr;
     RectPerInstanceData* RectanglePerInstanceDataPtr;
-    std::shared_ptr<VertexBuffer> RectanglePerVertexBuffer;
     std::shared_ptr<VertexBuffer> RectanglePerInstanceBuffer;
     std::shared_ptr<ConstantBuffer> CameraConstantBuffer;
     std::shared_ptr<PipelineState> RectanglePipelineState;
@@ -65,7 +58,6 @@ static void Flush()
 {
     PN_PROFILE_FUNCTION();
 
-    s_data->RectanglePerVertexBuffer->Unmap();
     s_data->RectanglePerInstanceBuffer->Unmap();
 
     /*for (uint32_t i = 0; i < s_data->NumTextures; i++) {
@@ -79,7 +71,6 @@ static void StartBatch()
 {
     PN_PROFILE_FUNCTION();
 
-    s_data->RectanglePerVertexDataPtr = reinterpret_cast<RectPerVertexData*>(s_data->RectanglePerVertexBuffer->Map());
     s_data->RectanglePerInstanceDataPtr = reinterpret_cast<RectPerInstanceData*>(s_data->RectanglePerInstanceBuffer->Map());
     s_data->NumRectInstances = 0;
     s_data->NumTextures = 0;
@@ -118,12 +109,14 @@ void Renderer2D::Init()
     
     s_data = std::make_unique<Renderer2DData>();
 
-    s_data->RectanglePerVertexBuffer = VertexBuffer::Create(
-        BufferMapAccess::WriteDiscard,
-        sizeof(RectPerVertexData) * MAX_VERTICES_PER_BATCH,
+    uint8_t vertexIndices[4] = { 0, 1, 2, 3 };
+    auto rectanglePerVertexBuffer = VertexBuffer::Create(
+        BufferMapAccess::NoAccess,
+        sizeof(vertexIndices),
         BufferLayout::Create(
             BufferLayoutAttributeUsage::PerVertex, {
-            { 0, "VertexIndex", BufferLayoutElementType::Uint32, 1 }}));
+            { 0, "VertexIndex", BufferLayoutElementType::Uint8, 1 }}),
+        vertexIndices);
 
     s_data->RectanglePerInstanceBuffer = VertexBuffer::Create(
         BufferMapAccess::WriteDiscard,
@@ -139,7 +132,7 @@ void Renderer2D::Init()
     std::vector<uint32_t> singleRectIndices = { 0, 1, 2, 2, 3, 0 };
     for (uint32_t i = 0, base = 0; i < MAX_RECTANGLES_PER_BATCH; i++, base += 4) { 
         for (uint32_t quadIndex : singleRectIndices) {
-            rectIndices.push_back(base + quadIndex);
+            rectIndices.push_back(quadIndex);
         }
     }
 
@@ -159,11 +152,11 @@ void Renderer2D::Init()
         "Renderer2D Rectangle Shader");
 
     auto rectangleShaderInputLayout = ShaderInputLayout::Create(
-        { s_data->RectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer }, 
+        { rectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer },
         s_data->RectangleShader);
 
     PipelineStateDescription pipelineStateDesc;
-    pipelineStateDesc.VertexBuffers = { s_data->RectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer };
+    pipelineStateDesc.VertexBuffers = { rectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer };
     pipelineStateDesc.IndexBuffer = rectangleIndexBuffer;
     pipelineStateDesc.ConstantBuffers = { s_data->CameraConstantBuffer };
     pipelineStateDesc.Shader = s_data->RectangleShader;
@@ -216,10 +209,6 @@ void Renderer2D::DrawRectangle(const Rectangle& rectangle)
     int32_t textureIndex = -1;
     if (rectangle.HasTexture()) {
         textureIndex = AddTextureToList(rectangle.GetTexture());
-    }
-
-    for (size_t i = 0; i < 4; i++) {
-        s_data->RectanglePerVertexDataPtr[s_data->NumRectInstances * 4 + i].VertexIndex = static_cast<uint8_t>(i);
     }
 
     s_data->RectanglePerInstanceDataPtr[s_data->NumRectInstances].ModelMatrix = rectangle.GetTransformMatrix();

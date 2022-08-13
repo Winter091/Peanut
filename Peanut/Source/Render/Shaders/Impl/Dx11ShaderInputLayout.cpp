@@ -9,19 +9,38 @@ namespace pn {
 Dx11ShaderInputLayout::Dx11ShaderInputLayout(const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers, const std::shared_ptr<Shader>& shader)
 {
     std::vector<D3D11_INPUT_ELEMENT_DESC> layoutDesc;
+    std::vector<std::unique_ptr<std::string>> semanticNameStrings;
+
     for (uint32_t bufferIndex = 0; bufferIndex < vertexBuffers.size(); bufferIndex++) {
         const auto& bufferLayout = vertexBuffers[bufferIndex]->GetLayout();
 
         for (const auto& attribute : bufferLayout->GetElements()) {
-            auto& desc = layoutDesc.emplace_back();
 
-            desc.SemanticName = attribute.name.c_str();
-            desc.SemanticIndex = 0;
-            desc.Format = AttributeTypeToDxFormat(attribute.type, attribute.count);
-            desc.InputSlot = bufferIndex;
-            desc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-            desc.InputSlotClass = BufferLayoutAttributeUsageToDx11InputSlotClass(bufferLayout->GetUsage());
-            desc.InstanceDataStepRate = BufferLayoutAttributeUsageToDx11InstanceDataStepRate(bufferLayout->GetUsage());
+            if (attribute.type == BufferLayoutElementType::Mat4) {
+                for (int semanticIndex = 0; semanticIndex < 4; semanticIndex++) {
+                    auto& desc = layoutDesc.emplace_back();
+
+                    desc.SemanticName = attribute.name.c_str();
+                    desc.SemanticIndex = semanticIndex;
+                    desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+                    desc.InputSlot = bufferIndex;
+                    desc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+                    desc.InputSlotClass = BufferLayoutAttributeUsageToDx11InputSlotClass(bufferLayout->GetUsage());
+                    desc.InstanceDataStepRate = BufferLayoutAttributeUsageToDx11InstanceDataStepRate(bufferLayout->GetUsage());
+                }
+            }
+            else {
+                auto& desc = layoutDesc.emplace_back();
+
+                desc.SemanticName = attribute.name.c_str();
+                desc.SemanticIndex = 0;
+                desc.Format = AttributeTypeToDxFormat(attribute.type, attribute.count);
+                desc.InputSlot = bufferIndex;
+                desc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+                desc.InputSlotClass = BufferLayoutAttributeUsageToDx11InputSlotClass(bufferLayout->GetUsage());
+                desc.InstanceDataStepRate = BufferLayoutAttributeUsageToDx11InstanceDataStepRate(bufferLayout->GetUsage());
+            }
+
         }
     }
 
