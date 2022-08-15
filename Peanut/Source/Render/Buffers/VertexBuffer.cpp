@@ -13,8 +13,10 @@
 
 namespace pn {
 
-std::shared_ptr<VertexBuffer> VertexBuffer::Create(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data)
+std::shared_ptr<VertexBuffer> VertexBuffer::Create(const std::shared_ptr<BufferLayout>& layout, BufferMapAccess access, uint32_t size, const void* data)
 {
+    PN_CORE_ASSERT(layout, "Buffer layout cannot be nullptr");
+    
     if (!data) {
         PN_CORE_ASSERT(DoesBufferMapAccessAllowWriting(access), "Data for vertex buffer without write permissions must be specified on creation");
     }
@@ -28,7 +30,7 @@ std::shared_ptr<VertexBuffer> VertexBuffer::Create(BufferMapAccess access, uint3
 
 #if defined(PN_RENDERING_OPENGL)
         case RenderAPI::OpenGL:
-            return std::make_shared<OpenGLVertexBuffer>(access, size, layout, data);
+            return std::make_shared<OpenGLVertexBuffer>(layout, access, size, data);
 #endif
 
 #if defined(PN_RENDERING_DX11)

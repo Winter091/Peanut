@@ -7,9 +7,7 @@ namespace pn
 {
 
 OpenGLIndexBuffer::OpenGLIndexBuffer(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data)
-    : m_handle(0)
-    , m_size(size)
-    , m_indexCount(0u)
+    : m_size(size)
     , m_mapAccess(access)
     , m_format(format)
 {
@@ -18,7 +16,7 @@ OpenGLIndexBuffer::OpenGLIndexBuffer(IndexBufferDataFormat format, BufferMapAcce
     glCreateBuffers(1, &m_handle);
     glNamedBufferStorage(m_handle, size, data, BufferMapAccessToGlStorageAccess(access));
 
-    UpdateIndexCount();
+    m_indexCount = m_size / GetIndexBufferDataFormatSize(format);
 }
 
 OpenGLIndexBuffer::~OpenGLIndexBuffer()
@@ -42,23 +40,6 @@ void OpenGLIndexBuffer::Unmap()
     PN_PROFILE_FUNCTION();
 
     glUnmapNamedBuffer(m_handle);
-}
-
-uint32_t OpenGLIndexBuffer::GetGLDataTypeSize() const
-{
-    switch (m_format) {
-        case IndexBufferDataFormat::Uint16: return 2u;
-        case IndexBufferDataFormat::Uint32: return 4u;
-        default: break;
-    }
-
-    PN_CORE_ASSERT(false, "Unknown index buffer data format: {}", static_cast<uint32_t>(m_format));
-    return 0u;
-}
-
-void OpenGLIndexBuffer::UpdateIndexCount()
-{
-    m_indexCount = m_size / GetGLDataTypeSize();
 }
 
 }

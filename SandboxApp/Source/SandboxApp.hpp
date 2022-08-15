@@ -15,6 +15,5 @@ public:
 
 private:
     std::vector<pn::Rectangle> m_rectangles;
-    std::shared_ptr<pn::VertexArray> m_vertexArray;
     std::shared_ptr<pn::OrthoCamera> m_camera;
 };

@@ -5,60 +5,6 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 {
     PN_PROFILE_FUNCTION();
 
-    float positions[] = {
-        -0.5f, -0.5f,  0.0f, 
-        -0.5f,  0.5f,  0.0f, 
-         0.5f,  0.5f,  0.0f, 
-         0.5f, -0.5f,  0.0f, 
-    };
-
-    float colors[] = {
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f,
-    };
-
-    uint32_t indices[] = { 0, 1, 2, 2, 3, 0 };
-
-    auto posVB = pn::VertexBuffer::Create(
-        pn::BufferMapAccess::NoAccess, 
-        sizeof(positions), 
-        pn::BufferLayout::Create(
-            pn::BufferLayoutAttributeUsage::PerVertex, {
-            { 0, "Position", pn::BufferLayoutElementType::Float, 3, }
-        }), 
-        positions
-    );
-
-    auto colorVB = pn::VertexBuffer::Create(
-        pn::BufferMapAccess::NoAccess, 
-        sizeof(colors), 
-        pn::BufferLayout::Create(
-            pn::BufferLayoutAttributeUsage::PerVertex, {
-            { 1, "Color", pn::BufferLayoutElementType::Float, 3, }
-        }), 
-        colors
-    );
-
-    auto indexBuffer = pn::IndexBuffer::Create(pn::IndexBufferDataFormat::Uint32, pn::BufferMapAccess::NoAccess, sizeof(indices), indices);
-    
-    float color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-    auto constantBuffer = pn::ConstantBuffer::Create(pn::BufferMapAccess::WriteDiscard, sizeof(color), color);
-
-    auto shader = pn::Shader::Create(pn::ShaderPaths()
-        .SetVertexPath(pn::StoragePath::GetAssetsPath() + "/Shaders/test.vert")
-        .SetFragmentPath(pn::StoragePath::GetAssetsPath() + "/Shaders/test.frag"),
-        "Test Shader");
-
-    pn::VertexArrayDescription desc;
-    desc.VertexBuffers = { posVB, colorVB };
-    desc._IndexBuffer = indexBuffer;
-    desc.ConstantBuffers = { constantBuffer };
-    desc._Shader = shader;
-
-    m_vertexArray = pn::VertexArray::Create(desc);
-
     m_camera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
         .SetZoom(1.0f)
         .SetAspectRatio(GetWindow().GetAspectRatio())

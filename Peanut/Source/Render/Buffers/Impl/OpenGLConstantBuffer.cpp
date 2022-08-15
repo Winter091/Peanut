@@ -9,8 +9,7 @@ namespace pn
 {
 
 OpenGLConstantBuffer::OpenGLConstantBuffer(BufferMapAccess access, uint32_t size, const void* data)
-    : m_handle(0)
-    , m_size(size)
+    : m_size(size)
     , m_mapAccess(access)
 {
     PN_PROFILE_FUNCTION();

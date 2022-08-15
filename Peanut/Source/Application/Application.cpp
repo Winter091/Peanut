@@ -55,7 +55,7 @@ bool Application::OnWindowResize(Event& event)
 {
     PN_PROFILE_FUNCTION();
 
-    auto& resizeEvent = dynamic_cast<WindowSizeChangedEvent&>(event);
+    auto& resizeEvent = static_cast<WindowSizeChangedEvent&>(event);
     m_window->OnResize(resizeEvent.GetWidth(), resizeEvent.GetHeight());
     RenderCommand::SetViewport(0, 0, m_window->GetWidth(), m_window->GetHeight());
     return true;

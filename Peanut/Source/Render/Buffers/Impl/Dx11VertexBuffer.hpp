@@ -11,18 +11,18 @@ class Dx11VertexBuffer final : public VertexBuffer
 {
 public:
     Dx11VertexBuffer(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data);
-    ~Dx11VertexBuffer() override;
+    ~Dx11VertexBuffer() override = default;
 
     void* Map() override;
     void Unmap() override;
 
-    const std::shared_ptr<BufferLayout>& GetLayout() const override;
+    const std::shared_ptr<BufferLayout>& GetLayout() const override { return m_layout; }
 
     uint32_t GetSize() const { return m_size; }
-    uint32_t GetVertexSize() const override;
-    uint32_t GetVertexCount() const override;
+    uint32_t GetVertexSize() const override { return m_layout->GetStride(); }
+    uint32_t GetVertexCount() const override { return GetSize() / GetVertexSize(); }
 
-    void* GetNativeHandle() const override { return (void*)m_handle.Get(); }
+    ID3D11Buffer* GetNativeObjectPtr() const { return m_handle.Get(); }
 
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_handle = nullptr;

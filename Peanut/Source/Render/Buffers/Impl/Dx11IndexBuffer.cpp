@@ -9,7 +9,7 @@ namespace pn
 
 Dx11IndexBuffer::Dx11IndexBuffer(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data)
     : m_size(size)
-    , m_indexCount(0u)
+    , m_indexCount(size / GetIndexBufferDataFormatSize(m_format))
     , m_mapAccess(access)
     , m_format(format)
 {
@@ -21,7 +21,7 @@ Dx11IndexBuffer::Dx11IndexBuffer(IndexBufferDataFormat format, BufferMapAccess a
     bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bufferDesc.CPUAccessFlags = BufferMapAccessToDxCpuAccessFlags(access);
     bufferDesc.MiscFlags = 0;
-    bufferDesc.StructureByteStride = GetDxDataTypeSize(format);
+    bufferDesc.StructureByteStride = GetIndexBufferDataFormatSize(format);
 
     auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
     HRESULT res = 0;
@@ -38,12 +38,6 @@ Dx11IndexBuffer::Dx11IndexBuffer(IndexBufferDataFormat format, BufferMapAccess a
     }
 
     PN_CORE_ASSERT(res == S_OK, "Unable to create index buffer\n");
-
-    UpdateIndexCount();
-}
-
-Dx11IndexBuffer::~Dx11IndexBuffer()
-{
 }
 
 void* Dx11IndexBuffer::Map()
@@ -65,23 +59,6 @@ void Dx11IndexBuffer::Unmap()
 
     auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
     deviceContext->Unmap(m_handle.Get(), 0);
-}
-
-uint32_t Dx11IndexBuffer::GetDxDataTypeSize(IndexBufferDataFormat format) const
-{
-    switch (format) {
-        case IndexBufferDataFormat::Uint16: return 2u;
-        case IndexBufferDataFormat::Uint32: return 4u;
-        default: break;
-    }
-
-    PN_CORE_ASSERT(false, "Unknown index buffer data format: {}", static_cast<uint32_t>(m_format));
-    return 0u;
-}
-
-void Dx11IndexBuffer::UpdateIndexCount()
-{
-    m_indexCount = m_size / GetDxDataTypeSize(m_format);
 }
 
 }

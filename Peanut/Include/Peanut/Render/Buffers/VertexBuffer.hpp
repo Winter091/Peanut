@@ -24,9 +24,7 @@ public:
     virtual uint32_t GetVertexSize() const = 0;
     virtual uint32_t GetVertexCount() const = 0;
 
-    virtual void* GetNativeHandle() const = 0;
-
-    static std::shared_ptr<VertexBuffer> Create(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data = nullptr);
+    static std::shared_ptr<VertexBuffer> Create(const std::shared_ptr<BufferLayout>& layout, BufferMapAccess access, uint32_t size, const void* data = nullptr);
 };
 
 }

@@ -16,16 +16,12 @@ public:
     uint32_t GetIndexCount() const override { return m_indexCount; }
     IndexBufferDataFormat GetDataFormat() const override { return m_format; }
 
-    void* GetNativeHandle() const override { return (void*)&m_handle; }
+    uint32_t GetOpenGLHandle() const { return m_handle; }
 
 private:
-    void UpdateIndexCount();
-    uint32_t GetGLDataTypeSize() const;
-
-private:
-    uint32_t m_handle;
-    uint32_t m_size;
-    uint32_t m_indexCount;
+    uint32_t m_handle = 0;
+    uint32_t m_size = 0;
+    uint32_t m_indexCount = 0;
     BufferMapAccess m_mapAccess;
     IndexBufferDataFormat m_format;
 };

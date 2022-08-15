@@ -111,25 +111,23 @@ void Renderer2D::Init()
 
     uint8_t vertexIndices[6] = { 0, 1, 2, 2, 3, 0 };
     auto rectanglePerVertexBuffer = VertexBuffer::Create(
-        BufferMapAccess::NoAccess,
-        sizeof(vertexIndices),
         BufferLayout::Create(
             BufferLayoutAttributeUsage::PerVertex, {
             { 0, "VertexIndex", BufferLayoutElementType::Uint8, 1 }}),
+        BufferMapAccess::NoAccess,
+        sizeof(vertexIndices),
         vertexIndices);
 
     s_data->RectanglePerInstanceBuffer = VertexBuffer::Create(
-        BufferMapAccess::WriteDiscard,
-        sizeof(RectPerInstanceData) * MAX_VERTICES_PER_BATCH,
         BufferLayout::Create(
             BufferLayoutAttributeUsage::PerInstance, {
             { 1, "ModelMatrix", BufferLayoutElementType::Mat4, 1 },
             { 5, "Color",       BufferLayoutElementType::Float, 4 },
-            { 6, "TexIndex",    BufferLayoutElementType::Int32, 1 }}));
-
-    s_data->CameraConstantBuffer = ConstantBuffer::Create(
+            { 6, "TexIndex",    BufferLayoutElementType::Int32, 1 } }),
         BufferMapAccess::WriteDiscard,
-        sizeof(CameraShaderData));
+        sizeof(RectPerInstanceData) * MAX_VERTICES_PER_BATCH);
+
+    s_data->CameraConstantBuffer = ConstantBuffer::Create(BufferMapAccess::WriteDiscard, sizeof(CameraShaderData));
 
     s_data->RectangleShader = Shader::Create(ShaderPaths()
         .SetVertexPath(StoragePath::GetAssetsPath() + "/Shaders/Renderer2D/Rect.vert")

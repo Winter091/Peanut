@@ -6,6 +6,9 @@
 #include <Render/Shaders/Impl/Dx11Shader.hpp>
 #include <Render/Shaders/Impl/Dx11ShaderInputLayout.hpp>
 #include "Dx11EnumConversions.hpp"
+#include "Dx11VertexBuffer.hpp"
+#include "Dx11IndexBuffer.hpp"
+#include "Dx11ConstantBuffer.hpp"
 
 #include <unordered_set>
 #include <algorithm>
@@ -40,22 +43,22 @@ void Dx11VertexArray::Bind()
     std::vector<uint32_t> offsets(m_vertexBuffers.size(), 0);
 
     for (const auto& vertexBuffer : m_vertexBuffers) {
-        vertexBuffers.push_back((ID3D11Buffer*)vertexBuffer->GetNativeHandle());
+        vertexBuffers.push_back(static_cast<Dx11VertexBuffer&>(*vertexBuffer).GetNativeObjectPtr());
         strides.push_back(vertexBuffer->GetLayout()->GetStride());
     }
 
     deviceContext->IASetVertexBuffers(0, static_cast<uint32_t>(vertexBuffers.size()), &vertexBuffers[0], &strides[0], &offsets[0]);
-    deviceContext->IASetInputLayout(dynamic_cast<Dx11ShaderInputLayout*>(m_inputLayout.get())->GetLayout());
+    deviceContext->IASetInputLayout(static_cast<Dx11ShaderInputLayout&>(*m_inputLayout).Get());
 
     if (m_indexBuffer) {
-        deviceContext->IASetIndexBuffer((ID3D11Buffer*)m_indexBuffer->GetNativeHandle(), IndexBufferFormatToDx11Format(m_indexBuffer->GetDataFormat()), 0);
+        deviceContext->IASetIndexBuffer(static_cast<Dx11IndexBuffer&>(*m_indexBuffer).GetNativeObjectPtr(), IndexBufferFormatToDx11Format(m_indexBuffer->GetDataFormat()), 0);
     }
 
     if (!m_constantBuffers.empty()) {
         std::vector<ID3D11Buffer*> constantBuffers;
         
         for (const auto& constantBuffer : m_constantBuffers) {
-            constantBuffers.push_back((ID3D11Buffer*)constantBuffer->GetNativeHandle());
+            constantBuffers.push_back(static_cast<Dx11ConstantBuffer&>(*constantBuffer).GetNativeObjectPtr());
         }
 
         deviceContext->VSSetConstantBuffers(0, static_cast<uint32_t>(constantBuffers.size()), &constantBuffers[0]);

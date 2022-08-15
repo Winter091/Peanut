@@ -3,6 +3,7 @@
 #include <Peanut/Render/Buffers/BufferMapAccess.hpp>
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Render/Buffers/BufferLayout.hpp>
+#include <Peanut/Render/Buffers/IndexBuffer.hpp>
 
 #include <cstdint>
 #include <glad/glad.h>
@@ -66,6 +67,18 @@ inline uint32_t IsBufferLayoutElementTypeInt(BufferLayoutElementType type)
             break;
     }
     return true;
+}
+
+inline uint32_t GetIndexBufferDataFormatSize(IndexBufferDataFormat format)
+{
+    switch (format) {
+        case IndexBufferDataFormat::Uint16: return 2u;
+        case IndexBufferDataFormat::Uint32: return 4u;
+        default: break;
+    }
+
+    PN_CORE_ASSERT(false, "Unknown IndexBufferDataFormat enum value: {}", static_cast<uint32_t>(format));
+    return 0u;
 }
 
 }

@@ -13,7 +13,7 @@ public:
     Dx11ShaderInputLayout(const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers, const std::shared_ptr<Shader>& shader);
     ~Dx11ShaderInputLayout() override = default;
 
-    ID3D11InputLayout* GetLayout() { return m_layout.Get(); }
+    ID3D11InputLayout* Get() { return m_layout.Get(); }
 
 private:
     Microsoft::WRL::ComPtr<ID3D11InputLayout> m_layout;

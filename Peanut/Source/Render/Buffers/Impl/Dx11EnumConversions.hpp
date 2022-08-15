@@ -174,5 +174,17 @@ namespace pn {
         return DXGI_FORMAT_UNKNOWN;
     }
 
+    inline uint32_t GetIndexBufferDataFormatSize(IndexBufferDataFormat format)
+    {
+        switch (format) {
+            case IndexBufferDataFormat::Uint16: return 2u;
+            case IndexBufferDataFormat::Uint32: return 4u;
+            default: break;
+        }
+
+        PN_CORE_ASSERT(false, "Unknown IndexBufferDataFormat enum value: {}", static_cast<uint32_t>(format));
+        return 0u;
+    }
+
 }
 

@@ -3,6 +3,9 @@
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
 #include <Render/Buffers/Impl/OpenGLEnumConversions.hpp>
+#include "OpenGLVertexBuffer.hpp"
+#include "OpenGLIndexBuffer.hpp"
+#include "OpenGLConstantBuffer.hpp"
 
 #include <glad/glad.h>
 
@@ -36,7 +39,7 @@ void OpenGLVertexArray::Bind()
     glBindVertexArray(m_vaoHandle);
 
     for (uint32_t i = 0; i < m_constantBuffers.size(); i++) {
-        uint32_t handle = *(uint32_t*)m_constantBuffers[i]->GetNativeHandle();
+        uint32_t handle = static_cast<OpenGLConstantBuffer&>(*m_constantBuffers[i]).GetOpenGLHandle();
         glBindBufferBase(GL_UNIFORM_BUFFER, i, handle);
     }
 
@@ -50,7 +53,7 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
     glBindVertexArray(m_vaoHandle);
 
     uint32_t bindingIndex = static_cast<uint32_t>(m_vertexBuffers.size());
-    uint32_t vertexBufferHandle = *(uint32_t*)vertexBuffer->GetNativeHandle();
+    uint32_t vertexBufferHandle = static_cast<OpenGLVertexBuffer&>(*vertexBuffer).GetOpenGLHandle();
     glBindVertexBuffer(bindingIndex, vertexBufferHandle, 0, vertexBuffer->GetVertexSize());
 
     if (vertexBuffer->GetLayout()->GetUsage() == pn::BufferLayoutAttributeUsage::PerVertex) {
@@ -126,7 +129,7 @@ void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& index
 {
     m_indexBuffer = indexBuffer;
 
-    uint32_t handle = indexBuffer ? *(uint32_t*)indexBuffer->GetNativeHandle() : 0;
+    uint32_t handle = indexBuffer ? static_cast<OpenGLIndexBuffer&>(*indexBuffer).GetOpenGLHandle() : 0;
 
     glBindVertexArray(m_vaoHandle);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);

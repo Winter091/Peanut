@@ -26,8 +26,6 @@ public:
     virtual uint32_t GetIndexCount() const = 0;
     virtual IndexBufferDataFormat GetDataFormat() const = 0;
 
-    virtual void* GetNativeHandle() const = 0;
-
     static std::shared_ptr<IndexBuffer> Create(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data = nullptr);
 };
 

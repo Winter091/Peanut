@@ -45,7 +45,7 @@ Dx11ShaderInputLayout::Dx11ShaderInputLayout(const std::vector<std::shared_ptr<V
     }
 
     auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
-    auto* dx11Shader = dynamic_cast<Dx11Shader*>(shader.get());
+    auto* dx11Shader = static_cast<Dx11Shader*>(shader.get());
 
     HRESULT res = device->CreateInputLayout(
         &layoutDesc[0],

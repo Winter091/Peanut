@@ -11,7 +11,7 @@ class Dx11IndexBuffer final : public IndexBuffer
 {
 public:
     Dx11IndexBuffer(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data = nullptr);
-    ~Dx11IndexBuffer() override;
+    ~Dx11IndexBuffer() override = default;
 
     void* Map() override;
     void Unmap() override;
@@ -19,11 +19,7 @@ public:
     uint32_t GetIndexCount() const override { return m_indexCount; }
     IndexBufferDataFormat GetDataFormat() const override { return m_format; }
 
-    void* GetNativeHandle() const override { return (void*)m_handle.Get(); }
-
-private:
-    void UpdateIndexCount();
-    uint32_t GetDxDataTypeSize(IndexBufferDataFormat format) const;
+    ID3D11Buffer* GetNativeObjectPtr() const { return m_handle.Get(); }
 
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_handle = nullptr;

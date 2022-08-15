@@ -18,6 +18,8 @@ namespace pn
 
 std::shared_ptr<IndexBuffer> IndexBuffer::Create(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data)
 {
+    PN_CORE_ASSERT(size, "Cannot create index buffer with size = 0");
+    
     if (!data) {
         PN_CORE_ASSERT(DoesBufferMapAccessAllowWriting(access), "Data for index buffer without write permissions must be specified on creation");
     }

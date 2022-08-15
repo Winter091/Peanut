@@ -8,8 +8,7 @@ namespace pn
 {
 
 Dx11ConstantBuffer::Dx11ConstantBuffer(BufferMapAccess access, uint32_t size, const void* data)
-    : m_handle(0)
-    , m_size(size)
+    : m_size(size)
     , m_mapAccess(access)
 {
     PN_PROFILE_FUNCTION();
@@ -37,10 +36,6 @@ Dx11ConstantBuffer::Dx11ConstantBuffer(BufferMapAccess access, uint32_t size, co
     }
 
     PN_CORE_ASSERT(res == S_OK, "Unable to create buffer\n");
-}
-
-Dx11ConstantBuffer::~Dx11ConstantBuffer()
-{
 }
 
 void* Dx11ConstantBuffer::Map()

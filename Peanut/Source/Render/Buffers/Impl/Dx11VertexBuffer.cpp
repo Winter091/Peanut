@@ -10,8 +10,7 @@ using Microsoft::WRL::ComPtr;
 namespace pn {
 
 Dx11VertexBuffer::Dx11VertexBuffer(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data)
-	: m_handle(nullptr)
-	, m_layout(layout)
+	: m_layout(layout)
 	, m_size(size)
 	, m_mapAccess(access)
 {
@@ -42,10 +41,6 @@ Dx11VertexBuffer::Dx11VertexBuffer(BufferMapAccess access, uint32_t size, const 
 	PN_CORE_ASSERT(res == S_OK, "Unable to create vertex buffer");
 }
 
-Dx11VertexBuffer::~Dx11VertexBuffer()
-{
-}
-
 void* Dx11VertexBuffer::Map()
 {
 	PN_PROFILE_FUNCTION();
@@ -63,21 +58,6 @@ void Dx11VertexBuffer::Unmap()
 {
 	auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 	deviceContext->Unmap(m_handle.Get(), 0);
-}
-
-const std::shared_ptr<BufferLayout>& Dx11VertexBuffer::GetLayout() const
-{
-	return m_layout;
-}
-
-uint32_t Dx11VertexBuffer::GetVertexSize() const
-{
-	return m_layout->GetStride();
-}
-
-uint32_t Dx11VertexBuffer::GetVertexCount() const
-{
-	return m_size / GetVertexSize();
 }
 
 }
