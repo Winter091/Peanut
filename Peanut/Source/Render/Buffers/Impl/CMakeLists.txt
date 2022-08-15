@@ -3,7 +3,7 @@ if (PN_RENDERING_DX11)
         Peanut PRIVATE
         Dx11ConstantBuffer.cpp
         Dx11IndexBuffer.cpp
-        Dx11PipelineState.cpp
+        Dx11VertexArray.cpp
         Dx11VertexBuffer.cpp
     )
 elseif (PN_RENDERING_OPENGL)
@@ -11,7 +11,7 @@ elseif (PN_RENDERING_OPENGL)
         Peanut PRIVATE
         OpenGLConstantBuffer.cpp
         OpenGLIndexBuffer.cpp
-        OpenGLPipelineState.cpp
+        OpenGLVertexArray.cpp
         OpenGLVertexBuffer.cpp
     )
 endif()

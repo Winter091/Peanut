@@ -51,13 +51,13 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
         .SetFragmentPath(pn::StoragePath::GetAssetsPath() + "/Shaders/test.frag"),
         "Test Shader");
 
-    pn::PipelineStateDescription desc;
+    pn::VertexArrayDescription desc;
     desc.VertexBuffers = { posVB, colorVB };
     desc._IndexBuffer = indexBuffer;
     desc.ConstantBuffers = { constantBuffer };
     desc._Shader = shader;
 
-    m_pipelineState = pn::PipelineState::Create(desc);
+    m_vertexArray = pn::VertexArray::Create(desc);
 
     m_camera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
         .SetZoom(1.0f)

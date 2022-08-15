@@ -14,12 +14,12 @@ public:
 
     void SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height) override;    
 
-    void DrawArrays(std::shared_ptr<PipelineState>& pipelineState, uint32_t count) override;
-    void DrawIndexed(std::shared_ptr<PipelineState>& pipelineState, uint32_t count) override;
+    void DrawArrays(std::shared_ptr<VertexArray>& pipelineState, uint32_t count) override;
+    void DrawIndexed(std::shared_ptr<VertexArray>& pipelineState, uint32_t count) override;
     void DrawArraysInstanced(
-        std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount) override;
+        std::shared_ptr<VertexArray>& pipelineState, uint32_t count, uint32_t instanceCount) override;
     void DrawIndexedInstanced(
-        std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount) override;
+        std::shared_ptr<VertexArray>& pipelineState, uint32_t count, uint32_t instanceCount) override;
 
 private:
     static uint32_t GetGLDataType(IndexBufferDataFormat format);

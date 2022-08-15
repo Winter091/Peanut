@@ -2,7 +2,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
-#include <Peanut/Render/Buffers/PipelineState.hpp>
+#include <Peanut/Render/Buffers/VertexArray.hpp>
 #include <Peanut/Render/Buffers/ConstantBuffer.hpp>
 #include <Peanut/Render/Shaders/Shader.hpp>
 #include <Peanut/Render/Shaders/ShaderInputLayout.hpp>
@@ -41,7 +41,7 @@ struct Renderer2DData
     RectPerInstanceData* RectanglePerInstanceDataPtr;
     std::shared_ptr<VertexBuffer> RectanglePerInstanceBuffer;
     std::shared_ptr<ConstantBuffer> CameraConstantBuffer;
-    std::shared_ptr<PipelineState> RectanglePipelineState;
+    std::shared_ptr<VertexArray> RectangleVertexArray;
     std::shared_ptr<Shader> RectangleShader;
 
     uint32_t NumRectInstances = 0;
@@ -64,7 +64,7 @@ static void Flush()
         s_data->Textures[i]->BindToSlot(i);
     }*/
 
-    RenderCommand::DrawArraysInstanced(s_data->RectanglePipelineState, 6, s_data->NumRectInstances);
+    RenderCommand::DrawArraysInstanced(s_data->RectangleVertexArray, 6, s_data->NumRectInstances);
 }
 
 static void StartBatch()
@@ -140,12 +140,12 @@ void Renderer2D::Init()
         { rectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer },
         s_data->RectangleShader);
 
-    PipelineStateDescription pipelineStateDesc;
+    VertexArrayDescription pipelineStateDesc;
     pipelineStateDesc.VertexBuffers = { rectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer };
     pipelineStateDesc.ConstantBuffers = { s_data->CameraConstantBuffer };
     pipelineStateDesc._Shader = s_data->RectangleShader;
     pipelineStateDesc._ShaderInputLayout = rectangleShaderInputLayout;
-    s_data->RectanglePipelineState = PipelineState::Create(pipelineStateDesc);
+    s_data->RectangleVertexArray = VertexArray::Create(pipelineStateDesc);
 
     s_isInitialized = true;
 }

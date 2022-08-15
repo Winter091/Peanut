@@ -47,7 +47,7 @@ void Dx11RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t wid
     deviceContext->RSSetViewports(1, &viewport);
 }
 
-void Dx11RenderCommand::DrawArrays(std::shared_ptr<PipelineState>& pipelineState, uint32_t count)
+void Dx11RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& pipelineState, uint32_t count)
 {
     auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 
@@ -60,7 +60,7 @@ void Dx11RenderCommand::DrawArrays(std::shared_ptr<PipelineState>& pipelineState
     deviceContext->Draw(count, 0);
 }
 
-void Dx11RenderCommand::DrawIndexed(std::shared_ptr<PipelineState>& pipelineState, uint32_t count)
+void Dx11RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& pipelineState, uint32_t count)
 {
     auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 
@@ -74,7 +74,7 @@ void Dx11RenderCommand::DrawIndexed(std::shared_ptr<PipelineState>& pipelineStat
 }
 
 void Dx11RenderCommand::DrawArraysInstanced(
-    std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
+    std::shared_ptr<VertexArray>& pipelineState, uint32_t count, uint32_t instanceCount)
 {
     auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 
@@ -92,7 +92,7 @@ void Dx11RenderCommand::DrawArraysInstanced(
 }
 
 void Dx11RenderCommand::DrawIndexedInstanced(
-    std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
+    std::shared_ptr<VertexArray>& pipelineState, uint32_t count, uint32_t instanceCount)
 {
     auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 

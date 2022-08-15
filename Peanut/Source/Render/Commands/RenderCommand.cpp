@@ -68,30 +68,30 @@ void RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, 
     s_renderCommandImpl->SetViewport(leftX, bottomY, width, height);
 }
 
-void RenderCommand::DrawArrays(std::shared_ptr<PipelineState>& pipelineState, uint32_t count)
+void RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    s_renderCommandImpl->DrawArrays(pipelineState, count);
+    s_renderCommandImpl->DrawArrays(vertexArray, count);
 }
 
-void RenderCommand::DrawIndexed(std::shared_ptr<PipelineState>& pipelineState, uint32_t count)
+void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    s_renderCommandImpl->DrawIndexed(pipelineState, count);
+    s_renderCommandImpl->DrawIndexed(vertexArray, count);
 }
 
 void RenderCommand::DrawArraysInstanced(
-    std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
+    std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    s_renderCommandImpl->DrawArraysInstanced(pipelineState, count, instanceCount);
+    s_renderCommandImpl->DrawArraysInstanced(vertexArray, count, instanceCount);
 }
 
 void RenderCommand::DrawIndexedInstanced(
-    std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
+    std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    s_renderCommandImpl->DrawIndexedInstanced(pipelineState, count, instanceCount);
+    s_renderCommandImpl->DrawIndexedInstanced(vertexArray, count, instanceCount);
 }
 
 }

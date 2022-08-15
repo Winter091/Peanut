@@ -1,4 +1,4 @@
-#include "Dx11PipelineState.hpp"
+#include "Dx11VertexArray.hpp"
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
@@ -13,7 +13,7 @@
 namespace pn
 {
 
-Dx11PipelineState::Dx11PipelineState(const PipelineStateDescription& description)
+Dx11VertexArray::Dx11VertexArray(const VertexArrayDescription& description)
     : m_vertexBuffers(description.VertexBuffers)
     , m_indexBuffer(description._IndexBuffer)
     , m_constantBuffers(description.ConstantBuffers)
@@ -27,11 +27,11 @@ Dx11PipelineState::Dx11PipelineState(const PipelineStateDescription& description
     }
 }
 
-Dx11PipelineState::~Dx11PipelineState()
+Dx11VertexArray::~Dx11VertexArray()
 {
 }
 
-void Dx11PipelineState::Bind()
+void Dx11VertexArray::Bind()
 {
     auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 
@@ -65,41 +65,41 @@ void Dx11PipelineState::Bind()
     m_shader->Bind();
 }
 
-void Dx11PipelineState::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+void Dx11VertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 {
     m_indexBuffer = indexBuffer;
 }
 
-void Dx11PipelineState::SetConstantBuffers(const std::vector<std::shared_ptr<ConstantBuffer>>& constantBuffers)
+void Dx11VertexArray::SetConstantBuffers(const std::vector<std::shared_ptr<ConstantBuffer>>& constantBuffers)
 {
     m_constantBuffers = constantBuffers;
 }
 
-uint32_t Dx11PipelineState::GetVertexCount() const
+uint32_t Dx11VertexArray::GetVertexCount() const
 {
     PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to pipeline state, can't get vertex count");
     return m_vertexBuffers.front()->GetVertexCount();
 }
 
-uint32_t Dx11PipelineState::GetIndexCount() const
+uint32_t Dx11VertexArray::GetIndexCount() const
 {
     PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set, unable to get its data format");
     return m_indexBuffer->GetIndexCount();
 }
 
-uint32_t Dx11PipelineState::GetInstanceCount() const
+uint32_t Dx11VertexArray::GetInstanceCount() const
 {
     // TODO: fixme
     return 0;
 }
 
-IndexBufferDataFormat Dx11PipelineState::GetIndexDataFormat() const
+IndexBufferDataFormat Dx11VertexArray::GetIndexDataFormat() const
 {
     PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set, unable to get its data format");
     return m_indexBuffer->GetDataFormat();
 }
 
-void Dx11PipelineState::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
+void Dx11VertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
 {
     if (m_instanceCount == 0) {
         m_instanceCount = vertexBuffer.GetVertexCount();

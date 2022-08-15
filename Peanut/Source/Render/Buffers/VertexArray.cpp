@@ -1,20 +1,20 @@
-#include <Peanut/Render/Buffers/PipelineState.hpp>
+#include <Peanut/Render/Buffers/VertexArray.hpp>
 
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/Assert.hpp>
 
 #if defined(PN_RENDERING_OPENGL)
-#include <Render/Buffers/Impl/OpenGLPipelineState.hpp>
+#include <Render/Buffers/Impl/OpenGLVertexArray.hpp>
 #endif
 
 #if defined(PN_RENDERING_DX11)
-#include <Render/Buffers/Impl/Dx11PipelineState.hpp>
+#include <Render/Buffers/Impl/Dx11VertexArray.hpp>
 #endif
 
 namespace pn
 {
 
-std::shared_ptr<PipelineState> PipelineState::Create(const PipelineStateDescription& description)
+std::shared_ptr<VertexArray> VertexArray::Create(const VertexArrayDescription& description)
 {
     auto renderApi = RenderCommand::GetRenderAPI();
 
@@ -25,12 +25,12 @@ std::shared_ptr<PipelineState> PipelineState::Create(const PipelineStateDescript
 
 #if defined(PN_RENDERING_OPENGL)
         case RenderAPI::OpenGL:
-            return std::make_shared<OpenGLPipelineState>(description);
+            return std::make_shared<OpenGLVertexArray>(description);
 #endif
 
 #if defined(PN_RENDERING_DX11)
         case RenderAPI::Dx11:
-            return std::make_shared<Dx11PipelineState>(description);
+            return std::make_shared<Dx11VertexArray>(description);
 #endif
 
         default:

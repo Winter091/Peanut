@@ -1,25 +1,22 @@
 #pragma once
 
-#include <Peanut/Render/Buffers/PipelineState.hpp>
+#include <Peanut/Render/Buffers/VertexArray.hpp>
 
 #include <vector>
 
-#include <d3d11.h>
-#include <wrl/client.h>
-
 namespace pn {
 
-class Dx11PipelineState final : public PipelineState
+class OpenGLVertexArray final : public VertexArray
 {
 public:
-    Dx11PipelineState(const PipelineStateDescription& description);
-    ~Dx11PipelineState() override;
+    OpenGLVertexArray(const VertexArrayDescription& description);
+    ~OpenGLVertexArray() override;
 
     void Bind() override;
 
     const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const override { return m_vertexBuffers; }
     std::shared_ptr<Shader> GetShader() const override { return m_shader; }
-    virtual std::shared_ptr<ShaderInputLayout> GetShaderInputLayout() const override { return m_inputLayout; }
+    std::shared_ptr<ShaderInputLayout> GetShaderInputLayout() const override { return nullptr; }
 
     std::shared_ptr<IndexBuffer> GetIndexBuffer() const override { return m_indexBuffer; }
     void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) override;
@@ -33,15 +30,18 @@ public:
     IndexBufferDataFormat GetIndexDataFormat() const override;
 
 private:
-    void UpdateInstanceCount(const VertexBuffer& vertexBuffer);
-
-private:
+    uint32_t m_vaoHandle = 0u;
+    uint32_t m_instanceCount = 0u;
     std::vector<std::shared_ptr<VertexBuffer>> m_vertexBuffers;
     std::shared_ptr<IndexBuffer> m_indexBuffer;
     std::vector<std::shared_ptr<ConstantBuffer>> m_constantBuffers;
     std::shared_ptr<Shader> m_shader;
-    std::shared_ptr<ShaderInputLayout> m_inputLayout;
-    uint32_t m_instanceCount = 0u;
+
+private:
+    void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
+    void ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex);
+    void AssertAllAttributeIndicesAreUnique() const;
+    void UpdateInstanceCount(const VertexBuffer& vertexBuffer);
 };
 
 }

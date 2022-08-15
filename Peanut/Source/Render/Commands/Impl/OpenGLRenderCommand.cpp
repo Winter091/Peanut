@@ -23,7 +23,7 @@ void OpenGLRenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t w
     glViewport(leftX, bottomY, width, height);
 }
 
-void OpenGLRenderCommand::DrawArrays(std::shared_ptr<PipelineState>& pipelineState, uint32_t count)
+void OpenGLRenderCommand::DrawArrays(std::shared_ptr<VertexArray>& pipelineState, uint32_t count)
 {
     PN_PROFILE_FUNCTION();
 
@@ -35,7 +35,7 @@ void OpenGLRenderCommand::DrawArrays(std::shared_ptr<PipelineState>& pipelineSta
     glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(count));
 }
 
-void OpenGLRenderCommand::DrawIndexed(std::shared_ptr<PipelineState>& pipelineState, uint32_t count)
+void OpenGLRenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& pipelineState, uint32_t count)
 {
     PN_PROFILE_FUNCTION();
 
@@ -49,7 +49,7 @@ void OpenGLRenderCommand::DrawIndexed(std::shared_ptr<PipelineState>& pipelineSt
     glDrawElements(GL_TRIANGLES, count, dataType, nullptr);
 }
 
-void OpenGLRenderCommand::DrawArraysInstanced(std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
+void OpenGLRenderCommand::DrawArraysInstanced(std::shared_ptr<VertexArray>& pipelineState, uint32_t count, uint32_t instanceCount)
 {
     PN_PROFILE_FUNCTION();
 
@@ -65,7 +65,7 @@ void OpenGLRenderCommand::DrawArraysInstanced(std::shared_ptr<PipelineState>& pi
     glDrawArraysInstanced(GL_TRIANGLES, 0, static_cast<GLsizei>(count), instanceCount);
 }
 
-void OpenGLRenderCommand::DrawIndexedInstanced(std::shared_ptr<PipelineState>& pipelineState, uint32_t count, uint32_t instanceCount)
+void OpenGLRenderCommand::DrawIndexedInstanced(std::shared_ptr<VertexArray>& pipelineState, uint32_t count, uint32_t instanceCount)
 {
     PN_PROFILE_FUNCTION();
 

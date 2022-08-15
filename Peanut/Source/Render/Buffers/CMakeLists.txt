@@ -3,7 +3,7 @@ target_sources(
     BufferLayout.cpp
     ConstantBuffer.cpp
     IndexBuffer.cpp
-    PipelineState.cpp
+    VertexArray.cpp
     VertexBuffer.cpp
 )
 

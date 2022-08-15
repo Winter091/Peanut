@@ -1,4 +1,4 @@
-#include "OpenGLPipelineState.hpp"
+#include "OpenGLVertexArray.hpp"
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
@@ -11,7 +11,7 @@
 namespace pn
 {
 
-OpenGLPipelineState::OpenGLPipelineState(const PipelineStateDescription& description)
+OpenGLVertexArray::OpenGLVertexArray(const VertexArrayDescription& description)
     : m_constantBuffers(description.ConstantBuffers)
     , m_shader(description._Shader)
 {
@@ -26,12 +26,12 @@ OpenGLPipelineState::OpenGLPipelineState(const PipelineStateDescription& descrip
     }
 }
     
-OpenGLPipelineState::~OpenGLPipelineState()
+OpenGLVertexArray::~OpenGLVertexArray()
 {
     glDeleteVertexArrays(1, &m_vaoHandle);
 }
 
-void OpenGLPipelineState::Bind()
+void OpenGLVertexArray::Bind()
 {
     glBindVertexArray(m_vaoHandle);
 
@@ -43,7 +43,7 @@ void OpenGLPipelineState::Bind()
     m_shader->Bind();
 }
 
-void OpenGLPipelineState::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
 {
     PN_PROFILE_FUNCTION();
 
@@ -68,7 +68,7 @@ void OpenGLPipelineState::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& v
 #endif
 }
 
-void OpenGLPipelineState::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
+void OpenGLVertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
 {
     if (m_instanceCount == 0) {
         m_instanceCount = vertexBuffer.GetVertexCount();
@@ -77,7 +77,7 @@ void OpenGLPipelineState::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
     }
 }
 
-void OpenGLPipelineState::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex)
+void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex)
 {
     PN_PROFILE_FUNCTION();
 
@@ -105,7 +105,7 @@ void OpenGLPipelineState::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, 
     }
 }
 
-void OpenGLPipelineState::AssertAllAttributeIndicesAreUnique() const
+void OpenGLVertexArray::AssertAllAttributeIndicesAreUnique() const
 {
     PN_PROFILE_FUNCTION();
 
@@ -122,7 +122,7 @@ void OpenGLPipelineState::AssertAllAttributeIndicesAreUnique() const
     }
 }
 
-void OpenGLPipelineState::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 {
     m_indexBuffer = indexBuffer;
 
@@ -132,29 +132,29 @@ void OpenGLPipelineState::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& ind
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
 }
 
-void OpenGLPipelineState::SetConstantBuffers(const std::vector<std::shared_ptr<ConstantBuffer>>& constantBuffers)
+void OpenGLVertexArray::SetConstantBuffers(const std::vector<std::shared_ptr<ConstantBuffer>>& constantBuffers)
 {
     m_constantBuffers = constantBuffers;
 }
 
-uint32_t OpenGLPipelineState::GetVertexCount() const
+uint32_t OpenGLVertexArray::GetVertexCount() const
 {
     PN_CORE_ASSERT(!m_vertexBuffers.empty(), "No vertex buffers are bound to pipeline state");
     return m_vertexBuffers.front()->GetVertexCount();
 }
 
-uint32_t OpenGLPipelineState::GetIndexCount() const 
+uint32_t OpenGLVertexArray::GetIndexCount() const 
 {
     PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set");
     return m_indexBuffer->GetIndexCount();
 }
 
-uint32_t OpenGLPipelineState::GetInstanceCount() const 
+uint32_t OpenGLVertexArray::GetInstanceCount() const 
 {
     return m_instanceCount == 0 ? 1 : m_instanceCount;
 }
 
-IndexBufferDataFormat OpenGLPipelineState::GetIndexDataFormat() const 
+IndexBufferDataFormat OpenGLVertexArray::GetIndexDataFormat() const 
 {
     PN_CORE_ASSERT(m_indexBuffer, "Index buffer is not set");
     return m_indexBuffer->GetDataFormat();
