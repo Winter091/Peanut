@@ -65,10 +65,6 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
 
     ProcessVertexBufferLayout(vertexBuffer.get(), bindingIndex);
     m_vertexBuffers.push_back(vertexBuffer);
-
-#if defined(PN_DEBUG)
-    AssertAllAttributeIndicesAreUnique();
-#endif
 }
 
 void OpenGLVertexArray::UpdateInstanceCount(const VertexBuffer& vertexBuffer)
@@ -103,24 +99,6 @@ void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, ui
 
             glVertexAttribBinding(elem.GetIndex(), bindingIndex);
             glEnableVertexAttribArray(elem.GetIndex());
-        }
-
-    }
-}
-
-void OpenGLVertexArray::AssertAllAttributeIndicesAreUnique() const
-{
-    PN_PROFILE_FUNCTION();
-
-    std::unordered_set<uint32_t> seenIndices;
-
-    for (const auto& buffer : m_vertexBuffers) {
-        const auto& bufferAttributes = buffer->GetLayout()->GetElements();
-
-        for (const BufferLayoutElement& elem : bufferAttributes) {
-            if (!seenIndices.insert(elem.GetIndex()).second) {
-                PN_CORE_ASSERT(false, "At least 2 attributes in pipeline state have the same index = {}", elem.Index);
-            }
         }
     }
 }

@@ -40,7 +40,6 @@ private:
 private:
     void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
     void ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, uint32_t bindingIndex);
-    void AssertAllAttributeIndicesAreUnique() const;
     void UpdateInstanceCount(const VertexBuffer& vertexBuffer);
 };
 

@@ -16,6 +16,9 @@ public:
     virtual ~ShaderInputLayout() = default;
 
     static std::shared_ptr<ShaderInputLayout> Create(const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers, const std::shared_ptr<Shader>& shader);
+
+private:
+    static bool CheckIfLayoutIsCorrect(const std::vector<std::shared_ptr<VertexBuffer>>& vertexBuffers);
 };
 
 }
