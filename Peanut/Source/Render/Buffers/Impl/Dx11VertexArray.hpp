@@ -13,7 +13,7 @@ class Dx11VertexArray final : public VertexArray
 {
 public:
     Dx11VertexArray(const VertexArrayDescription& description);
-    ~Dx11VertexArray() override;
+    ~Dx11VertexArray() override = default;
 
     void Bind() override;
 

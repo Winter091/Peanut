@@ -8,9 +8,11 @@
 namespace pn
 {
 
-OpenGLVertexBuffer::OpenGLVertexBuffer(const std::shared_ptr<BufferLayout>& layout, BufferMapAccess access, uint32_t size, const void* data)
+OpenGLVertexBuffer::OpenGLVertexBuffer(const std::shared_ptr<BufferLayout>& layout, BufferMapAccess access,
+                                       VertexBufferDataUsage dataUsage, uint32_t size, const void* data)
     : m_size(size)
     , m_mapAccess(access)
+    , m_dataUsage(dataUsage)
     , m_layout(layout)
 {
     PN_PROFILE_FUNCTION();

@@ -24,14 +24,10 @@ Dx11VertexArray::Dx11VertexArray(const VertexArrayDescription& description)
     , m_inputLayout(description._ShaderInputLayout)
 {
     for (const auto& vertexBuffer : m_vertexBuffers) {
-        if (vertexBuffer->GetLayout()->GetUsage() == BufferLayoutAttributeUsage::PerInstance) {
+        if (vertexBuffer->GetDataUsage() == VertexBufferDataUsage::PerInstance) {
             UpdateInstanceCount(*vertexBuffer);
         }
     }
-}
-
-Dx11VertexArray::~Dx11VertexArray()
-{
 }
 
 void Dx11VertexArray::Bind()
@@ -44,7 +40,7 @@ void Dx11VertexArray::Bind()
 
     for (const auto& vertexBuffer : m_vertexBuffers) {
         vertexBuffers.push_back(static_cast<Dx11VertexBuffer&>(*vertexBuffer).GetNativeObjectPtr());
-        strides.push_back(vertexBuffer->GetLayout()->GetStride());
+        strides.push_back(vertexBuffer->GetLayout()->GetVertexSize());
     }
 
     deviceContext->IASetVertexBuffers(0, static_cast<uint32_t>(vertexBuffers.size()), &vertexBuffers[0], &strides[0], &offsets[0]);

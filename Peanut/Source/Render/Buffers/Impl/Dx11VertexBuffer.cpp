@@ -9,10 +9,12 @@ using Microsoft::WRL::ComPtr;
 
 namespace pn {
 
-Dx11VertexBuffer::Dx11VertexBuffer(BufferMapAccess access, uint32_t size, const std::shared_ptr<BufferLayout>& layout, const void* data)
+Dx11VertexBuffer::Dx11VertexBuffer(const std::shared_ptr<BufferLayout>& layout, BufferMapAccess access,
+								   VertexBufferDataUsage dataUsage, uint32_t size, const void* data)
 	: m_layout(layout)
 	, m_size(size)
 	, m_mapAccess(access)
+	, m_dataUsage(dataUsage)
 {
 	PN_PROFILE_FUNCTION();
 
@@ -22,7 +24,7 @@ Dx11VertexBuffer::Dx11VertexBuffer(BufferMapAccess access, uint32_t size, const 
 	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bufferDesc.CPUAccessFlags = BufferMapAccessToDxCpuAccessFlags(access);
 	bufferDesc.MiscFlags = 0;
-	bufferDesc.StructureByteStride = m_layout->GetStride();
+	bufferDesc.StructureByteStride = m_layout->GetVertexSize();
 
 	auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
 	HRESULT res = 0;

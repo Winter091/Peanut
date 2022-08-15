@@ -13,32 +13,33 @@ Dx11ShaderInputLayout::Dx11ShaderInputLayout(const std::vector<std::shared_ptr<V
 
     for (uint32_t bufferIndex = 0; bufferIndex < vertexBuffers.size(); bufferIndex++) {
         const auto& bufferLayout = vertexBuffers[bufferIndex]->GetLayout();
+        const auto& bufferDataUsage = vertexBuffers[bufferIndex]->GetDataUsage();
 
         for (const auto& attribute : bufferLayout->GetElements()) {
 
-            if (attribute.type == BufferLayoutElementType::Mat4) {
+            if (attribute.GetType() == BufferLayoutElementType::Mat4) {
                 for (int semanticIndex = 0; semanticIndex < 4; semanticIndex++) {
                     auto& desc = layoutDesc.emplace_back();
 
-                    desc.SemanticName = attribute.name.c_str();
+                    desc.SemanticName = attribute.GetName().c_str();
                     desc.SemanticIndex = semanticIndex;
                     desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
                     desc.InputSlot = bufferIndex;
                     desc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-                    desc.InputSlotClass = BufferLayoutAttributeUsageToDx11InputSlotClass(bufferLayout->GetUsage());
-                    desc.InstanceDataStepRate = BufferLayoutAttributeUsageToDx11InstanceDataStepRate(bufferLayout->GetUsage());
+                    desc.InputSlotClass = VertexBufferDataUsageToDx11InputSlotClass(bufferDataUsage);
+                    desc.InstanceDataStepRate = VertexBufferDataUsageToDx11InstanceDataStepRate(bufferDataUsage);
                 }
             }
             else {
                 auto& desc = layoutDesc.emplace_back();
 
-                desc.SemanticName = attribute.name.c_str();
+                desc.SemanticName = attribute.GetName().c_str();
                 desc.SemanticIndex = 0;
-                desc.Format = AttributeTypeToDxFormat(attribute.type, attribute.count);
+                desc.Format = AttributeTypeToDxFormat(attribute.GetType(), attribute.GetCount());
                 desc.InputSlot = bufferIndex;
                 desc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-                desc.InputSlotClass = BufferLayoutAttributeUsageToDx11InputSlotClass(bufferLayout->GetUsage());
-                desc.InstanceDataStepRate = BufferLayoutAttributeUsageToDx11InstanceDataStepRate(bufferLayout->GetUsage());
+                desc.InputSlotClass = VertexBufferDataUsageToDx11InputSlotClass(bufferDataUsage);
+                desc.InstanceDataStepRate = VertexBufferDataUsageToDx11InstanceDataStepRate(bufferDataUsage);
             }
 
         }

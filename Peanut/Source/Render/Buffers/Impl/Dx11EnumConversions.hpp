@@ -3,6 +3,7 @@
 #include <Peanut/Render/Buffers/BufferMapAccess.hpp>
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Render/Buffers/BufferLayout.hpp>
+#include <Peanut/Render/Buffers/VertexBuffer.hpp>
 #include <Peanut/Render/Buffers/IndexBuffer.hpp>
 
 #include <cstdint>
@@ -138,11 +139,11 @@ namespace pn {
         return DXGI_FORMAT_UNKNOWN;
     }
 
-    inline D3D11_INPUT_CLASSIFICATION BufferLayoutAttributeUsageToDx11InputSlotClass(BufferLayoutAttributeUsage usage)
+    inline D3D11_INPUT_CLASSIFICATION VertexBufferDataUsageToDx11InputSlotClass(VertexBufferDataUsage usage)
     {
         switch (usage) {
-            case BufferLayoutAttributeUsage::PerVertex:     return D3D11_INPUT_PER_VERTEX_DATA;
-            case BufferLayoutAttributeUsage::PerInstance:   return D3D11_INPUT_PER_INSTANCE_DATA;
+            case VertexBufferDataUsage::PerVertex:     return D3D11_INPUT_PER_VERTEX_DATA;
+            case VertexBufferDataUsage::PerInstance:   return D3D11_INPUT_PER_INSTANCE_DATA;
             default: break;
         }
 
@@ -150,11 +151,11 @@ namespace pn {
         return D3D11_INPUT_PER_VERTEX_DATA;
     }
 
-    inline uint32_t BufferLayoutAttributeUsageToDx11InstanceDataStepRate(BufferLayoutAttributeUsage usage)
+    inline uint32_t VertexBufferDataUsageToDx11InstanceDataStepRate(VertexBufferDataUsage usage)
     {
         switch (usage) {
-            case BufferLayoutAttributeUsage::PerVertex:     return 0u;
-            case BufferLayoutAttributeUsage::PerInstance:   return 1u;
+            case VertexBufferDataUsage::PerVertex:     return 0u;
+            case VertexBufferDataUsage::PerInstance:   return 1u;
             default: break;
         }
 

@@ -56,7 +56,7 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
     uint32_t vertexBufferHandle = static_cast<OpenGLVertexBuffer&>(*vertexBuffer).GetOpenGLHandle();
     glBindVertexBuffer(bindingIndex, vertexBufferHandle, 0, vertexBuffer->GetVertexSize());
 
-    if (vertexBuffer->GetLayout()->GetUsage() == pn::BufferLayoutAttributeUsage::PerVertex) {
+    if (vertexBuffer->GetDataUsage() == pn::VertexBufferDataUsage::PerVertex) {
         glVertexBindingDivisor(bindingIndex, 0);
     } else {
         glVertexBindingDivisor(bindingIndex, 1);
@@ -88,21 +88,21 @@ void OpenGLVertexArray::ProcessVertexBufferLayout(VertexBuffer* vertexBuffer, ui
     const auto& layoutElements = layout->GetElements();
 
     for (const auto& elem : layoutElements) {
-        if (elem.type == BufferLayoutElementType::Mat4) {
+        if (elem.GetType() == BufferLayoutElementType::Mat4) {
             for (int i = 0; i < 4; i++) {
-                glVertexAttribFormat(elem.index + i, 4, GL_FLOAT, false, static_cast<GLuint>(elem.offset + i * (4 * sizeof(float))));
-                glVertexAttribBinding(elem.index + i, bindingIndex);
-                glEnableVertexAttribArray(elem.index + i);
+                glVertexAttribFormat(elem.GetIndex() + i, 4, GL_FLOAT, false, static_cast<GLuint>(elem.GetOffset() + i * (4 * sizeof(float))));
+                glVertexAttribBinding(elem.GetIndex() + i, bindingIndex);
+                glEnableVertexAttribArray(elem.GetIndex() + i);
             }
         } else {
-            if (IsBufferLayoutElementTypeInt(elem.type)) {
-                glVertexAttribIFormat(elem.index, elem.count, BufferLayoutElementTypeToGlType(elem.type), static_cast<GLuint>(elem.offset));
+            if (IsBufferLayoutElementTypeInt(elem.GetType())) {
+                glVertexAttribIFormat(elem.GetIndex(), elem.GetCount(), BufferLayoutElementTypeToGlType(elem.GetType()), static_cast<GLuint>(elem.GetOffset()));
             } else {
-                glVertexAttribFormat(elem.index, elem.count, BufferLayoutElementTypeToGlType(elem.type), false, static_cast<GLuint>(elem.offset));
+                glVertexAttribFormat(elem.GetIndex(), elem.GetCount(), BufferLayoutElementTypeToGlType(elem.GetType()), false, static_cast<GLuint>(elem.GetOffset()));
             }
 
-            glVertexAttribBinding(elem.index, bindingIndex);
-            glEnableVertexAttribArray(elem.index);
+            glVertexAttribBinding(elem.GetIndex(), bindingIndex);
+            glEnableVertexAttribArray(elem.GetIndex());
         }
 
     }
@@ -118,8 +118,8 @@ void OpenGLVertexArray::AssertAllAttributeIndicesAreUnique() const
         const auto& bufferAttributes = buffer->GetLayout()->GetElements();
 
         for (const BufferLayoutElement& elem : bufferAttributes) {
-            if (!seenIndices.insert(elem.index).second) {
-                PN_CORE_ASSERT(false, "At least 2 attributes in pipeline state have the same index = {}", elem.index);
+            if (!seenIndices.insert(elem.GetIndex()).second) {
+                PN_CORE_ASSERT(false, "At least 2 attributes in pipeline state have the same index = {}", elem.Index);
             }
         }
     }
