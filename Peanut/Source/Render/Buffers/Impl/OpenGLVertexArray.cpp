@@ -15,17 +15,17 @@ namespace pn
 {
 
 OpenGLVertexArray::OpenGLVertexArray(const VertexArrayDescription& description)
-    : m_constantBuffers(description.ConstantBuffers)
-    , m_shader(description._Shader)
+    : m_constantBuffers(description.GetConstantBuffers())
+    , m_shader(description.GetShader())
 {
     glCreateVertexArrays(1, &m_vaoHandle);
 
-    for (const auto& vertexBuffer : description.VertexBuffers) {
+    for (const auto& vertexBuffer : description.GetVertexBuffers()) {
         AddVertexBuffer(vertexBuffer);
     }
 
-    if (description._IndexBuffer) {
-        SetIndexBuffer(description._IndexBuffer);
+    if (description.GetIndexBuffer()) {
+        SetIndexBuffer(description.GetIndexBuffer());
     }
 }
     
