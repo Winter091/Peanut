@@ -134,16 +134,10 @@ void Renderer2D::Init()
         .SetFragmentPath(StoragePath::GetAssetsPath() + "/Shaders/Renderer2D/Rect.frag"),
         "Renderer2D Rectangle Shader");
 
-    auto rectangleShaderInputLayout = ShaderInputLayout::Create(
-        { rectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer },
-        s_data->RectangleShader);
-
-    VertexArrayDescription pipelineStateDesc;
-    pipelineStateDesc.VertexBuffers = { rectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer };
-    pipelineStateDesc.ConstantBuffers = { s_data->CameraConstantBuffer };
-    pipelineStateDesc._Shader = s_data->RectangleShader;
-    pipelineStateDesc._ShaderInputLayout = rectangleShaderInputLayout;
-    s_data->RectangleVertexArray = VertexArray::Create(pipelineStateDesc);
+    s_data->RectangleVertexArray = VertexArray::Create(VertexArrayDescription()
+        .SetVertexBuffers({ rectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer })
+        .SetShader(s_data->RectangleShader)
+        .AddConstantBuffer(s_data->CameraConstantBuffer));
 
     s_isInitialized = true;
 }

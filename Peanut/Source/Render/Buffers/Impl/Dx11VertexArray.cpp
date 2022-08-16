@@ -17,12 +17,16 @@ namespace pn
 {
 
 Dx11VertexArray::Dx11VertexArray(const VertexArrayDescription& description)
-    : m_vertexBuffers(description.VertexBuffers)
-    , m_indexBuffer(description._IndexBuffer)
-    , m_constantBuffers(description.ConstantBuffers)
-    , m_shader(description._Shader)
-    , m_inputLayout(description._ShaderInputLayout)
+    : m_vertexBuffers(description.GetVertexBuffers())
+    , m_indexBuffer(description.GetIndexBuffer())
+    , m_constantBuffers(description.GetConstantBuffers())
+    , m_shader(description.GetShader())
+    , m_inputLayout(description.GetShaderInputLayout())
 {
+    if (!m_inputLayout) {
+        m_inputLayout = ShaderInputLayout::Create(m_vertexBuffers, m_shader);
+    }
+    
     for (const auto& vertexBuffer : m_vertexBuffers) {
         if (vertexBuffer->GetDataUsage() == VertexBufferDataUsage::PerInstance) {
             UpdateInstanceCount(*vertexBuffer);

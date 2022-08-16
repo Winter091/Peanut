@@ -16,6 +16,17 @@ namespace pn
 
 std::shared_ptr<VertexArray> VertexArray::Create(const VertexArrayDescription& description)
 {
+    PN_CORE_ASSERT(!description.GetVertexBuffers().empty(), "Vertex array cannot have no vertex buffers");
+    PN_CORE_ASSERT(description.GetShader(), "Vertex array has to have shader defined");
+
+    for (const auto& vertexBuffer : description.GetVertexBuffers()) {
+        PN_CORE_ASSERT(vertexBuffer, "One of vertex buffers in vertex array is nullptr");
+    }
+
+    for (const auto& constantBuffer : description.GetConstantBuffers()) {
+        PN_CORE_ASSERT(constantBuffer, "One of constant buffers in vertex array is nullptr");
+    }
+    
     auto renderApi = RenderCommand::GetRenderAPI();
 
     switch (renderApi) {
@@ -37,7 +48,6 @@ std::shared_ptr<VertexArray> VertexArray::Create(const VertexArrayDescription& d
             PN_CORE_ASSERT(false, "Unknown RednerAPI: {}", static_cast<uint32_t>(renderApi)); 
             break;
     }
-
 
     return nullptr; 
 }
