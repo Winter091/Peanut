@@ -18,6 +18,7 @@ std::shared_ptr<VertexBuffer> VertexBuffer::Create(
     VertexBufferDataUsage dataUsage, uint32_t size, const void* data)
 {
     PN_CORE_ASSERT(layout, "Buffer layout cannot be nullptr");
+    PN_CORE_ASSERT(size % layout->GetVertexSize() == 0, "Vertex buffer size is not a multiple of vertex size");
     
     if (!data) {
         PN_CORE_ASSERT(DoesBufferMapAccessAllowWriting(access), "Data for vertex buffer without write permissions must be specified on creation");
