@@ -36,7 +36,7 @@ void main()
     color.r = float(((a_color >> 0)  & uint(0xFF))) / 255.0;
     color.g = float(((a_color >> 8)  & uint(0xFF))) / 255.0;
     color.b = float(((a_color >> 16) & uint(0xFF))) / 255.0;
-    color.a = float(((a_color >> 32) & uint(0xFF))) / 255.0;
+    color.a = float(((a_color >> 24) & uint(0xFF))) / 255.0;
     v_color = color;
     
     v_texCoord = texCoords[a_vertexIndex];

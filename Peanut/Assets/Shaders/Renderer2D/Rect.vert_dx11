@@ -42,7 +42,7 @@ VSOutput main(VSInput Input)
     color.r = ((Input.Color >> 0)  & 0xFF) / 255.0;
     color.g = ((Input.Color >> 8)  & 0xFF) / 255.0;
     color.b = ((Input.Color >> 16) & 0xFF) / 255.0;
-    color.a = ((Input.Color >> 32) & 0xFF) / 255.0;
+    color.a = ((Input.Color >> 24) & 0xFF) / 255.0;
     Output.Color = color;
     
     Output.TexCoord = texCoords[Input.VertexIndex];
