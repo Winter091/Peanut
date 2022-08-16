@@ -47,7 +47,7 @@ void Rectangle::SetSize(const glm::vec2& size)
     m_transformIsDirty = true;
 }
 
-void Rectangle::SetColor(const glm::vec4& color)
+void Rectangle::SetColor(const glm::u8vec4& color)
 {
     m_color = color;
 }

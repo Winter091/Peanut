@@ -27,7 +27,7 @@ static constexpr size_t MAX_TEXTURE_SLOTS = 16;
 struct RectPerInstanceData
 {
     glm::mat4 ModelMatrix;
-    glm::vec4 Color;
+    uint32_t Color;
     int32_t TexIndex;
 };
 
@@ -121,7 +121,7 @@ void Renderer2D::Init()
     s_data->RectanglePerInstanceBuffer = VertexBuffer::Create(
         BufferLayout::Create({
             { 1, "ModelMatrix", BufferLayoutElementType::Mat4, 1 },
-            { 5, "Color",       BufferLayoutElementType::Float, 4 },
+            { 5, "Color",       BufferLayoutElementType::Uint32, 1 },
             { 6, "TexIndex",    BufferLayoutElementType::Int32, 1 }}),
         BufferMapAccess::WriteDiscard,
         VertexBufferDataUsage::PerInstance,
@@ -193,8 +193,15 @@ void Renderer2D::DrawRectangle(const Rectangle& rectangle)
         textureIndex = AddTextureToList(rectangle.GetTexture());
     }
 
+    const glm::u8vec4& rectColor = rectangle.GetColor();
+    uint32_t color = 0;
+    color |= ((rectColor[0]) << 0);
+    color |= ((rectColor[1]) << 8);
+    color |= ((rectColor[2]) << 16);
+    color |= ((rectColor[3]) << 24);
+
     s_data->RectanglePerInstanceDataPtr[s_data->NumRectInstances].ModelMatrix = rectangle.GetTransformMatrix();
-    s_data->RectanglePerInstanceDataPtr[s_data->NumRectInstances].Color = rectangle.GetColor();
+    s_data->RectanglePerInstanceDataPtr[s_data->NumRectInstances].Color = color;
     s_data->RectanglePerInstanceDataPtr[s_data->NumRectInstances].TexIndex = textureIndex;
 
     s_data->NumRectInstances++;

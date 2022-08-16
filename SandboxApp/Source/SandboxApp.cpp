@@ -21,6 +21,7 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
             float y = step * static_cast<float>(j);
             pn::Rectangle rect;
             rect.SetPosition({ x, y });
+            rect.SetColor({ 255, 255, 0, 0 });
             m_rectangles.push_back(rect);
         }
     }

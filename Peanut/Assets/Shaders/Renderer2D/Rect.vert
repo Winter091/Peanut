@@ -2,7 +2,7 @@
 
 layout (location = 0) in uint a_vertexIndex;
 layout (location = 1) in mat4 a_modelMatrix;
-layout (location = 5) in vec4 a_color;
+layout (location = 5) in uint a_color;
 layout (location = 6) in int a_texIndex;
 
 layout (std140, binding = 0) uniform Matrices
@@ -31,7 +31,14 @@ const vec2 texCoords[4] = vec2[4](
 void main()
 {
     gl_Position = u_viewProjMatrix * a_modelMatrix * positions[a_vertexIndex];
-    v_color = a_color;
+
+    vec4 color;
+    color.r = (a_color >> 0)  & 0xFF;
+    color.g = (a_color >> 8)  & 0xFF;
+    color.b = (a_color >> 16) & 0xFF;
+    color.a = (a_color >> 32) & 0xFF;
+    v_color = color;
+    
     v_texCoord = texCoords[a_vertexIndex];
     v_texIndex = a_texIndex;
 }

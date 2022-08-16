@@ -25,8 +25,8 @@ public:
     const glm::vec2& GetSize() const { return m_size; }
     void SetSize(const glm::vec2& size);
 
-    virtual const glm::vec4& GetColor() const override { return m_color; }
-    void SetColor(const glm::vec4& color) override;
+    virtual const glm::u8vec4& GetColor() const override { return m_color; }
+    void SetColor(const glm::u8vec4& color) override;
 
     bool HasTexture() const override { return m_texture != nullptr; }
     const std::shared_ptr<Texture2D>& GetTexture() const override { return m_texture; }
@@ -42,7 +42,7 @@ private:
 
     glm::vec2 m_size;
 
-    glm::vec4 m_color;
+    glm::u8vec4 m_color;
     std::shared_ptr<Texture2D> m_texture;
 
     mutable glm::mat4 m_transform;

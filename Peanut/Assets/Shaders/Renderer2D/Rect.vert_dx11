@@ -2,7 +2,7 @@ struct VSInput
 {
     uint               VertexIndex : VertexIndex;
     row_major float4x4 ModelMatrix : ModelMatrix;
-    float4             Color       : Color;
+    uint               Color       : Color;
     int                TexIndex    : TexIndex;
 };
 
@@ -37,7 +37,14 @@ VSOutput main(VSInput Input)
 {
     VSOutput Output;
     Output.Position = mul(positions[Input.VertexIndex], mul(Input.ModelMatrix, ViewProjMatrix));
-    Output.Color = Input.Color;
+
+    float4 color;
+    color.r = (Input.Color >> 0)  & 0xFF;
+    color.g = (Input.Color >> 8)  & 0xFF;
+    color.b = (Input.Color >> 16) & 0xFF;
+    color.a = (Input.Color >> 32) & 0xFF;
+    Output.Color = color;
+    
     Output.TexCoord = texCoords[Input.VertexIndex];
     Output.TexIndex = Input.TexIndex;
     

@@ -28,8 +28,8 @@ public:
 
     virtual const glm::mat4& GetTransformMatrix() const = 0;
 
-    virtual const glm::vec4& GetColor() const = 0;
-    virtual void SetColor(const glm::vec4& color) = 0;
+    virtual const glm::u8vec4& GetColor() const = 0;
+    virtual void SetColor(const glm::u8vec4& color) = 0;
 
     virtual bool HasTexture() const = 0;
     virtual const std::shared_ptr<Texture2D>& GetTexture() const = 0;
