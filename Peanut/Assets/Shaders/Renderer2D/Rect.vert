@@ -33,10 +33,10 @@ void main()
     gl_Position = u_viewProjMatrix * a_modelMatrix * positions[a_vertexIndex];
 
     vec4 color;
-    color.r = (a_color >> 0)  & 0xFF;
-    color.g = (a_color >> 8)  & 0xFF;
-    color.b = (a_color >> 16) & 0xFF;
-    color.a = (a_color >> 32) & 0xFF;
+    color.r = float(((a_color >> 0)  & uint(0xFF))) / 255.0;
+    color.g = float(((a_color >> 8)  & uint(0xFF))) / 255.0;
+    color.b = float(((a_color >> 16) & uint(0xFF))) / 255.0;
+    color.a = float(((a_color >> 32) & uint(0xFF))) / 255.0;
     v_color = color;
     
     v_texCoord = texCoords[a_vertexIndex];

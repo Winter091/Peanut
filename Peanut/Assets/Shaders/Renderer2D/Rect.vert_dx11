@@ -39,10 +39,10 @@ VSOutput main(VSInput Input)
     Output.Position = mul(positions[Input.VertexIndex], mul(Input.ModelMatrix, ViewProjMatrix));
 
     float4 color;
-    color.r = (Input.Color >> 0)  & 0xFF;
-    color.g = (Input.Color >> 8)  & 0xFF;
-    color.b = (Input.Color >> 16) & 0xFF;
-    color.a = (Input.Color >> 32) & 0xFF;
+    color.r = ((Input.Color >> 0)  & 0xFF) / 255.0;
+    color.g = ((Input.Color >> 8)  & 0xFF) / 255.0;
+    color.b = ((Input.Color >> 16) & 0xFF) / 255.0;
+    color.a = ((Input.Color >> 32) & 0xFF) / 255.0;
     Output.Color = color;
     
     Output.TexCoord = texCoords[Input.VertexIndex];
