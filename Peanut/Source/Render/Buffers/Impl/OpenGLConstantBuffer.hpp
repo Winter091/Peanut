@@ -1,25 +1,24 @@
 #pragma once
 
 #include <Peanut/Render/Buffers/ConstantBuffer.hpp>
+#include "OpenGLBuffer.hpp"
 
 namespace pn {
 
-class OpenGLConstantBuffer final : public ConstantBuffer
+class OpenGLConstantBuffer final : public ConstantBuffer, public OpenGLBuffer
 {
 public:
-    OpenGLConstantBuffer(BufferMapAccess access, uint32_t size, const void* data);
-    ~OpenGLConstantBuffer() override;
+    OpenGLConstantBuffer(BufferMapAccess access, uint32_t size, const void* data)
+        : OpenGLBuffer(access, size, data)
+    {}
 
-    void* Map() override;
-    void Unmap() override;
-    
-    uint32_t GetSize() const override { return m_size; }
-    uint32_t GetOpenGLHandle() const { return m_handle; }
+    ~OpenGLConstantBuffer() override = default;
 
-private:
-    uint32_t m_handle = 0;
-    uint32_t m_size;
-    BufferMapAccess m_mapAccess;
+    void* Map() override { return OpenGLBuffer::Map(); }
+    void Unmap() override { OpenGLBuffer::Unmap(); }
+
+    uint32_t GetSize() const override { return OpenGLBuffer::GetSize(); }
+    uint32_t GetOpenGLHandle() const { return OpenGLBuffer::GetOpenGLHandle(); }
 };
 
 }

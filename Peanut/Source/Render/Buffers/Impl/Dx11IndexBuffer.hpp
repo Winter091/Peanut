@@ -16,6 +16,7 @@ public:
     void* Map() override;
     void Unmap() override;
 
+    uint32_t GetSize() const override { return m_size; }
     uint32_t GetIndexCount() const override { return m_indexCount; }
     IndexBufferDataFormat GetDataFormat() const override { return m_format; }
 

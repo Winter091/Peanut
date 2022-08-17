@@ -1,29 +1,25 @@
-#include "OpenGLConstantBuffer.hpp"
+#include "OpenGLBuffer.hpp"
 
-#include <Peanut/Core/TimeProfiler.hpp>
-#include <Render/Buffers/Impl/OpenGLEnumConversions.hpp>
+#include "OpenGLEnumConversions.hpp"
 
 #include <glad/glad.h>
 
-namespace pn
-{
+namespace pn {
 
-OpenGLConstantBuffer::OpenGLConstantBuffer(BufferMapAccess access, uint32_t size, const void* data)
+OpenGLBuffer::OpenGLBuffer(BufferMapAccess access, uint32_t size, const void* data)
     : m_size(size)
     , m_mapAccess(access)
 {
-    PN_PROFILE_FUNCTION();
-
     glCreateBuffers(1, &m_handle);
     glNamedBufferStorage(m_handle, size, data, BufferMapAccessToGlStorageAccess(access));
 }
 
-OpenGLConstantBuffer::~OpenGLConstantBuffer()
+OpenGLBuffer::~OpenGLBuffer()
 {
     glDeleteBuffers(1, &m_handle);
 }
 
-void* OpenGLConstantBuffer::Map()
+void* OpenGLBuffer::Map()
 {
     PN_PROFILE_FUNCTION();
 
@@ -34,10 +30,9 @@ void* OpenGLConstantBuffer::Map()
     return buffer;
 }
 
-void OpenGLConstantBuffer::Unmap()
+void OpenGLBuffer::Unmap()
 {
     PN_PROFILE_FUNCTION();
-
     glUnmapNamedBuffer(m_handle);
 }
 

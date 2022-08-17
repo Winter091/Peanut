@@ -23,6 +23,7 @@ public:
     virtual void* Map() = 0;
     virtual void Unmap() = 0;
 
+    virtual uint32_t GetSize() const = 0;
     virtual uint32_t GetIndexCount() const = 0;
     virtual IndexBufferDataFormat GetDataFormat() const = 0;
 
