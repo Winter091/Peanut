@@ -1,6 +1,7 @@
 if (PN_RENDERING_DX11)
     target_sources(
         Peanut PRIVATE
+        Dx11BufferImpl.cpp
         Dx11ConstantBuffer.cpp
         Dx11IndexBuffer.cpp
         Dx11VertexArray.cpp

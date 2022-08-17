@@ -1,5 +1,6 @@
 #include "OpenGLBuffer.hpp"
 
+#include <Peanut/Core/TimeProfiler.hpp>
 #include "OpenGLEnumConversions.hpp"
 
 #include <glad/glad.h>

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Peanut/Render/Buffers/BufferMapAccess.hpp>
-#include <Peanut/Core/TimeProfiler.hpp>
 
 namespace pn {
 
