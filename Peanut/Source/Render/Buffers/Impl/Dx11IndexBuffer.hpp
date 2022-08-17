@@ -16,6 +16,7 @@ public:
 
     void* Map() override { return Dx11BufferImpl::Map(m_handle.Get()); }
     void Unmap() override { return Dx11BufferImpl::Unmap(m_handle.Get()); }
+    void SetData(const void* data, size_t offset = 0, size_t size = 0) { Dx11BufferImpl::SetData(m_handle.Get(), data, offset, size); }
 
     uint32_t GetSize() const override { return Dx11BufferImpl::GetSize(); }
     uint32_t GetIndexCount() const override { return m_indexCount; }

@@ -1,5 +1,7 @@
 #include "Dx11BufferImpl.hpp"
+#include "Dx11BufferImpl.hpp"
 
+#include <Peanut/Core/Assert.hpp>
 #include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
 #include "Dx11EnumConversions.hpp"
 
@@ -50,6 +52,20 @@ void Dx11BufferImpl::Unmap(ID3D11Buffer* handle)
 
 	auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
 	deviceContext->Unmap(handle, 0);
+}
+
+void Dx11BufferImpl::SetData(ID3D11Buffer* handle, const void* data, size_t offset, size_t size)
+{
+	PN_CORE_ASSERT(offset + size <= m_size, "Trying to set data outsize of buffer data range: buffer size = {}, "
+		           "trying to set size = {} with offset = {}", m_size, size, offset);
+	
+	if (size == 0) {
+		size = m_size - offset;
+	}
+	
+	uint8_t* mappedData = reinterpret_cast<uint8_t*>(Map(handle));
+	memcpy(mappedData + offset, data, size);
+	Unmap(handle);
 }
 
 }

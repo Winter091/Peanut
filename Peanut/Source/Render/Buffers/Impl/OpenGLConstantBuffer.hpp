@@ -16,6 +16,7 @@ public:
 
     void* Map() override { return OpenGLBuffer::Map(); }
     void Unmap() override { OpenGLBuffer::Unmap(); }
+    void SetData(const void* data, size_t offset = 0, size_t size = 0) { OpenGLBuffer::SetData(data, offset, size); }
 
     uint32_t GetSize() const override { return OpenGLBuffer::GetSize(); }
     uint32_t GetOpenGLHandle() const { return OpenGLBuffer::GetOpenGLHandle(); }

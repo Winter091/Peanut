@@ -37,4 +37,18 @@ void OpenGLBuffer::Unmap()
     glUnmapNamedBuffer(m_handle);
 }
 
+void OpenGLBuffer::SetData(const void* data, size_t offset, size_t size)
+{
+    PN_CORE_ASSERT(offset + size <= m_size, "Trying to set data outsize of buffer data range: buffer size = {}, "
+                   "trying to set size = {} with offset = {}", m_size, size, offset);
+    
+    if (size == 0) {
+        size = m_size - offset;
+    }
+
+    uint8_t* mappedData = reinterpret_cast<uint8_t*>(Map());
+    memcpy(mappedData + offset, data, size);
+    Unmap();
+}
+
 }

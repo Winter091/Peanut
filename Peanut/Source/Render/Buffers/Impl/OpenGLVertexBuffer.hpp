@@ -19,6 +19,7 @@ public:
 
     void* Map() override { return OpenGLBuffer::Map(); }
     void Unmap() override { OpenGLBuffer::Unmap(); }
+    void SetData(const void* data, size_t offset = 0, size_t size = 0) { OpenGLBuffer::SetData(data, offset, size); }
 
     const std::shared_ptr<BufferLayout>& GetLayout() const override { return m_layout; }
 

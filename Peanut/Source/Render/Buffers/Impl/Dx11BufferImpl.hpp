@@ -20,6 +20,7 @@ public:
 
     void* Map(ID3D11Buffer* handle);
     void Unmap(ID3D11Buffer* handle);
+    void SetData(ID3D11Buffer* handle, const void* data, size_t offset, size_t size);
 
     uint32_t GetSize() const { return m_size; }
 

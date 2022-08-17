@@ -1,6 +1,8 @@
 #pragma once
 
+#include <Peanut/Render/Buffers/Buffer.hpp>
 #include <Peanut/Render/Buffers/BufferMapAccess.hpp>
+
 #include <cstdint>
 #include <memory>
 
@@ -12,7 +14,7 @@ enum class IndexBufferDataFormat : uint32_t
     Uint32,
 };
 
-class IndexBuffer
+class IndexBuffer : public Buffer
 {
 public:
     IndexBuffer() = default;
@@ -20,10 +22,6 @@ public:
     IndexBuffer& operator=(const IndexBuffer&) = delete;
     virtual ~IndexBuffer() = default;
 
-    virtual void* Map() = 0;
-    virtual void Unmap() = 0;
-
-    virtual uint32_t GetSize() const = 0;
     virtual uint32_t GetIndexCount() const = 0;
     virtual IndexBufferDataFormat GetDataFormat() const = 0;
 

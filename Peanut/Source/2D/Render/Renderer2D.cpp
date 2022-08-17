@@ -156,11 +156,7 @@ void Renderer2D::BeginScene(const Camera& camera)
     PN_CORE_ASSERT(s_isInitialized, "Renderer2D is not initialized");
     PN_PROFILE_FUNCTION();
 
-    auto* data = reinterpret_cast<CameraShaderData*>(s_data->CameraConstantBuffer->Map()); 
-    {
-        data->ViewProjMatrix = camera.GetViewProjectionMatrix();
-    }
-    s_data->CameraConstantBuffer->Unmap();
+    s_data->CameraConstantBuffer->SetData(&camera.GetViewProjectionMatrix());
 
     StartBatch();
 }

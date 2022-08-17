@@ -12,6 +12,7 @@ public:
 
     void* Map();
     void Unmap();
+    void SetData(const void* data, size_t offset, size_t size);
 
     uint32_t GetSize() const { return m_size; }
     uint32_t GetOpenGLHandle() const { return m_handle; }

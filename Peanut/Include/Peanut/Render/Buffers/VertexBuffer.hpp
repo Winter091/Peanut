@@ -1,7 +1,9 @@
 #pragma once
 
+#include <Peanut/Render/Buffers/Buffer.hpp>
 #include <Peanut/Render/Buffers/BufferLayout.hpp>
 #include <Peanut/Render/Buffers/BufferMapAccess.hpp>
+
 #include <cstdint>
 #include <memory>
 
@@ -13,7 +15,7 @@ enum class VertexBufferDataUsage
     PerInstance
 };
 
-class VertexBuffer
+class VertexBuffer : public Buffer
 {
 public:
     VertexBuffer() = default;
@@ -21,12 +23,8 @@ public:
     VertexBuffer& operator=(const VertexBuffer&) = delete;
     virtual ~VertexBuffer() = default;
 
-    virtual void* Map() = 0;
-    virtual void Unmap() = 0;
-
     virtual const std::shared_ptr<BufferLayout>& GetLayout() const = 0;
 
-    virtual uint32_t GetSize() const = 0;
     virtual uint32_t GetVertexSize() const = 0;
     virtual uint32_t GetVertexCount() const = 0;
     virtual VertexBufferDataUsage GetDataUsage() const = 0;
