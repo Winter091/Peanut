@@ -25,7 +25,7 @@ Dx11VertexBuffer::Dx11VertexBuffer(const std::shared_ptr<BufferLayout>& layout, 
 	desc.MiscFlags = 0;
 	desc.StructureByteStride = m_layout->GetVertexSize();
 
-	Dx11BufferImpl::Init(m_handle.GetAddressOf(), desc, data);
+	Dx11BufferImpl::Init(desc, data);
 }
 
 }

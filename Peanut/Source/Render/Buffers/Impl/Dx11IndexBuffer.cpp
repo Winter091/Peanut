@@ -22,7 +22,7 @@ Dx11IndexBuffer::Dx11IndexBuffer(IndexBufferDataFormat format, BufferMapAccess a
     desc.MiscFlags = 0;
     desc.StructureByteStride = GetIndexBufferDataFormatSize(format);
 
-    Dx11BufferImpl::Init(m_handle.GetAddressOf(), desc, data);
+    Dx11BufferImpl::Init(desc, data);
 }
 
 }

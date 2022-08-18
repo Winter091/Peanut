@@ -10,7 +10,7 @@ if (PN_RENDERING_DX11)
 elseif (PN_RENDERING_OPENGL)
     target_sources(
         Peanut PRIVATE
-        OpenGLBuffer.cpp
+        OpenGLBufferImpl.cpp
         OpenGLVertexArray.cpp
     )
 endif()

@@ -20,7 +20,7 @@ Dx11ConstantBuffer::Dx11ConstantBuffer(BufferMapAccess access, uint32_t size, co
     desc.MiscFlags = 0;
     desc.StructureByteStride = 0;
 
-    Dx11BufferImpl::Init(m_handle.GetAddressOf(), desc, data);
+    Dx11BufferImpl::Init(desc, data);
 }
 
 }

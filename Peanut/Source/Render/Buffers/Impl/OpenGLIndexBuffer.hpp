@@ -2,26 +2,26 @@
 
 #include <Render/Buffers/Impl/OpenGLEnumConversions.hpp>
 #include <Peanut/Render/Buffers/IndexBuffer.hpp>
-#include "OpenGLBuffer.hpp"
+#include "OpenGLBufferImpl.hpp"
 
 namespace pn {
 
-class OpenGLIndexBuffer final : public IndexBuffer, public OpenGLBuffer
+class OpenGLIndexBuffer final : public IndexBuffer, public OpenGLBufferImpl
 {
 public:
     OpenGLIndexBuffer(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data = nullptr)
-        : OpenGLBuffer(access, size, data)
+        : OpenGLBufferImpl(access, size, data)
         , m_indexCount(size / GetIndexBufferDataFormatSize(format))
         , m_format(format)
     {}  
 
     ~OpenGLIndexBuffer() override = default;
 
-    void* Map() override { return OpenGLBuffer::Map(); }
-    void Unmap() override { OpenGLBuffer::Unmap(); }
-    void SetData(const void* data, size_t offset = 0, size_t size = 0) { OpenGLBuffer::SetData(data, offset, size); }
+    void* Map() override { return OpenGLBufferImpl::Map(); }
+    void Unmap() override { OpenGLBufferImpl::Unmap(); }
+    void SetData(const void* data, size_t offset = 0, size_t size = 0) { OpenGLBufferImpl::SetData(data, offset, size); }
 
-    uint32_t GetSize() const override { return OpenGLBuffer::GetSize(); }
+    uint32_t GetSize() const override { return OpenGLBufferImpl::GetSize(); }
     uint32_t GetIndexCount() const override { return m_indexCount; }
     IndexBufferDataFormat GetDataFormat() const override { return m_format; }
 

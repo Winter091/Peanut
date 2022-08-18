@@ -2,13 +2,15 @@
 
 #include <Peanut/Render/Buffers/BufferMapAccess.hpp>
 
+#include <cstddef>
+
 namespace pn {
 
-class OpenGLBuffer
+class OpenGLBufferImpl
 {
 public:
-    OpenGLBuffer(BufferMapAccess access, uint32_t size, const void* data);
-    virtual ~OpenGLBuffer();
+    OpenGLBufferImpl(BufferMapAccess access, uint32_t size, const void* data);
+    virtual ~OpenGLBufferImpl();
 
     void* Map();
     void Unmap();

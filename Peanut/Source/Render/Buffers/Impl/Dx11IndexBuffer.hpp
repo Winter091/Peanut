@@ -14,18 +14,17 @@ public:
     Dx11IndexBuffer(IndexBufferDataFormat format, BufferMapAccess access, uint32_t size, const void* data = nullptr);
     ~Dx11IndexBuffer() override = default;
 
-    void* Map() override { return Dx11BufferImpl::Map(m_handle.Get()); }
-    void Unmap() override { return Dx11BufferImpl::Unmap(m_handle.Get()); }
-    void SetData(const void* data, size_t offset = 0, size_t size = 0) { Dx11BufferImpl::SetData(m_handle.Get(), data, offset, size); }
+    void* Map() override { return Dx11BufferImpl::Map(); }
+    void Unmap() override { return Dx11BufferImpl::Unmap(); }
+    void SetData(const void* data, size_t offset = 0, size_t size = 0) { Dx11BufferImpl::SetData(data, offset, size); }
 
     uint32_t GetSize() const override { return Dx11BufferImpl::GetSize(); }
     uint32_t GetIndexCount() const override { return m_indexCount; }
     IndexBufferDataFormat GetDataFormat() const override { return m_format; }
 
-    ID3D11Buffer* GetNativeObjectPtr() const { return m_handle.Get(); }
+    ID3D11Buffer* GetNativeObjectPtr() const { return Dx11BufferImpl::GetNativeObjectPtr(); }
 
 private:
-    Microsoft::WRL::ComPtr<ID3D11Buffer> m_handle = nullptr;
     uint32_t m_indexCount;
     IndexBufferDataFormat m_format;
 };

@@ -1,4 +1,4 @@
-#include "OpenGLBuffer.hpp"
+#include "OpenGLBufferImpl.hpp"
 
 #include <Peanut/Core/TimeProfiler.hpp>
 #include "OpenGLEnumConversions.hpp"
@@ -7,7 +7,7 @@
 
 namespace pn {
 
-OpenGLBuffer::OpenGLBuffer(BufferMapAccess access, uint32_t size, const void* data)
+OpenGLBufferImpl::OpenGLBufferImpl(BufferMapAccess access, uint32_t size, const void* data)
     : m_size(size)
     , m_mapAccess(access)
 {
@@ -15,12 +15,12 @@ OpenGLBuffer::OpenGLBuffer(BufferMapAccess access, uint32_t size, const void* da
     glNamedBufferStorage(m_handle, size, data, BufferMapAccessToGlStorageAccess(access));
 }
 
-OpenGLBuffer::~OpenGLBuffer()
+OpenGLBufferImpl::~OpenGLBufferImpl()
 {
     glDeleteBuffers(1, &m_handle);
 }
 
-void* OpenGLBuffer::Map()
+void* OpenGLBufferImpl::Map()
 {
     PN_PROFILE_FUNCTION();
 
@@ -31,13 +31,13 @@ void* OpenGLBuffer::Map()
     return buffer;
 }
 
-void OpenGLBuffer::Unmap()
+void OpenGLBufferImpl::Unmap()
 {
     PN_PROFILE_FUNCTION();
     glUnmapNamedBuffer(m_handle);
 }
 
-void OpenGLBuffer::SetData(const void* data, size_t offset, size_t size)
+void OpenGLBufferImpl::SetData(const void* data, size_t offset, size_t size)
 {
     PN_CORE_ASSERT(offset + size <= m_size, "Trying to set data outsize of buffer data range: buffer size = {}, "
                    "trying to set size = {} with offset = {}", m_size, size, offset);
