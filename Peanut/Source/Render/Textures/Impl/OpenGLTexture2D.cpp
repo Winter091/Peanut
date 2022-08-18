@@ -6,11 +6,10 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
+#include <Peanut/Core/Utils/FileUtils.hpp>
 
 #include <stb/stb_image.h>
 #include <glad/glad.h>
-
-#include <fstream>
 
 namespace pn {
 
@@ -21,23 +20,13 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSetting
 
     PN_CORE_ASSERT(!settings.SizeIsExplicitlySpecified, "Unable to specify 2d texture size when loading from file");
 
-    std::ifstream file(path, std::ios::binary | std::ios::ate);
-    PN_CORE_ENSURE(file, "Unable to open texture file {}", path);
-
-    std::streamsize size = file.tellg();
-    file.seekg(0, std::ios::beg);
-
-    std::vector<uint8_t> fileData(size);
-    if (!file.read(reinterpret_cast<char*>(&fileData[0]), size)) {
-        PN_CORE_ENSURE(false, "Unable to read texture data from file {}", path);
-    }
-    file.close();
-
-    stbi_set_flip_vertically_on_load(1);
+    auto fileData = ReadFile(path);
 
     int x, y, channels;
     int desiredChannels = static_cast<int>(GetNumChannels(settings.Format));
-    auto textureData = stbi_load_from_memory(&fileData[0], static_cast<int>(size), &x, &y, &channels, desiredChannels);
+
+    stbi_set_flip_vertically_on_load(1);
+    auto textureData = stbi_load_from_memory(&fileData[0], static_cast<int>(fileData.size()), &x, &y, &channels, desiredChannels);
 
     if (channels < 3) {
         PN_CORE_WARN("Texture {}: number of channels in source data is < 3", m_name);
