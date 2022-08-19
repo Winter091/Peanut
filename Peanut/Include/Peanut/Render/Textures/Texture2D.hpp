@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Texture.hpp"
+#include <Peanut/Render/Textures/TextureSampler.hpp>
 
 #include <string>
 #include <memory>
@@ -18,28 +19,6 @@ struct Texture2DSettings
         return *this;
     }
 
-    Texture2DSettings& UseWrapping(TextureWrap x, TextureWrap y)
-    {
-        WrapX = x;
-        WrapY = y;
-        return *this;
-    }
-
-    Texture2DSettings& UseFiltering(TextureFilter min, TextureFilter mag)
-    {
-        FilterMin = min;
-        FilterMag = mag;
-        return *this;
-    }
-
-    Texture2DSettings& UseMipmapFiltering(TextureMipmapFilter min, TextureFilter mag)
-    {
-        UseMipmaps = true;
-        MipmapFilterMin = min;
-        FilterMag = mag;
-        return *this;
-    }
-
     Texture2DSettings& UseMipmapping(bool use)
     {
         UseMipmaps = use;
@@ -53,15 +32,17 @@ struct Texture2DSettings
         return *this;
     }
 
+    Texture2DSettings SetSampler(const std::shared_ptr<TextureSampler>& sampler)
+    {
+        Sampler = sampler;
+        return *this;
+    }
+
     glm::u32vec2 DesiredSize = {0, 0};
     bool SizeIsExplicitlySpecified = false;
     TextureFormat Format = TextureFormat::RGBA;
-    TextureWrap WrapX = TextureWrap::Repeat; 
-    TextureWrap WrapY = TextureWrap::Repeat;
-    TextureFilter FilterMin = TextureFilter::Linear;
-    TextureFilter FilterMag = TextureFilter::Linear;
-    TextureMipmapFilter MipmapFilterMin = TextureMipmapFilter::LinearMipmapLinear; 
     bool UseMipmaps = true;
+    std::shared_ptr<TextureSampler> Sampler = nullptr;
 };
 
 class Texture2D : public Texture
@@ -75,10 +56,6 @@ public:
     virtual const glm::u32vec2& GetSize() const = 0;
 
     virtual void SetData(const TextureData& data, const glm::u32vec2& offset = {0, 0}, const glm::u32vec2& size = {0, 0}) = 0;
-
-    virtual void SetWrapping(TextureWrap x, TextureWrap y) = 0;
-    virtual void SetFiltering(TextureFilter min, TextureFilter mag) = 0;
-    virtual void SetFiltering(TextureMipmapFilter min, TextureFilter mag) = 0;
 
     static std::shared_ptr<Texture2D> Create(const std::string& path, const Texture2DSettings& settings, const std::string& name = "");
     static std::shared_ptr<Texture2D> Create(const TextureData& data, const Texture2DSettings& settings, const std::string& name = "");

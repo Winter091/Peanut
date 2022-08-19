@@ -12,16 +12,28 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
         .SetDirection({ 0.0f, 0.0f, -1.0f })
         .SetBoundaries(pn::OrthoCameraBoundaries()
             .SetCenter({ 0.0f, 0.0f })
-            .SetWidth(150.0f).SetHeight(150.0f)));
+            .SetWidth(15.0f).SetHeight(15.0f)));
 
+    auto sampler = pn::TextureSampler::Create(pn::TextureSamplerSettings()
+        .SetMinFilter(pn::TextureFilter::Linear)
+        .SetMagFilter(pn::TextureFilter::Linear)
+        .SetMipFilter(pn::TextureMipFilter::Linear)
+        .SetWrap(pn::TextureWrap::Repeat));
+
+    m_texture = pn::Texture2D::Create(
+        pn::StoragePath::GetAssetsPath() + "/Textures/container.jpg", 
+        pn::Texture2DSettings()
+            .SetSampler(sampler));
+    
     float step = 1.25f;
-    for (int i = -500; i <= 500; i++) {
-        for (int j = -500; j <= 500; j++) {
+    for (int i = -5; i <= 5; i++) {
+        for (int j = -5; j <= 5; j++) {
             float x = step * static_cast<float>(i);
             float y = step * static_cast<float>(j);
             pn::Rectangle rect;
             rect.SetPosition({ x, y });
             rect.SetColor({ 146, 226, 253, 255 });
+            rect.SetTexture(m_texture);
             m_rectangles.push_back(rect);
         }
     }
@@ -41,7 +53,7 @@ void SandboxApp::OnUpdate()
         pn::Window& window = GetWindow();
         glm::vec3 pos = m_camera->GetPosition();
         float zoom = m_camera->GetZoom();
-        float delta = 2.0f;
+        float delta = 0.15f;
         float zoomDelta = 0.01f;
 
         if (window.IsKeyPressed(pn::KeyCode::W)) { pos.y += delta * zoom; }
@@ -82,5 +94,5 @@ pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
     return new SandboxApp(WindowSettings()
         .SetTitle("Sandbox Application")
         .SetWidth(1280).SetHeight(720)
-        .UseVsync(false));
+        .UseVsync(true));
 }

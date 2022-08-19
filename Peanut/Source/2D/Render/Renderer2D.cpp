@@ -60,9 +60,9 @@ static void Flush()
 
     s_data->RectanglePerInstanceBuffer->Unmap();
 
-    /*for (uint32_t i = 0; i < s_data->NumTextures; i++) {
+    for (uint32_t i = 0; i < s_data->NumTextures; i++) {
         s_data->Textures[i]->BindToSlot(i);
-    }*/
+    }
 
     RenderCommand::DrawArraysInstanced(s_data->RectangleVertexArray, 6, s_data->NumRectInstances);
 }

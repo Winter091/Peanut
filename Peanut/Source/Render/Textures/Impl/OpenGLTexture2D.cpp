@@ -7,6 +7,7 @@
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
 #include <Peanut/Core/Utils/FileUtils.hpp>
+#include <Render/Textures/Impl/OpenGLTextureSampler.hpp>
 
 #include <stb/stb_image.h>
 #include <glad/glad.h>
@@ -15,10 +16,12 @@ namespace pn {
 
 OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSettings& settings, std::string name)
     : m_name(std::move(name))
+    , m_sampler(settings.Sampler)
 {   
     PN_PROFILE_FUNCTION();
 
     PN_CORE_ASSERT(!settings.SizeIsExplicitlySpecified, "Unable to specify 2d texture size when loading from file");
+    PN_CORE_ASSERT(settings.Sampler, "Sampler for texture is not defined");
 
     auto fileData = ReadFile(path);
 
@@ -39,10 +42,12 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSetting
 
 OpenGLTexture2D::OpenGLTexture2D(const TextureData& data, const Texture2DSettings& settings, std::string name)
     : m_name(std::move(name))
+    , m_sampler(settings.Sampler)
 {
     PN_PROFILE_FUNCTION();
 
     PN_CORE_ASSERT(settings.SizeIsExplicitlySpecified, "Size is not specified");
+    PN_CORE_ASSERT(settings.Sampler, "Sampler for texture is not defined");
     
     if (!data.empty()) {
         PN_CORE_ASSERT(data.size() == settings.DesiredSize.x * settings.DesiredSize.y * GetNumChannels(settings.Format), 
@@ -75,14 +80,6 @@ void OpenGLTexture2D::Initialize(const void* data, const glm::u32vec2& size, con
             glGenerateTextureMipmap(m_descriptor);
         }
     }
-
-    SetWrapping(settings.WrapX, settings.WrapY);
-
-    if (settings.UseMipmaps) {
-        SetFiltering(settings.MipmapFilterMin, settings.FilterMag);
-    } else {
-        SetFiltering(settings.FilterMin, settings.FilterMag);
-    }
 }
 
 OpenGLTexture2D::~OpenGLTexture2D()
@@ -94,11 +91,7 @@ void OpenGLTexture2D::BindToSlot(uint32_t slot)
 {
     m_slot = slot;
     glBindTextureUnit(slot, m_descriptor);
-}
-
-void OpenGLTexture2D::Unbind()
-{
-    glBindTextureUnit(m_slot, m_descriptor);
+    glBindSampler(slot, static_cast<OpenGLTextureSampler&>(*m_sampler).GetOpenGLHandle());
 }
 
 void OpenGLTexture2D::SetData(const TextureData& data, const glm::u32vec2& offset, const glm::u32vec2& size)
@@ -120,67 +113,6 @@ void OpenGLTexture2D::SetData(const TextureData& data, const glm::u32vec2& offse
     if (m_useMipmaps) {
         glGenerateTextureMipmap(m_descriptor);
     }
-}
-
-void OpenGLTexture2D::SetWrapping(TextureWrap x, TextureWrap y)
-{
-    glBindTexture(GL_TEXTURE_2D, m_descriptor);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ToGlWrap(x));
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ToGlWrap(y));
-}
-
-void OpenGLTexture2D::SetFiltering(TextureFilter min, TextureFilter mag)
-{
-    glBindTexture(GL_TEXTURE_2D, m_descriptor);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, ToGlFilter(min));
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, ToGlFilter(mag));
-}
-
-void OpenGLTexture2D::SetFiltering(TextureMipmapFilter min, TextureFilter mag)
-{
-    glBindTexture(GL_TEXTURE_2D, m_descriptor);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, ToGlFilter(min));
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, ToGlFilter(mag));
-}
-
-int OpenGLTexture2D::ToGlWrap(TextureWrap wrap) const
-{
-    switch (wrap) {
-        case TextureWrap::Repeat:           return GL_REPEAT;
-        case TextureWrap::MirroredRepeat:   return GL_MIRRORED_REPEAT;
-        case TextureWrap::ClampToBorder:    return GL_CLAMP_TO_BORDER;
-        case TextureWrap::ClampToEdge:      return GL_CLAMP_TO_EDGE;
-        default: break;
-    }
-
-    PN_CORE_ASSERT(false, "Unknown TextureWrap enum value");
-    return 0;
-}
-
-int OpenGLTexture2D::ToGlFilter(TextureFilter filter) const
-{
-    switch (filter) {
-        case TextureFilter::Nearest: return GL_NEAREST;
-        case TextureFilter::Linear: return  GL_LINEAR;
-        default: break;
-    }
-
-    PN_CORE_ASSERT(false, "Unknown TextureFilter enum value");
-    return 0;
-}
-
-int OpenGLTexture2D::ToGlFilter(TextureMipmapFilter filter) const
-{
-    switch (filter) {
-        case TextureMipmapFilter::NearestMipmapNearest: return GL_NEAREST_MIPMAP_NEAREST;
-        case TextureMipmapFilter::NearestMipmapLinear:  return GL_NEAREST_MIPMAP_LINEAR;
-        case TextureMipmapFilter::LinearMipmapNearest:  return GL_LINEAR_MIPMAP_NEAREST;
-        case TextureMipmapFilter::LinearMipmapLinear:   return GL_LINEAR_MIPMAP_LINEAR;
-        default: break;
-    }
-
-    PN_CORE_ASSERT(false, "Unknown TextureMipmapFilter enum value");
-    return 0;
 }
 
 int OpenGLTexture2D::ToGlInternalFormat(TextureFormat format) const
