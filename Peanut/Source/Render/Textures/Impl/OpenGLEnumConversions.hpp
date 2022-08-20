@@ -7,41 +7,40 @@
 
 namespace pn {
 
-    inline uint32_t GetGlMinFilter(TextureFilter minFilter, TextureMipFilter mipFilter)
+    inline uint32_t GetGlMinFilter(TextureFilter filter)
     {
-        switch (mipFilter) {
-            case TextureMipFilter::Nearest: 
-            {
-                switch (minFilter) {
-                    case TextureFilter::Nearest:        return GL_NEAREST_MIPMAP_NEAREST;
-                    case TextureFilter::Linear: 
-                    case TextureFilter::Anisotropic:    return GL_LINEAR_MIPMAP_NEAREST;
-                    default: break;
-                }
-            }
-            case TextureMipFilter::Linear:
-            {
-                switch (minFilter) {
-                    case TextureFilter::Nearest:        return GL_NEAREST_MIPMAP_LINEAR;
-                    case TextureFilter::Linear:
-                    case TextureFilter::Anisotropic:    return GL_LINEAR_MIPMAP_LINEAR;
-                    default: break;
-                }
-            }
-            default: break;
+        switch (filter) {
+            case TextureFilter::MinPointMagPointMipPoint: 
+            case TextureFilter::MinPointMagLinearMipPoint: return GL_NEAREST_MIPMAP_NEAREST;
+
+            case TextureFilter::MinPointMagPointMipLinear: 
+            case TextureFilter::MinPointMagLinearMipLinear: return GL_NEAREST_MIPMAP_LINEAR;
+
+            case TextureFilter::MinLinearMagPointMipPoint:
+            case TextureFilter::MinLinearMagLinearMipPoint: return GL_LINEAR_MIPMAP_NEAREST;
+
+            case TextureFilter::MinLinearMagPointMipLinear:
+            case TextureFilter::MinLinearMagLinearMipLinear: 
+            case TextureFilter::MinAnisotropicMagAnisotropicMipAnisotropic: return GL_LINEAR_MIPMAP_LINEAR;
         }
 
-        PN_CORE_ASSERT(false, "Unknown combination of TextureFilter and TextureMipFilter enum values");
+        PN_CORE_ASSERT(false, "Unknown TextureFilter enum value");
         return GL_LINEAR_MIPMAP_LINEAR;
     }
 
-    inline uint32_t GetGlMagFilter(TextureFilter magFilter)
+    inline uint32_t GetGlMagFilter(TextureFilter filter)
     {
-        switch (magFilter) {
-            case TextureFilter::Nearest:        return GL_NEAREST;
-            case TextureFilter::Linear:
-            case TextureFilter::Anisotropic:    return GL_LINEAR;
-            default: break;
+        switch (filter) {
+            case TextureFilter::MinPointMagPointMipPoint: 
+            case TextureFilter::MinLinearMagPointMipPoint:
+            case TextureFilter::MinPointMagPointMipLinear: 
+            case TextureFilter::MinLinearMagPointMipLinear: return GL_NEAREST;
+
+            case TextureFilter::MinPointMagLinearMipPoint:
+            case TextureFilter::MinLinearMagLinearMipPoint: 
+            case TextureFilter::MinPointMagLinearMipLinear:
+            case TextureFilter::MinLinearMagLinearMipLinear: 
+            case TextureFilter::MinAnisotropicMagAnisotropicMipAnisotropic: return GL_LINEAR;
         }
 
         PN_CORE_ASSERT(false, "Unknown TextureFilter enum value");

@@ -15,6 +15,9 @@ public:
 
     uint32_t GetDescriptor() const override { return m_descriptor; }
 
+    void SetSampler(const std::shared_ptr<TextureSampler>& sampler) { m_sampler = sampler; }
+    std::shared_ptr<TextureSampler> GetSampler() const override { return m_sampler; }
+
     const std::string& GetName() const override { return m_name; }
 
     void BindToSlot(uint32_t slot = 0) override;

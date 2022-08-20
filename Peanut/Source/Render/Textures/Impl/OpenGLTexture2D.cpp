@@ -21,7 +21,6 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSetting
     PN_PROFILE_FUNCTION();
 
     PN_CORE_ASSERT(!settings.SizeIsExplicitlySpecified, "Unable to specify 2d texture size when loading from file");
-    PN_CORE_ASSERT(settings.Sampler, "Sampler for texture is not defined");
 
     auto fileData = ReadFile(path);
 
@@ -47,7 +46,6 @@ OpenGLTexture2D::OpenGLTexture2D(const TextureData& data, const Texture2DSetting
     PN_PROFILE_FUNCTION();
 
     PN_CORE_ASSERT(settings.SizeIsExplicitlySpecified, "Size is not specified");
-    PN_CORE_ASSERT(settings.Sampler, "Sampler for texture is not defined");
     
     if (!data.empty()) {
         PN_CORE_ASSERT(data.size() == settings.DesiredSize.x * settings.DesiredSize.y * GetNumChannels(settings.Format), 
@@ -91,7 +89,10 @@ void OpenGLTexture2D::BindToSlot(uint32_t slot)
 {
     m_slot = slot;
     glBindTextureUnit(slot, m_descriptor);
-    glBindSampler(slot, static_cast<OpenGLTextureSampler&>(*m_sampler).GetOpenGLHandle());
+
+    if (m_sampler) {
+        glBindSampler(slot, static_cast<OpenGLTextureSampler&>(*m_sampler).GetOpenGLHandle());
+    }
 }
 
 void OpenGLTexture2D::SetData(const TextureData& data, const glm::u32vec2& offset, const glm::u32vec2& size)
