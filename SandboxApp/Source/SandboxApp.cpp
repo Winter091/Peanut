@@ -15,15 +15,16 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
             .SetWidth(15.0f).SetHeight(15.0f)));
 
     auto sampler = pn::TextureSampler::Create(pn::TextureSamplerSettings()
-        .SetMinFilter(pn::TextureFilter::Linear)
-        .SetMagFilter(pn::TextureFilter::Linear)
-        .SetMipFilter(pn::TextureMipFilter::Linear)
+        .SetMinFilter(pn::TextureFilter::Anisotropic)
+        .SetMagFilter(pn::TextureFilter::Anisotropic)
+        .SetMipFilter(pn::TextureMipFilter::Nearest)
         .SetWrap(pn::TextureWrap::Repeat));
 
     m_texture = pn::Texture2D::Create(
         pn::StoragePath::GetAssetsPath() + "/Textures/container.jpg", 
         pn::Texture2DSettings()
-            .SetSampler(sampler));
+            .SetSampler(sampler)
+            .UseMipmapping(true));
     
     float step = 1.25f;
     for (int i = -5; i <= 5; i++) {

@@ -2,8 +2,6 @@
 
 #include "OpenGLEnumConversions.hpp"
 
-#include <glad/glad.h>
-
 namespace pn {
 
 	OpenGLTextureSampler::OpenGLTextureSampler(const TextureSamplerSettings& settings)
@@ -15,6 +13,21 @@ namespace pn {
 
 		glSamplerParameteri(m_handle, GL_TEXTURE_WRAP_S, GetGLWrap(settings.GetWrapX()));
 		glSamplerParameteri(m_handle, GL_TEXTURE_WRAP_T, GetGLWrap(settings.GetWrapY()));
+
+		if (settings.GetMinFilter() != TextureFilter::Anisotropic && settings.GetMagFilter() != TextureFilter::Anisotropic) {
+			glSamplerParameterf(m_handle, GL_TEXTURE_MAX_ANISOTROPY, 1.0f);
+		} else {
+			float maxSupportedAnisotropy = 0.0f;
+			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, &maxSupportedAnisotropy);
+
+			if (settings.GetMaxAnisotropy() > maxSupportedAnisotropy) {
+				PN_CORE_WARN("Texture sampler: specified max anisotropy value {} is clamped to {} because of lack of hardware support",
+					settings.GetMaxAnisotropy(), maxSupportedAnisotropy);
+			}
+
+			float maxAnisotropy = std::max(maxSupportedAnisotropy, settings.GetMaxAnisotropy());
+			glSamplerParameterf(m_handle, GL_TEXTURE_MAX_ANISOTROPY, maxAnisotropy);
+		}
 	}
 
 	OpenGLTextureSampler::~OpenGLTextureSampler()
