@@ -15,9 +15,10 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
             .SetWidth(15.0f).SetHeight(15.0f)));
 
     auto sampler = pn::TextureSampler::Create(pn::TextureSamplerSettings()
-        .SetFilter(pn::TextureFilter::MinPointMagPointMipPoint)
+        .SetFilter(pn::TextureFilter::MinAnisotropicMagAnisotropicMipAnisotropic)
         .SetWrap(pn::TextureWrap::Border)
-        .SetBorderColor({ 0.0f, 0.0f, 0.0f, 0.0f }));
+        .SetBorderColor({ 0.0f, 0.0f, 0.0f, 0.0f })
+        .SetMaxAnisotropy(16));
 
     m_texture = pn::Texture2D::Create(
         pn::StoragePath::GetAssetsPath() + "/Textures/container.jpg", 

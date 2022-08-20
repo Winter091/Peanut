@@ -21,12 +21,24 @@ namespace pn {
 		MinAnisotropicMagAnisotropicMipAnisotropic,
 	};
 
-	enum class TextureWrap
+	enum class TextureWrap : uint32_t
 	{
-		Repeat,
+		Repeat = 0u,
 		MirroredRepeat,
 		Clamp,
 		Border,
+	};
+
+	enum class TextureComparisonFunc : uint32_t
+	{
+		Never = 0u,
+		Less,
+		Equal,
+		LessEqual,
+		Greater,
+		NotEqual,
+		GreaterEqual,
+		Always,
 	};
 
 	struct TextureSamplerSettings
@@ -64,8 +76,14 @@ namespace pn {
 			return *this;
 		}
 
-		TextureSamplerSettings& SetMaxAnisotropy(float value) {
-			PN_CORE_ASSERT(value >= 1.0f && value <= 16.0f, "Max anosotropy value has to be between 1.0 and 16.0");
+		TextureSamplerSettings& SetComparisonFunc(TextureComparisonFunc func)
+		{
+			m_comparionFunc = func;
+			return *this;
+		}
+
+		TextureSamplerSettings& SetMaxAnisotropy(uint32_t value) {
+			PN_CORE_ASSERT(value >= 1u && value <= 16u, "Max anosotropy value has to be between 1 and 16");
 			m_maxAnisotropy = value;
 			return *this;
 		}
@@ -94,7 +112,8 @@ namespace pn {
 		TextureWrap GetWrapX() const { return m_wrapX; }
 		TextureWrap GetWrapY() const { return m_wrapY; }
 		TextureWrap GetWrapZ() const { return m_wrapZ; }
-		float GetMaxAnisotropy() const { return m_maxAnisotropy; }
+		TextureComparisonFunc GetComparisonFunc() const { return m_comparionFunc; }
+		uint32_t GetMaxAnisotropy() const { return m_maxAnisotropy; }
 		const glm::vec4& GetBorderColor() const { return m_borderColor; }
 		float GetLodBias() const { return m_lodBias; }
 		float GetMinLod() const { return m_minLod; }
@@ -105,7 +124,8 @@ namespace pn {
 		TextureWrap m_wrapX = TextureWrap::Repeat;
 		TextureWrap m_wrapY = TextureWrap::Repeat;
 		TextureWrap m_wrapZ = TextureWrap::Repeat;
-		float m_maxAnisotropy = 1.0f;
+		TextureComparisonFunc m_comparionFunc = TextureComparisonFunc::Always;
+		uint32_t m_maxAnisotropy = 1u;
 		glm::vec4 m_borderColor = glm::vec4(0.0f);
 		float m_lodBias = 0.0f;
 		float m_minLod = 0.0f;

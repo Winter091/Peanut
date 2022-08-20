@@ -7,6 +7,11 @@
 #include <Render/Textures/Impl/OpenGLTextureSampler.hpp>
 #endif
 
+#if defined(PN_RENDERING_DX11)
+#include <Render/Textures/Impl/Dx11TextureSampler.hpp>
+#endif
+
+
 namespace pn {
 
     std::shared_ptr<TextureSampler> TextureSampler::Create(const TextureSamplerSettings& settings)
@@ -21,6 +26,11 @@ namespace pn {
 #if defined(PN_RENDERING_OPENGL)
             case RenderAPI::OpenGL:
                 return std::make_shared<OpenGLTextureSampler>(settings);
+#endif
+
+#if defined(PN_RENDERING_DX11)
+            case RenderAPI::Dx11:
+                return std::make_shared<Dx11TextureSampler>(settings);
 #endif
 
             default:

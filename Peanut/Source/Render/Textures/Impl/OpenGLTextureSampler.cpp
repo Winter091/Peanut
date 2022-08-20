@@ -13,6 +13,11 @@ namespace pn {
 
 		glSamplerParameteri(m_handle, GL_TEXTURE_WRAP_S, GetGLWrap(settings.GetWrapX()));
 		glSamplerParameteri(m_handle, GL_TEXTURE_WRAP_T, GetGLWrap(settings.GetWrapY()));
+		glSamplerParameteri(m_handle, GL_TEXTURE_WRAP_R, GetGLWrap(settings.GetWrapZ()));
+
+		glSamplerParameteri(m_handle, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+		glSamplerParameteri(m_handle, GL_TEXTURE_COMPARE_FUNC, GetGlComparisonFunc(settings.GetComparisonFunc()));
+
 
 		if (settings.GetFilter() != TextureFilter::MinAnisotropicMagAnisotropicMipAnisotropic) {
 			glSamplerParameterf(m_handle, GL_TEXTURE_MAX_ANISOTROPY, 1.0f);
@@ -20,12 +25,14 @@ namespace pn {
 			float maxSupportedAnisotropy = 0.0f;
 			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, &maxSupportedAnisotropy);
 
-			if (settings.GetMaxAnisotropy() > maxSupportedAnisotropy) {
+			float desiredMaxAnisotropy = static_cast<float>(settings.GetMaxAnisotropy());
+
+			if (desiredMaxAnisotropy > maxSupportedAnisotropy) {
 				PN_CORE_WARN("Texture sampler: specified max anisotropy value {} is clamped to {} because of lack of hardware support",
-					settings.GetMaxAnisotropy(), maxSupportedAnisotropy);
+					desiredMaxAnisotropy, maxSupportedAnisotropy);
 			}
 
-			float maxAnisotropy = std::max(maxSupportedAnisotropy, settings.GetMaxAnisotropy());
+			float maxAnisotropy = std::max(maxSupportedAnisotropy, desiredMaxAnisotropy);
 			glSamplerParameterf(m_handle, GL_TEXTURE_MAX_ANISOTROPY, maxAnisotropy);
 		}
 
