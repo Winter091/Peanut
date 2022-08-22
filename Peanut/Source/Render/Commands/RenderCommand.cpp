@@ -68,10 +68,10 @@ void RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, 
     s_renderCommandImpl->SetViewport(leftX, bottomY, width, height);
 }
 
-void RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
+void RenderCommand::Draw(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    s_renderCommandImpl->DrawArrays(vertexArray, count);
+    s_renderCommandImpl->Draw(vertexArray, count);
 }
 
 void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
@@ -80,11 +80,11 @@ void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint3
     s_renderCommandImpl->DrawIndexed(vertexArray, count);
 }
 
-void RenderCommand::DrawArraysInstanced(
+void RenderCommand::DrawInstanced(
     std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    s_renderCommandImpl->DrawArraysInstanced(vertexArray, count, instanceCount);
+    s_renderCommandImpl->DrawInstanced(vertexArray, count, instanceCount);
 }
 
 void RenderCommand::DrawIndexedInstanced(
@@ -92,6 +92,24 @@ void RenderCommand::DrawIndexedInstanced(
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
     s_renderCommandImpl->DrawIndexedInstanced(vertexArray, count, instanceCount);
+}
+
+void RenderCommand::BindShader(const std::shared_ptr<Shader>& shader)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->BindShader(shader);
+}
+
+void RenderCommand::BindConstantBuffers(const std::shared_ptr<ConstantBuffer>* constantBuffers, size_t amount, uint32_t startSlot)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->BindConstantBuffers(constantBuffers, amount, startSlot);
+}
+
+void RenderCommand::BindTextures(const std::shared_ptr<Texture>* textures, size_t amount, uint32_t startSlot)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->BindTextures(textures, amount, startSlot);
 }
 
 }

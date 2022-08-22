@@ -60,7 +60,7 @@ void OpenGLTexture2D::Initialize(const void* data, const glm::u32vec2& size, con
 {
     PN_PROFILE_FUNCTION();
 
-    glCreateTextures(GL_TEXTURE_2D, 1, &m_descriptor);
+    glCreateTextures(GL_TEXTURE_2D, 1, &m_handle);
 
     m_size = size;
 
@@ -70,29 +70,21 @@ void OpenGLTexture2D::Initialize(const void* data, const glm::u32vec2& size, con
     m_useMipmaps = settings.UseMipmaps;
 
     int numTextuteLevels = m_useMipmaps ? GetNumTextureLevels(m_size) : 1;
-    glTextureStorage2D(m_descriptor, numTextuteLevels, ToGlInternalFormat(settings.Format), m_size.x, m_size.y);
+    glTextureStorage2D(m_handle, numTextuteLevels, ToGlInternalFormat(settings.Format), m_size.x, m_size.y);
 
     if (data) {
-        glTextureSubImage2D(m_descriptor, 0, 0, 0, m_size.x, m_size.y, m_format, GL_UNSIGNED_BYTE, data);
+        glTextureSubImage2D(m_handle, 0, 0, 0, m_size.x, m_size.y, m_format, GL_UNSIGNED_BYTE, data);
         if (m_useMipmaps) {
-            glGenerateTextureMipmap(m_descriptor);
+            glGenerateTextureMipmap(m_handle);
         }
     }
+
+    PN_CORE_DEBUG("Texture after init has handle = {}", m_handle);
 }
 
 OpenGLTexture2D::~OpenGLTexture2D()
 {
-    glDeleteTextures(1, &m_descriptor);
-}
-
-void OpenGLTexture2D::BindToSlot(uint32_t slot)
-{
-    m_slot = slot;
-    glBindTextureUnit(slot, m_descriptor);
-
-    if (m_sampler) {
-        glBindSampler(slot, static_cast<OpenGLTextureSampler&>(*m_sampler).GetOpenGLHandle());
-    }
+    glDeleteTextures(1, &m_handle);
 }
 
 void OpenGLTexture2D::SetData(const TextureData& data, const glm::u32vec2& offset, const glm::u32vec2& size)
@@ -110,9 +102,9 @@ void OpenGLTexture2D::SetData(const TextureData& data, const glm::u32vec2& offse
 
     PN_CORE_ASSERT(data.size() >= sz.x * sz.y * m_numChannels, "Provided data size is not enough for specified subrectangle");
 
-    glTextureSubImage2D(m_descriptor, 0, offset.x, offset.y, sz.x, sz.y, m_format, GL_UNSIGNED_BYTE, &data[0]);
+    glTextureSubImage2D(m_handle, 0, offset.x, offset.y, sz.x, sz.y, m_format, GL_UNSIGNED_BYTE, &data[0]);
     if (m_useMipmaps) {
-        glGenerateTextureMipmap(m_descriptor);
+        glGenerateTextureMipmap(m_handle);
     }
 }
 

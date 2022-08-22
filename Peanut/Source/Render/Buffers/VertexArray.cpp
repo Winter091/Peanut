@@ -23,10 +23,6 @@ std::shared_ptr<VertexArray> VertexArray::Create(const VertexArrayDescription& d
         PN_CORE_ASSERT(vertexBuffer, "One of vertex buffers in vertex array is nullptr");
     }
 
-    for (const auto& constantBuffer : description.GetConstantBuffers()) {
-        PN_CORE_ASSERT(constantBuffer, "One of constant buffers in vertex array is nullptr");
-    }
-    
     auto renderApi = RenderCommand::GetRenderAPI();
 
     switch (renderApi) {

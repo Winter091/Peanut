@@ -1,8 +1,17 @@
+#include "Dx11RenderCommand.hpp"
 #include "DX11RenderCommand.hpp"
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Application/Application.hpp>
 #include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
+#include <Render/Buffers/Impl/Dx11VertexBuffer.hpp>
+#include <Render/Buffers/Impl/Dx11IndexBuffer.hpp>
+#include <Render/Buffers/Impl/Dx11EnumConversions.hpp>
+#include <Render/Buffers/Impl/Dx11ConstantBuffer.hpp>
+#include <Render/Shaders/Impl/Dx11ShaderInputLayout.hpp>
+#include <Render/Shaders/Impl/Dx11Shader.hpp>
+
+#include <vector>
 
 #include <d3d11.h>
 
@@ -47,66 +56,128 @@ void Dx11RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t wid
     deviceContext->RSSetViewports(1, &viewport);
 }
 
-void Dx11RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& pipelineState, uint32_t count)
+void Dx11RenderCommand::Draw(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
-    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
-
     if (count == 0) {
-        count = pipelineState->GetVertexCount();
+        count = vertexArray->GetVertexCount();
     }
 
-    pipelineState->Bind();
+    BindVertexArray(vertexArray);
+
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
     deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     deviceContext->Draw(count, 0);
 }
 
-void Dx11RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& pipelineState, uint32_t count)
+void Dx11RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
-    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
-
     if (count == 0) {
-        count = pipelineState->GetIndexCount();
+        count = vertexArray->GetIndexCount();
     }
 
-    pipelineState->Bind();
+    BindVertexArray(vertexArray);
+
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
     deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     deviceContext->DrawIndexed(count, 0, 0);
 }
 
-void Dx11RenderCommand::DrawArraysInstanced(
-    std::shared_ptr<VertexArray>& pipelineState, uint32_t count, uint32_t instanceCount)
+void Dx11RenderCommand::DrawInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
 {
-    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
-
     if (count == 0) {
-        count = pipelineState->GetIndexCount();
+        count = vertexArray->GetIndexCount();
     }
 
     if (instanceCount == 0) {
-        instanceCount = pipelineState->GetInstanceCount();
+        instanceCount = vertexArray->GetInstanceCount();
     }
 
-    pipelineState->Bind();
+    BindVertexArray(vertexArray);
+    
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
     deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     deviceContext->DrawInstanced(count, instanceCount, 0, 0);
 }
 
-void Dx11RenderCommand::DrawIndexedInstanced(
-    std::shared_ptr<VertexArray>& pipelineState, uint32_t count, uint32_t instanceCount)
+void Dx11RenderCommand::DrawIndexedInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
 {
-    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
-
     if (count == 0) {
-        count = pipelineState->GetIndexCount();
+        count = vertexArray->GetIndexCount();
     }
 
     if (instanceCount == 0) {
-        instanceCount = pipelineState->GetInstanceCount();
+        instanceCount = vertexArray->GetInstanceCount();
     }
 
-    pipelineState->Bind();
+    BindVertexArray(vertexArray);
+
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
     deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     deviceContext->DrawIndexedInstanced(count, instanceCount, 0, 0, 0);
+}
+
+void Dx11RenderCommand::BindVertexBuffers(const std::shared_ptr<VertexBuffer>* vertexBuffers, size_t amount, uint32_t startSlot)
+{
+    constexpr size_t maxBuffers = 16;
+    static std::vector<ID3D11Buffer*> buffers(maxBuffers);
+    static std::vector<uint32_t> strides(maxBuffers);
+    static std::vector<uint32_t> offsets(maxBuffers, 0);
+
+    PN_CORE_ASSERT(amount > 0 && amount <= maxBuffers, "Can't bind less than 1 or more than {} vertex buffers", maxBuffers);
+
+    for (int i = 0; i < amount; i++) {
+        buffers[i] = (static_cast<Dx11VertexBuffer&>(*vertexBuffers[i])).GetNativeObjectPtr();
+        strides[i] = vertexBuffers[i]->GetLayout()->GetVertexSize();
+    }
+
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+    deviceContext->IASetVertexBuffers(startSlot, static_cast<uint32_t>(amount), &buffers[0], &strides[0], &offsets[0]);
+}
+
+void Dx11RenderCommand::BindVertexArray(const std::shared_ptr<VertexArray>& vertexArray)
+{
+    auto vertexBuffers = vertexArray->GetVertexBuffers();
+    BindVertexBuffers(vertexBuffers.data(), vertexBuffers.size(), 0);
+
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+    deviceContext->IASetInputLayout(static_cast<Dx11ShaderInputLayout&>(*vertexArray->GetShaderInputLayout()).Get());
+
+    auto indexBuffer = vertexArray->GetIndexBuffer();
+    if (indexBuffer) {
+        deviceContext->IASetIndexBuffer(
+            static_cast<Dx11IndexBuffer&>(*indexBuffer).GetNativeObjectPtr(), 
+            IndexBufferFormatToDx11Format(indexBuffer->GetDataFormat()),
+            0);
+    }
+}
+
+void Dx11RenderCommand::BindShader(const std::shared_ptr<Shader>& shader)
+{
+    auto& dx11Shader = static_cast<Dx11Shader&>(*shader);
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+    deviceContext->VSSetShader(dx11Shader.GetNativeVertexShaderObj(), nullptr, 0);
+    deviceContext->PSSetShader(dx11Shader.GetNativeFragmentShaderObj(), nullptr, 0);
+}
+
+void Dx11RenderCommand::BindConstantBuffers(const std::shared_ptr<ConstantBuffer>* constantBuffers, size_t amount, uint32_t startSlot)
+{
+    constexpr size_t maxBuffers = 16;
+    static std::vector<ID3D11Buffer*> buffers(maxBuffers);
+
+    PN_CORE_ASSERT(amount > 0 && amount <= maxBuffers, "Can't bind less than 1 or more than {} vertex buffers", maxBuffers);
+
+    for (int i = 0; i < amount; i++) {
+        buffers[i] = (static_cast<Dx11ConstantBuffer&>(*constantBuffers[i])).GetNativeObjectPtr();
+    }
+    
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+    deviceContext->VSSetConstantBuffers(0, static_cast<uint32_t>(amount), &buffers[0]);
+    deviceContext->PSSetConstantBuffers(0, static_cast<uint32_t>(amount), &buffers[0]);
+}
+
+void Dx11RenderCommand::BindTextures(const std::shared_ptr<Texture>* textures, size_t amount, uint32_t startSlot)
+{
+    PN_CORE_ASSERT(false, "Not implemented");
 }
 
 }

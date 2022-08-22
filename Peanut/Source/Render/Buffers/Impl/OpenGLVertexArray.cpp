@@ -3,6 +3,8 @@
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
 #include <Render/Buffers/Impl/OpenGLEnumConversions.hpp>
+#include <Render/Textures/Impl/OpenGLTexture.hpp>
+#include <Render/Textures/Impl/OpenGLTextureSampler.hpp>
 #include "OpenGLVertexBuffer.hpp"
 #include "OpenGLIndexBuffer.hpp"
 #include "OpenGLConstantBuffer.hpp"
@@ -15,10 +17,9 @@ namespace pn
 {
 
 OpenGLVertexArray::OpenGLVertexArray(const VertexArrayDescription& description)
-    : m_constantBuffers(description.GetConstantBuffers())
-    , m_shader(description.GetShader())
 {
     glCreateVertexArrays(1, &m_vaoHandle);
+    glBindVertexArray(m_vaoHandle);
 
     for (const auto& vertexBuffer : description.GetVertexBuffers()) {
         AddVertexBuffer(vertexBuffer);
@@ -34,23 +35,9 @@ OpenGLVertexArray::~OpenGLVertexArray()
     glDeleteVertexArrays(1, &m_vaoHandle);
 }
 
-void OpenGLVertexArray::Bind()
-{
-    glBindVertexArray(m_vaoHandle);
-
-    for (uint32_t i = 0; i < m_constantBuffers.size(); i++) {
-        uint32_t handle = static_cast<OpenGLConstantBuffer&>(*m_constantBuffers[i]).GetOpenGLHandle();
-        glBindBufferBase(GL_UNIFORM_BUFFER, i, handle);
-    }
-
-    m_shader->Bind();
-}
-
 void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
 {
     PN_PROFILE_FUNCTION();
-
-    glBindVertexArray(m_vaoHandle);
 
     uint32_t bindingIndex = static_cast<uint32_t>(m_vertexBuffers.size());
     uint32_t vertexBufferHandle = static_cast<OpenGLVertexBuffer&>(*vertexBuffer).GetOpenGLHandle();
@@ -111,11 +98,6 @@ void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& index
 
     glBindVertexArray(m_vaoHandle);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
-}
-
-void OpenGLVertexArray::SetConstantBuffers(const std::vector<std::shared_ptr<ConstantBuffer>>& constantBuffers)
-{
-    m_constantBuffers = constantBuffers;
 }
 
 uint32_t OpenGLVertexArray::GetVertexCount() const

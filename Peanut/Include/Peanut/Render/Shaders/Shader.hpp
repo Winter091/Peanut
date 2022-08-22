@@ -39,8 +39,6 @@ public:
 
     virtual const std::string& GetName() const = 0;
 
-    virtual void Bind() = 0;
-
     static std::shared_ptr<Shader> Create(const ShaderPaths& paths, const std::string& name = "");
     static std::shared_ptr<Shader> Create(const ShaderSources& sources, const std::string& name = "");
 };

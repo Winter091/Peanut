@@ -24,12 +24,12 @@ public:
     Texture& operator=(const Texture&) = delete;
     virtual ~Texture() = default;
 
+    virtual bool operator==(const Texture& other) const = 0;
+
     virtual void SetSampler(const std::shared_ptr<TextureSampler>& sampler) = 0;
     virtual  std::shared_ptr<TextureSampler> GetSampler() const = 0;
 
     virtual const std::string& GetName() const = 0;
-
-    virtual void BindToSlot(uint32_t slot = 0) = 0;
 };
 
 }

@@ -45,14 +45,11 @@ struct Texture2DSettings
     std::shared_ptr<TextureSampler> Sampler = nullptr;
 };
 
-class Texture2D : public Texture
+class Texture2D : virtual public Texture
 {
 public:
     ~Texture2D() override = default;
-    virtual bool operator==(const Texture2D& other) const = 0;
 
-    virtual uint32_t GetDescriptor() const = 0;
-    
     virtual const glm::u32vec2& GetSize() const = 0;
 
     virtual void SetData(const TextureData& data, const glm::u32vec2& offset = {0, 0}, const glm::u32vec2& size = {0, 0}) = 0;

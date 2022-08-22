@@ -43,7 +43,8 @@ namespace pn {
     inline D3D11_COMPARISON_FUNC GetDx11ComparisonFunc(TextureComparisonFunc func)
     {
         switch (func) {
-        case TextureComparisonFunc::Never: return D3D11_COMPARISON_NEVER;
+            case TextureComparisonFunc::NotRequired: return D3D11_COMPARISON_ALWAYS;
+            case TextureComparisonFunc::Never: return D3D11_COMPARISON_NEVER;
             case TextureComparisonFunc::Less: return D3D11_COMPARISON_LESS;
             case TextureComparisonFunc::Equal: return D3D11_COMPARISON_EQUAL;
             case TextureComparisonFunc::LessEqual: return D3D11_COMPARISON_LESS_EQUAL;

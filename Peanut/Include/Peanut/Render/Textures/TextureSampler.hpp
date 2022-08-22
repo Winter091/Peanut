@@ -31,7 +31,8 @@ namespace pn {
 
 	enum class TextureComparisonFunc : uint32_t
 	{
-		Never = 0u,
+		NotRequired = 0u,
+		Never,
 		Less,
 		Equal,
 		LessEqual,
@@ -124,7 +125,7 @@ namespace pn {
 		TextureWrap m_wrapX = TextureWrap::Repeat;
 		TextureWrap m_wrapY = TextureWrap::Repeat;
 		TextureWrap m_wrapZ = TextureWrap::Repeat;
-		TextureComparisonFunc m_comparionFunc = TextureComparisonFunc::Always;
+		TextureComparisonFunc m_comparionFunc = TextureComparisonFunc::NotRequired;
 		uint32_t m_maxAnisotropy = 1u;
 		glm::vec4 m_borderColor = glm::vec4(0.0f);
 		float m_lodBias = 0.0f;

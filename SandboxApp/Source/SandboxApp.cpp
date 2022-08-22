@@ -20,11 +20,13 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
         .SetBorderColor({ 0.0f, 0.0f, 0.0f, 0.0f })
         .SetMaxAnisotropy(16));
 
+    /*
     m_texture = pn::Texture2D::Create(
         pn::StoragePath::GetAssetsPath() + "/Textures/container.jpg", 
         pn::Texture2DSettings()
             .SetSampler(sampler)
             .UseMipmapping(true));
+    */
     
     float step = 1.25f;
     for (int i = -5; i <= 5; i++) {
@@ -34,7 +36,7 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
             pn::Rectangle rect;
             rect.SetPosition({ x, y });
             rect.SetColor({ 146, 226, 253, 255 });
-            rect.SetTexture(m_texture);
+            //rect.SetTexture(m_texture);
             m_rectangles.push_back(rect);
         }
     }

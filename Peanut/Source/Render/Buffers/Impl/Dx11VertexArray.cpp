@@ -1,4 +1,5 @@
 #include "Dx11VertexArray.hpp"
+#include "Dx11VertexArray.hpp"
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
@@ -19,12 +20,10 @@ namespace pn
 Dx11VertexArray::Dx11VertexArray(const VertexArrayDescription& description)
     : m_vertexBuffers(description.GetVertexBuffers())
     , m_indexBuffer(description.GetIndexBuffer())
-    , m_constantBuffers(description.GetConstantBuffers())
-    , m_shader(description.GetShader())
     , m_inputLayout(description.GetShaderInputLayout())
 {
     if (!m_inputLayout) {
-        m_inputLayout = ShaderInputLayout::Create(m_vertexBuffers, m_shader);
+        m_inputLayout = ShaderInputLayout::Create(m_vertexBuffers, description.GetShader());
     }
     
     for (const auto& vertexBuffer : m_vertexBuffers) {
@@ -34,48 +33,9 @@ Dx11VertexArray::Dx11VertexArray(const VertexArrayDescription& description)
     }
 }
 
-void Dx11VertexArray::Bind()
-{
-    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
-
-    std::vector<ID3D11Buffer*> vertexBuffers;
-    std::vector<uint32_t> strides;
-    std::vector<uint32_t> offsets(m_vertexBuffers.size(), 0);
-
-    for (const auto& vertexBuffer : m_vertexBuffers) {
-        vertexBuffers.push_back(static_cast<Dx11VertexBuffer&>(*vertexBuffer).GetNativeObjectPtr());
-        strides.push_back(vertexBuffer->GetLayout()->GetVertexSize());
-    }
-
-    deviceContext->IASetVertexBuffers(0, static_cast<uint32_t>(vertexBuffers.size()), &vertexBuffers[0], &strides[0], &offsets[0]);
-    deviceContext->IASetInputLayout(static_cast<Dx11ShaderInputLayout&>(*m_inputLayout).Get());
-
-    if (m_indexBuffer) {
-        deviceContext->IASetIndexBuffer(static_cast<Dx11IndexBuffer&>(*m_indexBuffer).GetNativeObjectPtr(), IndexBufferFormatToDx11Format(m_indexBuffer->GetDataFormat()), 0);
-    }
-
-    if (!m_constantBuffers.empty()) {
-        std::vector<ID3D11Buffer*> constantBuffers;
-        
-        for (const auto& constantBuffer : m_constantBuffers) {
-            constantBuffers.push_back(static_cast<Dx11ConstantBuffer&>(*constantBuffer).GetNativeObjectPtr());
-        }
-
-        deviceContext->VSSetConstantBuffers(0, static_cast<uint32_t>(constantBuffers.size()), &constantBuffers[0]);
-        deviceContext->PSSetConstantBuffers(0, static_cast<uint32_t>(constantBuffers.size()), &constantBuffers[0]);
-    }
-
-    m_shader->Bind();
-}
-
 void Dx11VertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 {
     m_indexBuffer = indexBuffer;
-}
-
-void Dx11VertexArray::SetConstantBuffers(const std::vector<std::shared_ptr<ConstantBuffer>>& constantBuffers)
-{
-    m_constantBuffers = constantBuffers;
 }
 
 uint32_t Dx11VertexArray::GetVertexCount() const

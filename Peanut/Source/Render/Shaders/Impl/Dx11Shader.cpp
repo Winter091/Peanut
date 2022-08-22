@@ -102,12 +102,4 @@ Dx11Shader::~Dx11Shader()
 {
 }
 
-void Dx11Shader::Bind()
-{
-	auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
-
-	deviceContext->VSSetShader(m_vertexShader.Get(), nullptr, 0);
-	deviceContext->PSSetShader(m_fragmentShader.Get(), nullptr, 0);
-}
-
 }

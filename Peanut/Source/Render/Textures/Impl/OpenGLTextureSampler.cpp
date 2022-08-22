@@ -15,9 +15,12 @@ namespace pn {
 		glSamplerParameteri(m_handle, GL_TEXTURE_WRAP_T, GetGLWrap(settings.GetWrapY()));
 		glSamplerParameteri(m_handle, GL_TEXTURE_WRAP_R, GetGLWrap(settings.GetWrapZ()));
 
-		glSamplerParameteri(m_handle, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-		glSamplerParameteri(m_handle, GL_TEXTURE_COMPARE_FUNC, GetGlComparisonFunc(settings.GetComparisonFunc()));
-
+		if (settings.GetComparisonFunc() == TextureComparisonFunc::NotRequired) {
+			glSamplerParameteri(m_handle, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+		} else {
+			glSamplerParameteri(m_handle, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+			glSamplerParameteri(m_handle, GL_TEXTURE_COMPARE_FUNC, GetGlComparisonFunc(settings.GetComparisonFunc()));
+		}
 
 		if (settings.GetFilter() != TextureFilter::MinAnisotropicMagAnisotropicMipAnisotropic) {
 			glSamplerParameterf(m_handle, GL_TEXTURE_MAX_ANISOTROPY, 1.0f);

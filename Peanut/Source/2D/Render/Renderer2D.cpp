@@ -46,7 +46,7 @@ struct Renderer2DData
 
     uint32_t NumRectInstances = 0;
 
-    std::array<std::shared_ptr<Texture2D>, MAX_TEXTURE_SLOTS> Textures;
+    std::array<std::shared_ptr<Texture>, MAX_TEXTURE_SLOTS> Textures;
     uint32_t NumTextures = 0;
 
 };
@@ -60,11 +60,11 @@ static void Flush()
 
     s_data->RectanglePerInstanceBuffer->Unmap();
 
-    for (uint32_t i = 0; i < s_data->NumTextures; i++) {
-        s_data->Textures[i]->BindToSlot(i);
+    if (s_data->NumTextures) {
+        RenderCommand::BindTextures(&s_data->Textures[0], s_data->NumTextures);
     }
 
-    RenderCommand::DrawArraysInstanced(s_data->RectangleVertexArray, 6, s_data->NumRectInstances);
+    RenderCommand::DrawInstanced(s_data->RectangleVertexArray, 6, s_data->NumRectInstances);
 }
 
 static void StartBatch()
@@ -136,8 +136,7 @@ void Renderer2D::Init()
 
     s_data->RectangleVertexArray = VertexArray::Create(VertexArrayDescription()
         .SetVertexBuffers({ rectanglePerVertexBuffer, s_data->RectanglePerInstanceBuffer })
-        .SetShader(s_data->RectangleShader)
-        .AddConstantBuffer(s_data->CameraConstantBuffer));
+        .SetShader(s_data->RectangleShader));
 
     s_isInitialized = true;
 }
@@ -157,6 +156,9 @@ void Renderer2D::BeginScene(const Camera& camera)
     PN_PROFILE_FUNCTION();
 
     s_data->CameraConstantBuffer->SetData(&camera.GetViewProjectionMatrix());
+
+    RenderCommand::BindConstantBuffers(&s_data->CameraConstantBuffer, 1);
+    RenderCommand::BindShader(s_data->RectangleShader);
 
     StartBatch();
 }
