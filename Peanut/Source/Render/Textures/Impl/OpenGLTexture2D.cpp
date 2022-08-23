@@ -8,6 +8,7 @@
 #include <Peanut/Core/TimeProfiler.hpp>
 #include <Peanut/Core/Utils/FileUtils.hpp>
 #include <Render/Textures/Impl/OpenGLTextureSampler.hpp>
+#include <Render/Textures/TextureLoad.hpp>
 
 #include <stb/stb_image.h>
 #include <glad/glad.h>
@@ -22,21 +23,8 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSetting
 
     PN_CORE_ASSERT(!settings.SizeIsExplicitlySpecified, "Unable to specify 2d texture size when loading from file");
 
-    auto fileData = ReadFile(path);
-
-    int x, y, channels;
-    int desiredChannels = static_cast<int>(GetNumChannels(settings.Format));
-
-    stbi_set_flip_vertically_on_load(1);
-    auto textureData = stbi_load_from_memory(&fileData[0], static_cast<int>(fileData.size()), &x, &y, &channels, desiredChannels);
-
-    if (channels < 3) {
-        PN_CORE_WARN("Texture {}: number of channels in source data is < 3", m_name);
-    }
-
-    Initialize(reinterpret_cast<const void*>(textureData), {x, y}, settings);
-
-    stbi_image_free(textureData);
+    TextureLoadResult loaded = TextureLoad::FromFile(path.c_str(), TextureLoadSettings().SetOutFormat(settings.Format));
+    Initialize(loaded.GetData(), { loaded.GetWidth(), loaded.GetHeight() }, settings);
 }
 
 OpenGLTexture2D::OpenGLTexture2D(const TextureData& data, const Texture2DSettings& settings, std::string name)
