@@ -13,6 +13,8 @@
 #include <stb/stb_image.h>
 #include <glad/glad.h>
 
+#include <algorithm>
+
 namespace pn {
 
 OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSettings& settings, std::string name)
@@ -27,21 +29,14 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const Texture2DSetting
     Initialize(loaded.GetData(), { loaded.GetWidth(), loaded.GetHeight() }, settings);
 }
 
-OpenGLTexture2D::OpenGLTexture2D(const TextureData& data, const Texture2DSettings& settings, std::string name)
+OpenGLTexture2D::OpenGLTexture2D(const void* data, const Texture2DSettings& settings, std::string name)
     : m_name(std::move(name))
     , m_sampler(settings.Sampler)
 {
     PN_PROFILE_FUNCTION();
 
-    PN_CORE_ASSERT(settings.SizeIsExplicitlySpecified, "Size is not specified");
-    
-    if (!data.empty()) {
-        PN_CORE_ASSERT(data.size() == settings.DesiredSize.x * settings.DesiredSize.y * GetNumChannels(settings.Format), 
-            "Texture data size doesn't equal x * y * channels");
-    }
-
-    const void* ptr = data.empty() ? nullptr : reinterpret_cast<const void*>(&data[0]);
-    Initialize(ptr, settings.DesiredSize, settings);
+    PN_CORE_ASSERT(settings.SizeIsExplicitlySpecified, "Texture dimensions are not specified");
+    Initialize(data, settings.DesiredSize, settings);
 }
 
 void OpenGLTexture2D::Initialize(const void* data, const glm::u32vec2& size, const Texture2DSettings& settings)
@@ -51,23 +46,22 @@ void OpenGLTexture2D::Initialize(const void* data, const glm::u32vec2& size, con
     glCreateTextures(GL_TEXTURE_2D, 1, &m_handle);
 
     m_size = size;
-
     m_format = ToGlFormat(settings.Format);
     m_numChannels = GetNumChannels(settings.Format);
+    m_numLevels = settings.NumLevels;
+    if (m_numLevels == 0) {
+        m_numLevels = GetNumTextureLevels(size);
+    }
 
-    m_useMipmaps = settings.UseMipmaps;
-
-    int numTextuteLevels = m_useMipmaps ? GetNumTextureLevels(m_size) : 1;
-    glTextureStorage2D(m_handle, numTextuteLevels, ToGlInternalFormat(settings.Format), m_size.x, m_size.y);
+    int numLevels = settings.GenerateMipmaps ? GetNumTextureLevels(m_size) : 1;
+    glTextureStorage2D(m_handle, m_numLevels, ToGlInternalFormat(settings.Format), m_size.x, m_size.y);
 
     if (data) {
         glTextureSubImage2D(m_handle, 0, 0, 0, m_size.x, m_size.y, m_format, GL_UNSIGNED_BYTE, data);
-        if (m_useMipmaps) {
+        if (settings.GenerateMipmaps) {
             glGenerateTextureMipmap(m_handle);
         }
     }
-
-    PN_CORE_DEBUG("Texture after init has handle = {}", m_handle);
 }
 
 OpenGLTexture2D::~OpenGLTexture2D()
@@ -75,25 +69,26 @@ OpenGLTexture2D::~OpenGLTexture2D()
     glDeleteTextures(1, &m_handle);
 }
 
-void OpenGLTexture2D::SetData(const TextureData& data, const glm::u32vec2& offset, const glm::u32vec2& size)
+void OpenGLTexture2D::SetData(const void* data, const glm::u32vec2& size, const glm::u32vec2& offset)
 {
     PN_PROFILE_FUNCTION();
 
-    PN_CORE_ASSERT(!data.empty(), "No data to set");
-    PN_CORE_ASSERT(data.size() <= m_size.x * m_size.y * m_numChannels, "Provided data size is larger than the texture can possibly hold");
-    PN_CORE_ASSERT(offset.x + size.x < m_size.x && offset.y + size.y < m_size.y, "Subrectangle defined by offset and size is out of bounds");
+    SetLevelData(data, 0, offset, size);
+    glGenerateTextureMipmap(m_handle);
+}
+
+void OpenGLTexture2D::SetLevelData(const void* data, uint32_t level, const glm::u32vec2& size, const glm::u32vec2& offset)
+{
+    PN_PROFILE_FUNCTION();
+
+    PN_CORE_ASSERT(data, "Data cannot be nullptr");
     
     glm::u32vec2 sz = size;
     if (size.x == 0 && size.y == 0) {
-        sz = m_size - offset;
+        sz = GetLevelDimensions(level) - offset;
     }
 
-    PN_CORE_ASSERT(data.size() >= sz.x * sz.y * m_numChannels, "Provided data size is not enough for specified subrectangle");
-
-    glTextureSubImage2D(m_handle, 0, offset.x, offset.y, sz.x, sz.y, m_format, GL_UNSIGNED_BYTE, &data[0]);
-    if (m_useMipmaps) {
-        glGenerateTextureMipmap(m_handle);
-    }
+    glTextureSubImage2D(m_handle, level, offset.x, offset.y, sz.x, sz.y, m_format, GL_UNSIGNED_BYTE, data);
 }
 
 int OpenGLTexture2D::ToGlInternalFormat(TextureFormat format) const
@@ -135,6 +130,21 @@ uint32_t OpenGLTexture2D::GetNumChannels(TextureFormat format) const
 uint32_t OpenGLTexture2D::GetNumTextureLevels(const glm::u32vec2& textureSize) const 
 {
     return 1u + static_cast<uint32_t>(std::floor(std::log2f(static_cast<float>(std::max(textureSize.x, textureSize.y)))));
+}
+
+glm::u32vec2 OpenGLTexture2D::GetLevelDimensions(uint32_t level) const
+{
+    glm::u32vec2 result = m_size;
+    for (uint32_t i = 0; i < level; i++) {
+        result.x = std::max(1u, result.x / 2);
+        result.y = std::max(1u, result.y / 2);
+
+        if (result.x == 1 && result.y == 1) {
+            break;
+        }
+    }
+
+    return result;
 }
 
 

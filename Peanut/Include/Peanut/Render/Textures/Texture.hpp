@@ -14,8 +14,6 @@ enum class TextureFormat
     RGBA
 };
 
-using TextureData = std::vector<uint8_t>;
-
 class Texture
 {
 public:

@@ -15,18 +15,36 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
             .SetWidth(15.0f).SetHeight(15.0f)));
 
     auto sampler = pn::TextureSampler::Create(pn::TextureSamplerSettings()
-        .SetFilter(pn::TextureFilter::MinAnisotropicMagAnisotropicMipAnisotropic)
+        .SetFilter(pn::TextureFilter::MinLinearMagLinearMipPoint)
         .SetWrap(pn::TextureWrap::Border)
         .SetBorderColor({ 0.0f, 0.0f, 0.0f, 0.0f })
         .SetMaxAnisotropy(16));
 
-    /*
+    int x = 512, y = 512;
+    int levels = 10;
+
     m_texture = pn::Texture2D::Create(
-        pn::StoragePath::GetAssetsPath() + "/Textures/container.jpg", 
+        nullptr,
         pn::Texture2DSettings()
-            .SetSampler(sampler)
-            .UseMipmapping(true));
-    */
+        .SetSampler(sampler)
+        .UseFormat(pn::TextureFormat::RGBA)
+        .SetSize({ x, y })
+        .SetNumLevels(levels)
+        .DoGenerateMipmaps(false));
+
+    for (int i = 0; i < levels; i++, x /= 2, y /= 2) {
+        std::vector<int32_t> color = { rand() % 256, rand() % 256, rand() % 256, 255};
+        
+        std::vector<uint8_t> pixels(x * y * 4);
+        for (int j = 0; j < pixels.size(); j += 4) {
+            pixels[j + 0] = color[0];
+            pixels[j + 1] = color[1];
+            pixels[j + 2] = color[2];
+            pixels[j + 3] = color[3];
+        }
+
+        m_texture->SetLevelData(pixels.data(), i, { x, y });
+    }
     
     float step = 1.25f;
     for (int i = -5; i <= 5; i++) {
@@ -36,7 +54,7 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
             pn::Rectangle rect;
             rect.SetPosition({ x, y });
             rect.SetColor({ 146, 226, 253, 255 });
-            //rect.SetTexture(m_texture);
+            rect.SetTexture(m_texture);
             m_rectangles.push_back(rect);
         }
     }

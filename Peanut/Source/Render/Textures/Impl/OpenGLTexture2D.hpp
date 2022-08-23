@@ -9,7 +9,7 @@ class OpenGLTexture2D : public Texture2D, public OpenGLTexture
 {
 public:
     OpenGLTexture2D(const std::string& path, const Texture2DSettings& settings, std::string name = "");
-    OpenGLTexture2D(const TextureData& data, const Texture2DSettings& settings, std::string name = "");
+    OpenGLTexture2D(const void* data, const Texture2DSettings& settings, std::string name = "");
     ~OpenGLTexture2D() override;
 
     bool operator==(const Texture& other) const override { return OpenGLTexture::operator==(other); }
@@ -20,14 +20,15 @@ public:
     const std::string& GetName() const override { return m_name; }
     const glm::u32vec2& GetSize() const override { return m_size; }
 
-    void SetData(const TextureData& data, const glm::u32vec2& offset = {0, 0}, const glm::u32vec2& size = {0, 0}) override;
+    void SetData(const void* data, const glm::u32vec2& size = { 0, 0 }, const glm::u32vec2& offset = { 0, 0 }) override;
+    void SetLevelData(const void* data, uint32_t level, const glm::u32vec2& size = {0, 0}, const glm::u32vec2& offset = { 0, 0 }) override;
 
 private:
     std::string m_name;
     glm::u32vec2 m_size;
     int m_format;
     uint32_t m_numChannels;
-    bool m_useMipmaps;
+    uint32_t m_numLevels;
     std::shared_ptr<TextureSampler> m_sampler;
 
 private:
@@ -36,6 +37,7 @@ private:
     int ToGlFormat(TextureFormat format) const;
     uint32_t GetNumChannels(TextureFormat format) const;
     uint32_t GetNumTextureLevels(const glm::u32vec2& textureSize) const;
+    glm::u32vec2 GetLevelDimensions(uint32_t level) const;
 };
 
 }

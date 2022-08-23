@@ -31,7 +31,7 @@ std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path, const Text
     return nullptr;
 }
 
-std::shared_ptr<Texture2D> Texture2D::Create(const TextureData& data, const Texture2DSettings& settings, const std::string& name)
+std::shared_ptr<Texture2D> Texture2D::Create(const void* data, const Texture2DSettings& settings, const std::string& name)
 {
     auto renderApi = RenderCommand::GetRenderAPI();
 

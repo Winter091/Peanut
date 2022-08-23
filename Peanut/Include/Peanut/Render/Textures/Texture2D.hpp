@@ -19,9 +19,15 @@ struct Texture2DSettings
         return *this;
     }
 
-    Texture2DSettings& UseMipmapping(bool use)
+    Texture2DSettings& SetNumLevels(uint32_t numLevels)
     {
-        UseMipmaps = use;
+        NumLevels = numLevels;
+        return *this;
+    }
+
+    Texture2DSettings& DoGenerateMipmaps(bool generate)
+    {
+        GenerateMipmaps = generate;
         return *this;
     }
 
@@ -41,7 +47,8 @@ struct Texture2DSettings
     glm::u32vec2 DesiredSize = {0, 0};
     bool SizeIsExplicitlySpecified = false;
     TextureFormat Format = TextureFormat::RGBA;
-    bool UseMipmaps = true;
+    uint32_t NumLevels = 0;
+    bool GenerateMipmaps = false;
     std::shared_ptr<TextureSampler> Sampler = nullptr;
 };
 
@@ -52,11 +59,11 @@ public:
 
     virtual const glm::u32vec2& GetSize() const = 0;
 
-    virtual void SetData(const TextureData& data, const glm::u32vec2& offset = {0, 0}, const glm::u32vec2& size = {0, 0}) = 0;
+    virtual void SetData(const void* data, const glm::u32vec2& size = { 0, 0 }, const glm::u32vec2& offset = { 0, 0 }) = 0;
+    virtual void SetLevelData(const void* data, uint32_t level, const glm::u32vec2& size = { 0, 0 }, const glm::u32vec2& offset = { 0, 0 }) = 0;
 
     static std::shared_ptr<Texture2D> Create(const std::string& path, const Texture2DSettings& settings, const std::string& name = "");
-    static std::shared_ptr<Texture2D> Create(const TextureData& data, const Texture2DSettings& settings, const std::string& name = "");
-    static std::shared_ptr<Texture2D> Create(const glm::vec2& size, const TextureData& initialData, const Texture2DSettings& settings, const std::string& name = "");
+    static std::shared_ptr<Texture2D> Create(const void* data, const Texture2DSettings& settings, const std::string& name = "");
 };
 
 }
