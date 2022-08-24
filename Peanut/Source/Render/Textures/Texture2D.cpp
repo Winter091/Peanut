@@ -7,6 +7,10 @@
 #include <Render/Textures/Impl/OpenGLTexture2D.hpp>
 #endif
 
+#if defined(PN_RENDERING_DX11)
+#include <Render/Textures/Impl/Dx11Texture2D.hpp>
+#endif
+
 namespace pn {
 
 std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path, const Texture2DSettings& settings, const std::string& name)
@@ -21,6 +25,11 @@ std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path, const Text
 #if defined(PN_RENDERING_OPENGL)
         case RenderAPI::OpenGL:
             return std::make_shared<OpenGLTexture2D>(path, settings, name);
+#endif
+
+#if defined(PN_RENDERING_DX11)
+        case RenderAPI::Dx11:
+            return std::make_shared<Dx11Texture2D>(path, settings, name);
 #endif
 
         default:
@@ -43,6 +52,11 @@ std::shared_ptr<Texture2D> Texture2D::Create(const void* data, const Texture2DSe
 #if defined(PN_RENDERING_OPENGL)
         case RenderAPI::OpenGL:
             return std::make_shared<OpenGLTexture2D>(data, settings, name);
+#endif
+
+#if defined(PN_RENDERING_DX11)
+        case RenderAPI::Dx11:
+            return std::make_shared<Dx11Texture2D>(data, settings, name);
 #endif
 
         default:

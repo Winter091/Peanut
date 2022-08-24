@@ -10,6 +10,8 @@
 #include <Render/Buffers/Impl/Dx11ConstantBuffer.hpp>
 #include <Render/Shaders/Impl/Dx11ShaderInputLayout.hpp>
 #include <Render/Shaders/Impl/Dx11Shader.hpp>
+#include <Render/Textures/Impl/Dx11Texture.hpp>
+#include <Render/Textures/Impl/Dx11TextureSampler.hpp>
 
 #include <vector>
 
@@ -177,7 +179,20 @@ void Dx11RenderCommand::BindConstantBuffers(const std::shared_ptr<ConstantBuffer
 
 void Dx11RenderCommand::BindTextures(const std::shared_ptr<Texture>* textures, size_t amount, uint32_t startSlot)
 {
-    PN_CORE_ASSERT(false, "Not implemented");
+    constexpr size_t maxTextures = 16;
+    static std::vector<ID3D11ShaderResourceView*> views(maxTextures);
+    static std::vector<ID3D11SamplerState*> samplers(maxTextures);
+
+    PN_CORE_ASSERT(amount > 0 && amount <= maxTextures, "Cannot bind less than 1 or more than {} textures", maxTextures);
+
+    for (int i = 0; i < amount; i++) {
+        views[i] = dynamic_cast<Dx11Texture&>(*textures[i]).GetNativeViewPtr();
+        samplers[i] = dynamic_cast<Dx11TextureSampler&>(*textures[i]->GetSampler()).GetNativeObjectPtr();
+    }
+
+    auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+    deviceContext->PSSetShaderResources(startSlot, static_cast<uint32_t>(amount), &views[0]);
+    deviceContext->PSSetSamplers(startSlot, static_cast<uint32_t>(amount), &samplers[0]);
 }
 
 }

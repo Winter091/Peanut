@@ -35,7 +35,7 @@ namespace pn {
 
         return TextureLoadResult(
             std::unique_ptr<uint8_t>(textureData),
-            static_cast<uint32_t>(x * y * channels), 
+            static_cast<uint32_t>(x * y * desiredChannels),
             static_cast<uint32_t>(x), 
             static_cast<uint32_t>(y));
 	}

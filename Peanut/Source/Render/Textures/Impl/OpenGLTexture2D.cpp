@@ -53,7 +53,7 @@ void OpenGLTexture2D::Initialize(const void* data, const glm::u32vec2& size, con
         m_numLevels = GetNumTextureLevels(size);
     }
 
-    int numLevels = settings.GenerateMipmaps ? GetNumTextureLevels(m_size) : 1;
+    PN_CORE_DEBUG("Levels: {}", m_numLevels);
     glTextureStorage2D(m_handle, m_numLevels, ToGlInternalFormat(settings.Format), m_size.x, m_size.y);
 
     if (data) {
