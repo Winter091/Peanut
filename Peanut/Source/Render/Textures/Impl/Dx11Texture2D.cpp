@@ -1,7 +1,7 @@
 #include "Dx11Texture2D.hpp"
 
 #include <Peanut/Core/TimeProfiler.hpp>
-#include <Render/Textures/TextureLoad.hpp>
+#include <Peanut/Render/Textures/TextureLoad.hpp>
 #include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
 #include "Dx11EnumConversions.hpp"
 

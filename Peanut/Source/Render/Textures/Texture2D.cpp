@@ -15,6 +15,8 @@ namespace pn {
 
 glm::u32vec2 Texture2D::GetMipLevelDimensions(const glm::u32vec2& mainDimensions, uint32_t level)
 {
+    PN_CORE_ASSERT(mainDimensions.x > 0 && mainDimensions.y > 0, "2D texture size is less than 1x1");
+    
     glm::u32vec2 result = mainDimensions;
 
     for (uint32_t i = 0; i < level; i++) {
@@ -31,6 +33,7 @@ glm::u32vec2 Texture2D::GetMipLevelDimensions(const glm::u32vec2& mainDimensions
 
 uint32_t Texture2D::GetMaxAmountOfMips(const glm::u32vec2& mainDimensions)
 {
+    PN_CORE_ASSERT(mainDimensions.x > 0 && mainDimensions.y > 0, "2D texture size is less than 1x1");
     return 1u + static_cast<uint32_t>(std::floor(std::log2f(static_cast<float>(std::max(mainDimensions.x, mainDimensions.y)))));
 }
 

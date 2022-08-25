@@ -8,7 +8,7 @@
 #include <Peanut/Core/TimeProfiler.hpp>
 #include <Peanut/Core/Utils/FileUtils.hpp>
 #include <Render/Textures/Impl/OpenGLTextureSampler.hpp>
-#include <Render/Textures/TextureLoad.hpp>
+#include <Peanut/Render/Textures/TextureLoad.hpp>
 #include "OpenGLEnumConversions.hpp"
 
 #include <stb/stb_image.h>

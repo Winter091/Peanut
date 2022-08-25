@@ -24,20 +24,17 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     int levels = 10;
 
     m_texture = pn::Texture2D::Create(
-        //pn::StoragePath().GetAssetsPath() + "/Textures/container.jpg",
         nullptr,
         pn::Texture2DSettings()
-        .SetSampler(sampler)
-        .UseFormat(pn::TextureFormat::RGBA)
-        .SetSize({ x, y })
-        //.SetNumLevels(1)
-        .SetNumLevels(levels)
-        .DoGenerateMipmaps(true));
+            .SetSampler(sampler)
+            .UseFormat(pn::TextureFormat::RGBA)
+            .SetSize({ x, y })
+            .SetNumLevels(levels)
+            .DoGenerateMipmaps(false));
 
-    ///*
     for (int i = 0; i < levels; i++, x /= 2, y /= 2) {
-        std::vector<int32_t> color = { rand() % 256, rand() % 256, rand() % 256, 255};
-        
+        std::vector<int32_t> color = { rand() % 256, rand() % 256, rand() % 256, 255 };
+
         std::vector<uint8_t> pixels(x * y * 4);
         for (int j = 0; j < pixels.size(); j += 4) {
             pixels[j + 0] = color[0];
@@ -46,10 +43,8 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
             pixels[j + 3] = color[3];
         }
 
-        m_texture->SetLevelData(pixels.data(), i, { x / 2, y / 2 }, {x / 8, y / 8});
+        m_texture->SetLevelData(pixels.data(), i);
     }
-   // */
-    
     
     float step = 1.25f;
     for (int i = -5; i <= 5; i++) {
