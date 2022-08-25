@@ -13,7 +13,7 @@ public:
 
     const std::string& GetName() const override { return m_name; }
 
-    void Bind() override;
+    uint32_t GetOpenGLHandle() const { return m_handler; }
 
 private:
     uint32_t m_handler;

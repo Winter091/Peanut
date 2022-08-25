@@ -124,9 +124,4 @@ OpenGLShader::~OpenGLShader()
     glDeleteProgram(m_handler);
 }
 
-void OpenGLShader::Bind()
-{
-    glUseProgram(m_handler);
-}
-
 }
