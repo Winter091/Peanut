@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Render/Textures/Texture.hpp>
 #include <Peanut/Render/Textures/TextureSampler.hpp>
 
 #include <d3d11.h>
@@ -57,6 +58,17 @@ namespace pn {
 
         PN_CORE_ASSERT(false, "Unknown TextureComparisonFunc enum value");
         return D3D11_COMPARISON_ALWAYS;
+    }
+
+    inline DXGI_FORMAT GetDx11TextureFormat(TextureFormat format)
+    {
+        switch (format) {
+            case TextureFormat::RGBA:   return DXGI_FORMAT_R8G8B8A8_UNORM;
+            default: break;
+        }
+
+        PN_CORE_ASSERT(false, "Unknown TextureFormat enum value");
+        return DXGI_FORMAT_R8G8B8A8_UNORM;
     }
 
 }

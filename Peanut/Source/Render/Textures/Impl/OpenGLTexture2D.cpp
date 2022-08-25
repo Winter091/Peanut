@@ -85,7 +85,7 @@ void OpenGLTexture2D::SetLevelData(const void* data, uint32_t level, const glm::
     
     glm::u32vec2 sz = size;
     if (size.x == 0 && size.y == 0) {
-        sz = Texture2D::GetMipLevelDimensions(size, level) - offset;
+        sz = Texture2D::GetMipLevelDimensions(m_size, level) - offset;
     }
 
     glTextureSubImage2D(m_handle, level, offset.x, offset.y, sz.x, sz.y, m_format, GL_UNSIGNED_BYTE, data);
