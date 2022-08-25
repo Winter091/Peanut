@@ -57,6 +57,9 @@ class Texture2D : virtual public Texture
 public:
     ~Texture2D() override = default;
 
+    static glm::u32vec2 GetMipLevelDimensions(const glm::u32vec2& mainDimensions, uint32_t level);
+    static uint32_t GetMaxAmountOfMips(const glm::u32vec2& mainDimensions);
+
     virtual const glm::u32vec2& GetSize() const = 0;
 
     virtual void SetData(const void* data, const glm::u32vec2& size = { 0, 0 }, const glm::u32vec2& offset = { 0, 0 }) = 0;

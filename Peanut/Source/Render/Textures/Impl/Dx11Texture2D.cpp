@@ -3,6 +3,7 @@
 #include <Peanut/Core/TimeProfiler.hpp>
 #include <Render/Textures/TextureLoad.hpp>
 #include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
+#include "Dx11EnumConversions.hpp"
 
 #include <d3d11.h>
 
@@ -39,15 +40,17 @@ namespace pn {
 		m_size = size;
 		m_numLevels = settings.NumLevels;
 		if (m_numLevels == 0) {
-			m_numLevels = GetNumTextureLevels(size);
+			m_numLevels = Texture2D::GetMaxAmountOfMips(m_size);
 		}
+
+		m_numChannels = GetTextureFormatNumChannels(settings.Format);
 		
 		D3D11_TEXTURE2D_DESC desc;
 		desc.Width = m_size.x;
 		desc.Height = m_size.y;
 		desc.MipLevels = m_numLevels;
 		desc.ArraySize = 1;
-		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		desc.Format = GetDx11TextureFormat(settings.Format);
 		desc.SampleDesc.Count = 1;
 		desc.SampleDesc.Quality = 0;
 		desc.Usage = D3D11_USAGE_DEFAULT;
@@ -86,44 +89,21 @@ namespace pn {
 	{
 		PN_CORE_ASSERT(data, "Cannot set nullptr data");
 
-		glm::u32vec2 levelDimensions = GetLevelDimensions(level);
-
 		glm::u32vec2 sz = size;
 		if (size.x == 0 && size.y == 0) {
-			sz = levelDimensions - offset;
+			sz = Texture2D::GetMipLevelDimensions(m_size, level) - offset;
 		}
 		
 		D3D11_BOX region;
 		region.left = offset.x;
-		region.top = offset.y;
-		region.front = 0;
 		region.right = offset.x + sz.x;
+		region.top = offset.y;
 		region.bottom = offset.y + sz.y;
+		region.front = 0;
 		region.back = 1;
 
-		// TODO: fix row size
 		auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
-		deviceContext->UpdateSubresource(m_handle, level, &region, data, sz.x * 4, 0);
-	}
-
-	uint32_t Dx11Texture2D::GetNumTextureLevels(const glm::u32vec2& textureSize) const
-	{
-		return 1u + static_cast<uint32_t>(std::floor(std::log2f(static_cast<float>(::std::max<uint32_t>(textureSize.x, textureSize.y)))));
-	}
-
-	glm::u32vec2 Dx11Texture2D::GetLevelDimensions(uint32_t level) const
-	{
-		glm::u32vec2 result = m_size;
-		for (uint32_t i = 0; i < level; i++) {
-			result.x = std::max<uint32_t>(1u, result.x / 2);
-			result.y = std::max<uint32_t>(1u, result.y / 2);
-
-			if (result.x == 1 && result.y == 1) {
-				break;
-			}
-		}
-
-		return result;
+		deviceContext->UpdateSubresource(m_handle, level, &region, data, sz.x * m_numChannels, 0);
 	}
 
 }

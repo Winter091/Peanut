@@ -9,6 +9,7 @@
 #include <Peanut/Core/Utils/FileUtils.hpp>
 #include <Render/Textures/Impl/OpenGLTextureSampler.hpp>
 #include <Render/Textures/TextureLoad.hpp>
+#include "OpenGLEnumConversions.hpp"
 
 #include <stb/stb_image.h>
 #include <glad/glad.h>
@@ -46,15 +47,14 @@ void OpenGLTexture2D::Initialize(const void* data, const glm::u32vec2& size, con
     glCreateTextures(GL_TEXTURE_2D, 1, &m_handle);
 
     m_size = size;
-    m_format = ToGlFormat(settings.Format);
-    m_numChannels = GetNumChannels(settings.Format);
+    m_format = GetGlTextureFormat(settings.Format);
+    m_numChannels = GetTextureFormatNumChannels(settings.Format);
     m_numLevels = settings.NumLevels;
     if (m_numLevels == 0) {
-        m_numLevels = GetNumTextureLevels(size);
+        m_numLevels = Texture2D::GetMaxAmountOfMips(size);
     }
 
-    PN_CORE_DEBUG("Levels: {}", m_numLevels);
-    glTextureStorage2D(m_handle, m_numLevels, ToGlInternalFormat(settings.Format), m_size.x, m_size.y);
+    glTextureStorage2D(m_handle, m_numLevels, GetGlInternalTextureFormat(settings.Format), m_size.x, m_size.y);
 
     if (data) {
         glTextureSubImage2D(m_handle, 0, 0, 0, m_size.x, m_size.y, m_format, GL_UNSIGNED_BYTE, data);
@@ -85,67 +85,10 @@ void OpenGLTexture2D::SetLevelData(const void* data, uint32_t level, const glm::
     
     glm::u32vec2 sz = size;
     if (size.x == 0 && size.y == 0) {
-        sz = GetLevelDimensions(level) - offset;
+        sz = Texture2D::GetMipLevelDimensions(size, level) - offset;
     }
 
     glTextureSubImage2D(m_handle, level, offset.x, offset.y, sz.x, sz.y, m_format, GL_UNSIGNED_BYTE, data);
 }
-
-int OpenGLTexture2D::ToGlInternalFormat(TextureFormat format) const
-{
-    switch (format) {
-        case TextureFormat::RGB:    return GL_RGB8;
-        case TextureFormat::RGBA:   return GL_RGBA8;
-        default: break;
-    }
-
-    PN_CORE_ASSERT(false, "Unknown TextureFormat enum value");
-    return 0;
-}
-
-int OpenGLTexture2D::ToGlFormat(TextureFormat format) const
-{
-    switch (format) {
-        case TextureFormat::RGB:    return GL_RGB;
-        case TextureFormat::RGBA:   return GL_RGBA;
-        default: break;
-    }
-
-    PN_CORE_ASSERT(false, "Unknown TextureFormat enum value");
-    return 0;
-}
-
-uint32_t OpenGLTexture2D::GetNumChannels(TextureFormat format) const
-{
-    switch (format) {
-        case TextureFormat::RGB:    return 3u;
-        case TextureFormat::RGBA:   return 4u;
-        default: break;
-    }
-
-    PN_CORE_ASSERT(false, "Unknown TextureFormat enum value");
-    return 0u;
-}
-
-uint32_t OpenGLTexture2D::GetNumTextureLevels(const glm::u32vec2& textureSize) const 
-{
-    return 1u + static_cast<uint32_t>(std::floor(std::log2f(static_cast<float>(std::max(textureSize.x, textureSize.y)))));
-}
-
-glm::u32vec2 OpenGLTexture2D::GetLevelDimensions(uint32_t level) const
-{
-    glm::u32vec2 result = m_size;
-    for (uint32_t i = 0; i < level; i++) {
-        result.x = std::max(1u, result.x / 2);
-        result.y = std::max(1u, result.y / 2);
-
-        if (result.x == 1 && result.y == 1) {
-            break;
-        }
-    }
-
-    return result;
-}
-
 
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Peanut/Core/Assert.hpp>
+#include <Peanut/Render/Textures/Texture.hpp>
 #include <Peanut/Render/Textures/TextureSampler.hpp>
 
 #include <glad/glad.h>
@@ -77,6 +78,28 @@ namespace pn {
 
         PN_CORE_ASSERT(false, "Unknown TextureComparisonFunc enum value");
         return GL_ALWAYS;
+    }
+
+    inline uint32_t GetGlTextureFormat(TextureFormat format)
+    {
+        switch (format) {
+            case TextureFormat::RGBA:   return GL_RGBA;
+            default: break;
+        }
+
+        PN_CORE_ASSERT(false, "Unknown TextureFormat enum value");
+        return GL_RGBA;
+    }
+
+    inline uint32_t GetGlInternalTextureFormat(TextureFormat format)
+    {
+        switch (format) {
+            case TextureFormat::RGBA:   return GL_RGBA8;
+            default: break;
+        }
+
+        PN_CORE_ASSERT(false, "Unknown TextureFormat enum value");
+        return GL_RGBA8;
     }
 
 }

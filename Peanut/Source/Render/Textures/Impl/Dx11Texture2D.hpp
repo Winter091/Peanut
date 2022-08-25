@@ -20,6 +20,8 @@ namespace pn {
         void SetSampler(const std::shared_ptr<TextureSampler>& sampler) { m_sampler = sampler; }
         std::shared_ptr<TextureSampler> GetSampler() const override { return m_sampler; }
 
+        uint32_t GetNumMipmaps() const override { return m_numLevels; }
+
         const std::string& GetName() const override { return m_name; }
         const glm::u32vec2& GetSize() const override { return m_size; }
 
@@ -33,11 +35,10 @@ namespace pn {
         glm::u32vec2 m_size;
         std::shared_ptr<TextureSampler> m_sampler;
         std::uint32_t m_numLevels;
+        std::uint32_t m_numChannels;
 
     private:
         void Initialize(const void* data, const glm::u32vec2& size, const Texture2DSettings& settings);
-        uint32_t GetNumTextureLevels(const glm::u32vec2& textureSize) const;
-        glm::u32vec2 GetLevelDimensions(uint32_t level) const;
     };
 
 }
