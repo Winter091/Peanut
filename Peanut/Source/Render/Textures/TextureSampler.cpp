@@ -11,7 +11,6 @@
 #include <Render/Textures/Impl/Dx11TextureSampler.hpp>
 #endif
 
-
 namespace pn {
 
     std::shared_ptr<TextureSampler> TextureSampler::Create(const TextureSamplerSettings& settings)

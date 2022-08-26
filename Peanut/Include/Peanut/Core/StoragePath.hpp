@@ -4,11 +4,11 @@
 
 namespace pn {
 
-class StoragePath
-{
-public:
-    static void SetAssetsPath(const std::string& stringPath);
-    static const std::string& GetAssetsPath();
-};
+    class StoragePath
+    {
+    public:
+        static void SetAssetsPath(const std::string& stringPath);
+        static const std::string& GetAssetsPath();
+    };
 
 }

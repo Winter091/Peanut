@@ -8,33 +8,33 @@
 
 namespace pn {
 
-class Application
-{
-public:
-    Application(const WindowSettings& settings);
-    Application(const Application&) = delete;
-    Application& operator=(const Application&) = delete;
-    virtual ~Application();
+    class Application
+    {
+    public:
+        Application(const WindowSettings& settings);
+        Application(const Application&) = delete;
+        Application& operator=(const Application&) = delete;
+        virtual ~Application();
 
-    Window& GetWindow() { return *m_window; }
+        Window& GetWindow() { return *m_window; }
 
-    virtual void OnEvent(Event& event) = 0;
-    virtual void OnUpdate() = 0;
+        virtual void OnEvent(Event& event) = 0;
+        virtual void OnUpdate() = 0;
 
-    void Run();
+        void Run();
 
-    static Application* CreateApplication(const CommandLineArgs& args);
-    static Application& GetInstance();
+        static Application* CreateApplication(const CommandLineArgs& args);
+        static Application& GetInstance();
 
-private:
-    std::unique_ptr<Window> m_window;
-    EventQueue m_eventQueue;
+    private:
+        std::unique_ptr<Window> m_window;
+        EventQueue m_eventQueue;
 
-private:
-    void MainOnEvent(Event& event);
-    void MainOnUpdate();
-    void SendEvents();
-    bool OnWindowResize(Event& event);
-};
+    private:
+        void MainOnEvent(Event& event);
+        void MainOnUpdate();
+        void SendEvents();
+        bool OnWindowResize(Event& event);
+    };
 
 }

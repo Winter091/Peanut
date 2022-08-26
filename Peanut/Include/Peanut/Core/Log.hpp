@@ -7,24 +7,24 @@
 
 namespace pn {
 
-class Log
-{
-public:
-    static void Init();
-    static void Shutdown();
+    class Log
+    {
+    public:
+        static void Init();
+        static void Shutdown();
 
-    static spdlog::logger* GetCoreLogger();
-    static spdlog::logger* GetClientLogger();
+        static spdlog::logger* GetCoreLogger();
+        static spdlog::logger* GetClientLogger();
 
-    static void SetCoreLoggerLever(spdlog::level::level_enum level) { m_coreLogger->set_level(level); }
-    static void SetClientLoggerLever(spdlog::level::level_enum level) { m_clientLogger->set_level(level); }
+        static void SetCoreLoggerLever(spdlog::level::level_enum level) { m_coreLogger->set_level(level); }
+        static void SetClientLoggerLever(spdlog::level::level_enum level) { m_clientLogger->set_level(level); }
 
-private:
-    static bool s_isInitialized;
+    private:
+        static bool s_isInitialized;
 
-    static std::unique_ptr<spdlog::logger> m_coreLogger;
-    static std::unique_ptr<spdlog::logger> m_clientLogger;
-};
+        static std::unique_ptr<spdlog::logger> m_coreLogger;
+        static std::unique_ptr<spdlog::logger> m_clientLogger;
+    };
 
 }
 

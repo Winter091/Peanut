@@ -4,28 +4,28 @@
 
 namespace pn {
 
-class WindowSizeChangedEvent : public Event
-{
-public:
-    WindowSizeChangedEvent(int width, int height) : m_width(width), m_height(height) {}
-    ~WindowSizeChangedEvent() override = default;
-
-    Event* Copy() const override { return new WindowSizeChangedEvent(*this); }
-
-    std::string ToString() const override
+    class WindowSizeChangedEvent : public Event
     {
-        return std::string("WindowSizeChangedEvent: ") + 
-            std::to_string(m_width) + ", " + std::to_string(m_height);
-    }
+    public:
+        WindowSizeChangedEvent(int width, int height) : m_width(width), m_height(height) {}
+        ~WindowSizeChangedEvent() override = default;
 
-    PN_DEFINE_EVENT_TYPE(WindowSizeChanged);
+        Event* Copy() const override { return new WindowSizeChangedEvent(*this); }
 
-    int GetWidth() const { return m_width; }
-    int GetHeight() const { return m_height; }
+        std::string ToString() const override
+        {
+            return std::string("WindowSizeChangedEvent: ") + 
+                std::to_string(m_width) + ", " + std::to_string(m_height);
+        }
 
-private:
-    int m_width;
-    int m_height;
-};
+        PN_DEFINE_EVENT_TYPE(WindowSizeChanged);
+
+        int GetWidth() const { return m_width; }
+        int GetHeight() const { return m_height; }
+
+    private:
+        int m_width;
+        int m_height;
+    };
 
 }

@@ -8,15 +8,15 @@
 
 namespace pn {
 
-class ConstantBuffer : public Buffer
-{
-public:
-    ConstantBuffer() = default;
-    ConstantBuffer(const ConstantBuffer&) = delete;
-    ConstantBuffer& operator=(const ConstantBuffer&) = delete;
-    virtual ~ConstantBuffer() = default;
+    class ConstantBuffer : public Buffer
+    {
+    public:
+        ConstantBuffer() = default;
+        ConstantBuffer(const ConstantBuffer&) = delete;
+        ConstantBuffer& operator=(const ConstantBuffer&) = delete;
+        virtual ~ConstantBuffer() = default;
 
-    static std::shared_ptr<ConstantBuffer> Create(BufferMapAccess access, uint32_t size, const void* data = nullptr);
-};
+        static std::shared_ptr<ConstantBuffer> Create(BufferMapAccess access, uint32_t size, const void* data = nullptr);
+    };
 
 }

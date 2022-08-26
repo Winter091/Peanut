@@ -7,30 +7,30 @@
 
 namespace pn {
 
-class Event
-{
-public:
-    virtual ~Event() = default;
-
-    virtual EventType GetType() const = 0;
-    virtual const char* GetStringType() const = 0;
-    virtual std::string ToString() const = 0;
-    virtual Event* Copy() const = 0;
-
-    void SetIsProcessed(bool value) { m_isProcessed |= value; }
-    bool GetIsProcessed() const { return m_isProcessed; }
-
-    template <EventType T, typename Fn>
-    void Dispatch(Fn&& function)
+    class Event
     {
-        if (GetType() == T) {
-            SetIsProcessed(function(*this));
-        }
-    }
+    public:
+        virtual ~Event() = default;
 
-private:
-    bool m_isProcessed = false;
-};
+        virtual EventType GetType() const = 0;
+        virtual const char* GetStringType() const = 0;
+        virtual std::string ToString() const = 0;
+        virtual Event* Copy() const = 0;
+
+        void SetIsProcessed(bool value) { m_isProcessed |= value; }
+        bool GetIsProcessed() const { return m_isProcessed; }
+
+        template <EventType T, typename Fn>
+        void Dispatch(Fn&& function)
+        {
+            if (GetType() == T) {
+                SetIsProcessed(function(*this));
+            }
+        }
+
+    private:
+        bool m_isProcessed = false;
+    };
 
 }
 

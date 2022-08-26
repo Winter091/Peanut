@@ -6,6 +6,6 @@
 
 namespace pn {
 
-std::vector<uint8_t> ReadFile(const std::string& filepath);
+	std::vector<uint8_t> ReadFile(const std::string& filepath);
 
 }

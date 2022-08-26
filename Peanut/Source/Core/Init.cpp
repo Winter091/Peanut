@@ -6,36 +6,36 @@
 
 namespace pn::internal {
 
-void InitWithoutContext()
-{
-    PN_PROFILE_FUNCTION();
+    void InitWithoutContext()
+    {
+        PN_PROFILE_FUNCTION();
 
-    Log::Init();
-    Window::Init();
-    RenderCommand::Init();
-}
+        Log::Init();
+        Window::Init();
+        RenderCommand::Init();
+    }
 
-void InitWithContext()
-{
-    PN_PROFILE_FUNCTION();
+    void InitWithContext()
+    {
+        PN_PROFILE_FUNCTION();
 
-    Renderer2D::Init();
-}
+        Renderer2D::Init();
+    }
 
-void ShutdownWithContext()
-{
-    PN_PROFILE_FUNCTION();
+    void ShutdownWithContext()
+    {
+        PN_PROFILE_FUNCTION();
 
-    Renderer2D::Shutdown();
-}
+        Renderer2D::Shutdown();
+    }
 
-void ShutdownWithoutContext()
-{
-    PN_PROFILE_FUNCTION();
+    void ShutdownWithoutContext()
+    {
+        PN_PROFILE_FUNCTION();
 
-    RenderCommand::Shutdown();
-    Window::Shutdown();
-    Log::Shutdown();
-}
+        RenderCommand::Shutdown();
+        Window::Shutdown();
+        Log::Shutdown();
+    }
 
 }

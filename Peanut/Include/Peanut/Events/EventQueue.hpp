@@ -7,20 +7,20 @@
 
 namespace pn {
 
-class EventQueue
-{
-public:
-    EventQueue() = default;
-    EventQueue(const EventQueue&) = delete;
-    EventQueue& operator=(const EventQueue&) = delete;
-    ~EventQueue();
+    class EventQueue
+    {
+    public:
+        EventQueue() = default;
+        EventQueue(const EventQueue&) = delete;
+        EventQueue& operator=(const EventQueue&) = delete;
+        ~EventQueue();
 
-    void Push(const Event& event);
-    bool HasEvents() const { return !m_events.empty(); }
-    std::unique_ptr<Event> Pop();
+        void Push(const Event& event);
+        bool HasEvents() const { return !m_events.empty(); }
+        std::unique_ptr<Event> Pop();
 
-private:
-    std::queue<std::unique_ptr<Event>> m_events;
-};
+    private:
+        std::queue<std::unique_ptr<Event>> m_events;
+    };
 
 }

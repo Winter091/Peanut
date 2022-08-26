@@ -11,36 +11,36 @@
 
 namespace pn {
 
-struct ShaderPaths
-{
-    std::string VertexPath;
-    std::string FragmentPath;
+    struct ShaderPaths
+    {
+        std::string VertexPath;
+        std::string FragmentPath;
 
-    ShaderPaths& SetVertexPath(const std::string& path) { VertexPath = path; return *this; }
-    ShaderPaths& SetFragmentPath(const std::string& path) { FragmentPath = path; return *this; }
-};
+        ShaderPaths& SetVertexPath(const std::string& path) { VertexPath = path; return *this; }
+        ShaderPaths& SetFragmentPath(const std::string& path) { FragmentPath = path; return *this; }
+    };
 
-struct ShaderSources
-{
-    std::string VertexSource;
-    std::string FragmentSource;
+    struct ShaderSources
+    {
+        std::string VertexSource;
+        std::string FragmentSource;
 
-    ShaderSources& SetVertexSource(const std::string& source) { VertexSource = source; return *this; }
-    ShaderSources& SetFragmentSource(const std::string& source) { FragmentSource = source; return *this; }
-};
+        ShaderSources& SetVertexSource(const std::string& source) { VertexSource = source; return *this; }
+        ShaderSources& SetFragmentSource(const std::string& source) { FragmentSource = source; return *this; }
+    };
 
-class Shader
-{
-public:
-    Shader() = default;
-    Shader(const Shader&) = delete;
-    Shader& operator=(const Shader&) = delete;
-    virtual ~Shader() = default;
+    class Shader
+    {
+    public:
+        Shader() = default;
+        Shader(const Shader&) = delete;
+        Shader& operator=(const Shader&) = delete;
+        virtual ~Shader() = default;
 
-    virtual const std::string& GetName() const = 0;
+        virtual const std::string& GetName() const = 0;
 
-    static std::shared_ptr<Shader> Create(const ShaderPaths& paths, const std::string& name = "");
-    static std::shared_ptr<Shader> Create(const ShaderSources& sources, const std::string& name = "");
-};
+        static std::shared_ptr<Shader> Create(const ShaderPaths& paths, const std::string& name = "");
+        static std::shared_ptr<Shader> Create(const ShaderSources& sources, const std::string& name = "");
+    };
 
 }
