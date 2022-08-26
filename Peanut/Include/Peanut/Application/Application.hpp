@@ -14,7 +14,7 @@ public:
     Application(const WindowSettings& settings);
     Application(const Application&) = delete;
     Application& operator=(const Application&) = delete;
-    virtual ~Application() = default;
+    virtual ~Application();
 
     Window& GetWindow() { return *m_window; }
 
@@ -24,6 +24,7 @@ public:
     void Run();
 
     static Application* CreateApplication(const CommandLineArgs& args);
+    static Application& GetInstance();
 
 private:
     std::unique_ptr<Window> m_window;

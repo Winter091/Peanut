@@ -180,6 +180,7 @@ void GLFWWindow::OnResize(int newWidth, int newHeight)
 {
     m_data.width = newWidth;
     m_data.height = newHeight;
+    GetRenderContext().OnWindowResize(*this);
 }
 
 void* GLFWWindow::GetNativeHandle() const 

@@ -1,0 +1,52 @@
+struct VSInput
+{
+    uint               VertexIndex : VertexIndex;
+    row_major float4x4 ModelMatrix : ModelMatrix;
+    uint               Color       : Color;
+    int                TexIndex    : TexIndex;
+};
+
+cbuffer Matrices : register(b0)
+{
+    row_major float4x4 ViewProjMatrix;
+}
+
+struct VSOutput
+{
+    float4              Position : SV_Position;
+    float4              Color    : Color;
+    float2              TexCoord : TexCoord;
+    nointerpolation int TexIndex : TexIndex;
+};
+
+static const float4 positions[4] = {
+    float4(0.0, 0.0, 0.0, 1.0),
+    float4(0.0, 1.0, 0.0, 1.0),
+    float4(1.0, 1.0, 0.0, 1.0),
+    float4(1.0, 0.0, 0.0, 1.0)
+};
+
+static const float2 texCoords[4] = {
+    float2(0.0, 0.0),
+    float2(0.0, 1.0),
+    float2(1.0, 1.0),
+    float2(1.0, 0.0)
+};
+
+VSOutput main(VSInput Input)
+{
+    VSOutput Output;
+    Output.Position = mul(positions[Input.VertexIndex], mul(Input.ModelMatrix, ViewProjMatrix));
+
+    float4 color;
+    color.r = ((Input.Color >> 0)  & 0xFF) / 255.0;
+    color.g = ((Input.Color >> 8)  & 0xFF) / 255.0;
+    color.b = ((Input.Color >> 16) & 0xFF) / 255.0;
+    color.a = ((Input.Color >> 24) & 0xFF) / 255.0;
+    Output.Color = color;
+    
+    Output.TexCoord = texCoords[Input.VertexIndex];
+    Output.TexIndex = Input.TexIndex;
+    
+    return Output;
+}

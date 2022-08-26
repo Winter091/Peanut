@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.13)
 
 project(Peanut)
 
+option(PN_USE_DX11_ON_WINDOWS "Use DirectX 11 rendering backend on windows instead of OpenGL" ON)
+
 # Force c11
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -30,8 +32,6 @@ add_subdirectory(Deps/spdlog)
 add_subdirectory(Deps/stb)
 
 add_library(Peanut)
-add_subdirectory(Deps)
-add_subdirectory(Source)
 
 target_compile_definitions(Peanut PUBLIC SPDLOG_COMPILED_LIB)
 
@@ -39,14 +39,47 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(Peanut PUBLIC PN_DEBUG)
 endif()
 
-# In future (ha-ha) DirectX and WinAPI window will be supported
-target_compile_definitions(Peanut PUBLIC PN_RENDERING_OPENGL)
-target_compile_definitions(Peanut PUBLIC PN_WINDOW_GLFW)
+target_link_libraries(
+    Peanut PRIVATE 
+    glfw
+    spdlog
+    stb
+)
+
+target_include_directories(
+    Peanut PUBLIC 
+    Source
+    Deps/glad/include
+    Deps/glfw/include
+    Deps/stb/include
+)
+
+target_include_directories(
+    Peanut PUBLIC
+    Include
+    Deps/glm/include
+    Deps/spdlog/include
+)
+
+target_compile_definitions(Peanut PUBLIC PN_PROFILE)
 
 if (UNIX)
     target_compile_definitions(Peanut PUBLIC PN_PLATFORM_LINUX)
+    target_compile_definitions(Peanut PUBLIC PN_WINDOW_GLFW)
+    target_compile_definitions(Peanut PUBLIC PN_RENDERING_OPENGL)
+    set(PN_RENDERING_OPENGL ON)
 elseif (WIN32 OR MINGW OR CYGWIN)
     target_compile_definitions(Peanut PUBLIC PN_PLATFORM_WINDOWS)
+    target_compile_definitions(Peanut PUBLIC PN_WINDOW_GLFW)
+
+    if (PN_USE_DX11_ON_WINDOWS)
+        target_compile_definitions(Peanut PUBLIC PN_RENDERING_DX11)
+        set(PN_RENDERING_DX11 ON)
+        target_link_libraries(Peanut PUBLIC d3d11 dxguid DXGI D3DCompiler)
+    else()
+        target_compile_definitions(Peanut PUBLIC PN_RENDERING_OPENGL)
+        set(PN_RENDERING_OPENGL ON)
+    endif()
 else()
     message(FATAL_ERROR "Platform is not supported by Peanut")
 endif()
@@ -64,24 +97,5 @@ else()
     )
 endif()
 
-target_include_directories(
-    Peanut PUBLIC 
-    Source
-    Deps/glad/include
-    Deps/glfw/include
-    Deps/stb/include
-)
-
-target_include_directories(
-    Peanut PUBLIC
-    Include
-    Deps/glm/include
-    Deps/spdlog/include
-)
-
-target_link_libraries(
-    Peanut PRIVATE 
-    glfw
-    spdlog
-    stb
-)
+add_subdirectory(Deps)
+add_subdirectory(Source)

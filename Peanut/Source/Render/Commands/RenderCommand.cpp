@@ -1,7 +1,14 @@
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 
 #include <Peanut/Core/Assert.hpp>
+
+#if defined(PN_RENDERING_OPENGL)
 #include <Render/Commands/Impl/OpenGLRenderCommand.hpp>
+#endif
+
+#if defined(PN_RENDERING_DX11)
+#include <Render/Commands/Impl/Dx11RenderCommand.hpp>
+#endif
 
 namespace pn
 {
@@ -19,10 +26,12 @@ void RenderCommand::Init()
     s_renderAPI = RenderAPI::OpenGL;
     s_renderCommandImpl = std::make_unique<OpenGLRenderCommand>();
     PN_CORE_INFO("Using OpenGL Renderer");
-#elif defined(PN_RENDERING_DIRECTX)
-    PN_CORE_ASSERT("RenderCommand: directx backend is currently not supported");
+#elif defined(PN_RENDERING_DX11)
+    s_renderAPI = RenderAPI::Dx11;
+    s_renderCommandImpl = std::make_unique<Dx11RenderCommand>();
+    PN_CORE_INFO("Using DirectX 11 Renderer");
 #else
-    PN_CORE_ASSERT("RenderCommand: cannot determine rendering backend");
+    PN_CORE_ASSERT(false, "RenderCommand: cannot determine rendering backend");
 #endif
 }
 
@@ -59,10 +68,10 @@ void RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, 
     s_renderCommandImpl->SetViewport(leftX, bottomY, width, height);
 }
 
-void RenderCommand::DrawArrays(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
+void RenderCommand::Draw(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    s_renderCommandImpl->DrawArrays(vertexArray, count);
+    s_renderCommandImpl->Draw(vertexArray, count);
 }
 
 void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
@@ -71,11 +80,11 @@ void RenderCommand::DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint3
     s_renderCommandImpl->DrawIndexed(vertexArray, count);
 }
 
-void RenderCommand::DrawArraysInstanced(
+void RenderCommand::DrawInstanced(
     std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-    s_renderCommandImpl->DrawArraysInstanced(vertexArray, count, instanceCount);
+    s_renderCommandImpl->DrawInstanced(vertexArray, count, instanceCount);
 }
 
 void RenderCommand::DrawIndexedInstanced(
@@ -83,6 +92,24 @@ void RenderCommand::DrawIndexedInstanced(
 {
     PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
     s_renderCommandImpl->DrawIndexedInstanced(vertexArray, count, instanceCount);
+}
+
+void RenderCommand::BindShader(const std::shared_ptr<Shader>& shader)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->BindShader(shader);
+}
+
+void RenderCommand::BindConstantBuffers(const std::shared_ptr<ConstantBuffer>* constantBuffers, size_t amount, uint32_t startSlot)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->BindConstantBuffers(constantBuffers, amount, startSlot);
+}
+
+void RenderCommand::BindTextures(const std::shared_ptr<Texture>* textures, size_t amount, uint32_t startSlot)
+{
+    PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+    s_renderCommandImpl->BindTextures(textures, amount, startSlot);
 }
 
 }

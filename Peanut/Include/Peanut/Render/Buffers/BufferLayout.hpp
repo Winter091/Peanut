@@ -16,37 +16,47 @@ enum class BufferLayoutElementType : uint32_t
     Int32,
     Uint32,
     Float,
-    Double,
+    Mat4,
 };
 
-struct BufferLayoutElement
+class BufferLayoutElement
 {
-    BufferLayoutElement(uint32_t index, BufferLayoutElementType type, uint32_t count, 
-                        std::string name, bool isNormalized = false);
+public:
+    BufferLayoutElement(uint32_t index, std::string name, BufferLayoutElementType type, uint32_t count);
 
-    std::string name;
-    uint32_t index;
-    uint32_t size;
-    uint64_t offset;
-    BufferLayoutElementType type;
-    uint32_t count;
-    bool isNormalized;
+    uint32_t GetIndex() const { return Index; }
+    const std::string& GetName() const { return Name; }
+    BufferLayoutElementType GetType() const { return Type; }
+    uint32_t GetCount() const { return Count; }
+
+    uint32_t GetSize() const { return Size; }
+    void SetSize(uint32_t size) { Size = size; }
+
+    uint64_t GetOffset() const { return Offset; }
+    void SetOffset(uint64_t offset) { Offset = offset; }
+
+private:
+    uint32_t Index;
+    std::string Name;
+    BufferLayoutElementType Type;
+    uint32_t Count;
+    uint32_t Size = 0;
+    uint64_t Offset = 0;
 };
 
 class BufferLayout
 {
 public:
-    // BufferLayout() = default;
     BufferLayout(std::initializer_list<BufferLayoutElement> elements);
 
     const std::vector<BufferLayoutElement>& GetElements() const { return m_elements; }
-    uint32_t GetStride() const { return m_stride; }
+    uint32_t GetVertexSize() const { return m_vertexSize; }
 
     static std::shared_ptr<BufferLayout> Create(std::initializer_list<BufferLayoutElement> elements);
 
 private:
     std::vector<BufferLayoutElement> m_elements;
-    uint32_t m_stride = 0;
+    uint32_t m_vertexSize = 0;
 
 private:
     uint32_t GetTypeSize(BufferLayoutElementType type);

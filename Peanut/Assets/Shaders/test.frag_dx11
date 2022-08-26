@@ -1,0 +1,16 @@
+struct FsInput
+{
+    float4 Position    : SV_Position;
+    float3 Color       : Color;
+};
+
+cbuffer ColorConstantBuffer : register(b0)
+{
+    float4 cColor;
+};
+
+float4 main(FsInput Input) : SV_Target
+{
+    float4 color = lerp(float4(Input.Color, 1.0), cColor, 0.1);
+    return color;
+}

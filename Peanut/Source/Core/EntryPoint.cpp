@@ -1,6 +1,6 @@
 #include <Core/Init.hpp>
-#include <Core/StoragePath.hpp>
 
+#include <Peanut/Core/StoragePath.hpp>
 #include <Peanut/Application/CommandLineArgs.hpp>
 #include <Peanut/Application/Application.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>

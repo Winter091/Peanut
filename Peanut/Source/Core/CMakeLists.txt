@@ -6,3 +6,5 @@ target_sources(
     Log.cpp
     StoragePath.cpp
 )
+
+add_subdirectory(Utils)

@@ -14,7 +14,7 @@ public:
     void OnUpdate() override;
 
 private:
-    std::shared_ptr<pn::Texture2D> m_texture;
+    std::vector<pn::Rectangle> m_rectangles;
     std::shared_ptr<pn::OrthoCamera> m_camera;
-    pn::TextureData m_textureData;
+    std::shared_ptr<pn::Texture2D> m_texture;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Texture.hpp"
+#include <Peanut/Render/Textures/TextureSampler.hpp>
 
 #include <string>
 #include <memory>
@@ -18,31 +19,15 @@ struct Texture2DSettings
         return *this;
     }
 
-    Texture2DSettings& UseWrapping(TextureWrap x, TextureWrap y)
+    Texture2DSettings& SetNumLevels(uint32_t numLevels)
     {
-        WrapX = x;
-        WrapY = y;
+        NumLevels = numLevels;
         return *this;
     }
 
-    Texture2DSettings& UseFiltering(TextureFilter min, TextureFilter mag)
+    Texture2DSettings& DoGenerateMipmaps(bool generate)
     {
-        FilterMin = min;
-        FilterMag = mag;
-        return *this;
-    }
-
-    Texture2DSettings& UseMipmapFiltering(TextureMipmapFilter min, TextureFilter mag)
-    {
-        UseMipmaps = true;
-        MipmapFilterMin = min;
-        FilterMag = mag;
-        return *this;
-    }
-
-    Texture2DSettings& UseMipmapping(bool use)
-    {
-        UseMipmaps = use;
+        GenerateMipmaps = generate;
         return *this;
     }
 
@@ -53,36 +38,35 @@ struct Texture2DSettings
         return *this;
     }
 
+    Texture2DSettings SetSampler(const std::shared_ptr<TextureSampler>& sampler)
+    {
+        Sampler = sampler;
+        return *this;
+    }
+
     glm::u32vec2 DesiredSize = {0, 0};
     bool SizeIsExplicitlySpecified = false;
     TextureFormat Format = TextureFormat::RGBA;
-    TextureWrap WrapX = TextureWrap::Repeat; 
-    TextureWrap WrapY = TextureWrap::Repeat;
-    TextureFilter FilterMin = TextureFilter::Linear;
-    TextureFilter FilterMag = TextureFilter::Linear;
-    TextureMipmapFilter MipmapFilterMin = TextureMipmapFilter::LinearMipmapLinear; 
-    bool UseMipmaps = true;
+    uint32_t NumLevels = 0;
+    bool GenerateMipmaps = false;
+    std::shared_ptr<TextureSampler> Sampler = nullptr;
 };
 
-class Texture2D : public Texture
+class Texture2D : virtual public Texture
 {
 public:
     ~Texture2D() override = default;
-    virtual bool operator==(const Texture2D& other) const = 0;
 
-    virtual uint32_t GetDescriptor() const = 0;
-    
+    static glm::u32vec2 GetMipLevelDimensions(const glm::u32vec2& mainDimensions, uint32_t level);
+    static uint32_t GetMaxAmountOfMips(const glm::u32vec2& mainDimensions);
+
     virtual const glm::u32vec2& GetSize() const = 0;
 
-    virtual void SetData(const TextureData& data, const glm::u32vec2& offset = {0, 0}, const glm::u32vec2& size = {0, 0}) = 0;
-
-    virtual void SetWrapping(TextureWrap x, TextureWrap y) = 0;
-    virtual void SetFiltering(TextureFilter min, TextureFilter mag) = 0;
-    virtual void SetFiltering(TextureMipmapFilter min, TextureFilter mag) = 0;
+    virtual void SetData(const void* data, const glm::u32vec2& size = { 0, 0 }, const glm::u32vec2& offset = { 0, 0 }) = 0;
+    virtual void SetLevelData(const void* data, uint32_t level, const glm::u32vec2& size = { 0, 0 }, const glm::u32vec2& offset = { 0, 0 }) = 0;
 
     static std::shared_ptr<Texture2D> Create(const std::string& path, const Texture2DSettings& settings, const std::string& name = "");
-    static std::shared_ptr<Texture2D> Create(const TextureData& data, const Texture2DSettings& settings, const std::string& name = "");
-    static std::shared_ptr<Texture2D> Create(const glm::vec2& size, const TextureData& initialData, const Texture2DSettings& settings, const std::string& name = "");
+    static std::shared_ptr<Texture2D> Create(const void* data, const Texture2DSettings& settings, const std::string& name = "");
 };
 
 }

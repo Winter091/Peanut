@@ -1,0 +1,41 @@
+struct FSInput
+{
+    float4 Position              : SV_Position;
+    float4 Color                 : Color;
+    float2 TexCoord              : TexCoord;
+    nointerpolation int TexIndex : TexIndex;
+};
+
+Texture2D Textures[16] : register(t0);
+SamplerState Samplers[16] : register(s0);
+
+float4 main(FSInput Input) : SV_Target
+{
+    float4 color; 
+
+    if (Input.TexIndex < 0) {
+        color = Input.Color;
+    } else {
+        switch(Input.TexIndex) {
+            case 0:  color = Textures[0 ].Sample(Samplers[0 ], Input.TexCoord); break;
+            case 1:  color = Textures[1 ].Sample(Samplers[1 ], Input.TexCoord); break;
+            case 2:  color = Textures[2 ].Sample(Samplers[2 ], Input.TexCoord); break;
+            case 3:  color = Textures[3 ].Sample(Samplers[3 ], Input.TexCoord); break;
+            case 4:  color = Textures[4 ].Sample(Samplers[4 ], Input.TexCoord); break;
+            case 5:  color = Textures[5 ].Sample(Samplers[5 ], Input.TexCoord); break;
+            case 6:  color = Textures[6 ].Sample(Samplers[6 ], Input.TexCoord); break;
+            case 7:  color = Textures[7 ].Sample(Samplers[7 ], Input.TexCoord); break;
+            case 8:  color = Textures[8 ].Sample(Samplers[8 ], Input.TexCoord); break;
+            case 9:  color = Textures[9 ].Sample(Samplers[9 ], Input.TexCoord); break;
+            case 10: color = Textures[10].Sample(Samplers[10], Input.TexCoord); break;
+            case 11: color = Textures[11].Sample(Samplers[11], Input.TexCoord); break;
+            case 12: color = Textures[12].Sample(Samplers[12], Input.TexCoord); break;
+            case 13: color = Textures[13].Sample(Samplers[13], Input.TexCoord); break;
+            case 14: color = Textures[14].Sample(Samplers[14], Input.TexCoord); break;
+            case 15: color = Textures[15].Sample(Samplers[15], Input.TexCoord); break;
+            default: color = float4(1.0, 0.0, 1.0, 1.0); break;
+        }
+    }
+
+    return color;
+}

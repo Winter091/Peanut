@@ -83,7 +83,7 @@ void OpenGLGLFWRenderContext::PreWindowSetup()
 {
     PN_PROFILE_FUNCTION();
 
-    int major = 4, minor = 5;
+    int major = 4, minor = 6;
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -155,6 +155,10 @@ void OpenGLGLFWRenderContext::SwapBuffers(Window& window)
 
     auto handle = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
     glfwSwapBuffers(handle);
+}
+
+void OpenGLGLFWRenderContext::OnWindowResize(Window& /*window*/)
+{
 }
 
 }
