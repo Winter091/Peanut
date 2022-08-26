@@ -33,14 +33,13 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
             .DoGenerateMipmaps(false));
 
     for (int i = 0; i < levels; i++, x /= 2, y /= 2) {
-        std::vector<int32_t> color = { rand() % 256, rand() % 256, rand() % 256, 255 };
-
         std::vector<uint8_t> pixels(x * y * 4);
-        for (int j = 0; j < pixels.size(); j += 4) {
-            pixels[j + 0] = color[0];
-            pixels[j + 1] = color[1];
-            pixels[j + 2] = color[2];
-            pixels[j + 3] = color[3];
+
+        for (uint32_t j = 0; j < pixels.size(); j += 4) {
+            pixels[j + 0] = static_cast<uint32_t>((1234567 * (i + 1)) % 256);
+            pixels[j + 1] = static_cast<uint32_t>((2345678 * (i + 1)) % 256);
+            pixels[j + 2] = static_cast<uint32_t>((3456789 * (i + 1)) % 256);
+            pixels[j + 3] = 255;
         }
 
         m_texture->SetLevelData(pixels.data(), i);

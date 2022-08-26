@@ -20,6 +20,7 @@ std::shared_ptr<VertexArray> VertexArray::Create(const VertexArrayDescription& d
     PN_CORE_ASSERT(description.GetShader(), "Vertex array has to have shader defined");
 
     for (const auto& vertexBuffer : description.GetVertexBuffers()) {
+        (void)vertexBuffer; // Suppress unused variable warning
         PN_CORE_ASSERT(vertexBuffer, "One of vertex buffers in vertex array is nullptr");
     }
 

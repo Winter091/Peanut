@@ -106,7 +106,7 @@ void OpenGLRenderCommand::BindConstantBuffers(const std::shared_ptr<ConstantBuff
     
     static std::vector<uint32_t> bufferHandles(16);
 
-    for (int i = 0; i < amount; i++) {
+    for (uint32_t i = 0; i < amount; i++) {
         bufferHandles[i] = static_cast<const OpenGLConstantBuffer&>(*constantBuffers[i]).GetOpenGLHandle();
     }
 
@@ -120,7 +120,7 @@ void OpenGLRenderCommand::BindTextures(const std::shared_ptr<Texture>* textures,
     static std::vector<uint32_t> textureHandles(16);
     static std::vector<uint32_t> textureSamplers(16);
 
-    for (int i = 0; i < amount; i++) {
+    for (uint32_t i = 0; i < amount; i++) {
         textureHandles[i] = dynamic_cast<const OpenGLTexture&>(*textures[i]).GetOpenGLHandle();
         textureSamplers[i] = static_cast<const OpenGLTextureSampler&>(*textures[i]->GetSampler()).GetOpenGLHandle();
     }
