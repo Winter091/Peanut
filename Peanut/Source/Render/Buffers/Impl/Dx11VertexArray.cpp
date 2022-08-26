@@ -52,8 +52,7 @@ uint32_t Dx11VertexArray::GetIndexCount() const
 
 uint32_t Dx11VertexArray::GetInstanceCount() const
 {
-    // TODO: fixme
-    return 0;
+    return m_instanceCount == 0 ? 1 : m_instanceCount;
 }
 
 IndexBufferDataFormat Dx11VertexArray::GetIndexDataFormat() const
