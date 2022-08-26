@@ -90,7 +90,7 @@ static int32_t AddTextureToList(const std::shared_ptr<Texture2D>& texture)
 {
     int32_t index = FindTextureIndex(*texture);
     if (index == -1) {
-        if (s_data->NumTextures + 1 >= MAX_TEXTURE_SLOTS) {
+        if (s_data->NumTextures >= MAX_TEXTURE_SLOTS) {
             Flush();
             StartBatch();
         }

@@ -1,5 +1,37 @@
 #include "SandboxApp.hpp"
 
+static std::shared_ptr<pn::Texture2D> GenerateRandomTexture(uint32_t width, uint32_t height, uint32_t mipLevels)
+{
+    auto texture = pn::Texture2D::Create(
+        nullptr,
+        pn::Texture2DSettings()
+        .UseFormat(pn::TextureFormat::RGBA)
+        .SetSize({ width, height })
+        .SetNumLevels(mipLevels)
+        .DoGenerateMipmaps(false));
+
+    for (uint32_t mipLevel = 0; mipLevel < mipLevels; mipLevel++, width /= 2, height /= 2) {
+        std::vector<uint8_t> pixels(width * height * 4);
+        
+        std::vector<uint8_t> color(4);
+        color[0] = static_cast<uint8_t>(rand() % 256);
+        color[1] = static_cast<uint8_t>(rand() % 256);
+        color[2] = static_cast<uint8_t>(rand() % 256);
+        color[3] = 255;
+
+        for (uint32_t j = 0; j < pixels.size(); j += 4) {
+            pixels[j + 0] = color[0];
+            pixels[j + 1] = color[1];
+            pixels[j + 2] = color[2];
+            pixels[j + 3] = color[3];
+        }
+
+        texture->SetLevelData(pixels.data(), mipLevel);
+    }
+
+    return texture;
+}
+
 SandboxApp::SandboxApp(const pn::WindowSettings& settings)
     : pn::Application(settings)
 {
@@ -20,43 +52,24 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
         .SetBorderColor({ 0.0f, 0.0f, 0.0f, 1.0f })
         .SetMaxAnisotropy(16));
 
-    int x = 512, y = 512;
-    int levels = 10;
-
-    m_texture = pn::Texture2D::Create(
-        nullptr,
-        pn::Texture2DSettings()
-            .SetSampler(sampler)
-            .UseFormat(pn::TextureFormat::RGBA)
-            .SetSize({ x, y })
-            .SetNumLevels(levels)
-            .DoGenerateMipmaps(false));
-
-    for (int i = 0; i < levels; i++, x /= 2, y /= 2) {
-        std::vector<uint8_t> pixels(x * y * 4);
-
-        for (uint32_t j = 0; j < pixels.size(); j += 4) {
-            pixels[j + 0] = static_cast<uint32_t>((1234567 * (i + 1)) % 256);
-            pixels[j + 1] = static_cast<uint32_t>((2345678 * (i + 1)) % 256);
-            pixels[j + 2] = static_cast<uint32_t>((3456789 * (i + 1)) % 256);
-            pixels[j + 3] = 255;
-        }
-
-        m_texture->SetLevelData(pixels.data(), i);
-    }
-    
     float step = 1.25f;
+    uint32_t texWidth = 512, texHeight = 512, texMipLevels = 10;
+
     for (int i = -5; i <= 5; i++) {
         for (int j = -5; j <= 5; j++) {
             float x = step * static_cast<float>(i);
             float y = step * static_cast<float>(j);
+
+            auto texture = GenerateRandomTexture(texWidth, texHeight, texMipLevels);
+            texture->SetSampler(sampler);
+
             pn::Rectangle rect;
             rect.SetPosition({ x, y });
-            rect.SetColor({ 146, 226, 253, 255 });
-            rect.SetTexture(m_texture);
+            rect.SetTexture(texture);
+            
             m_rectangles.push_back(rect);
         }
-    }
+    }    
 }
 
 void SandboxApp::OnEvent(pn::Event& event)
