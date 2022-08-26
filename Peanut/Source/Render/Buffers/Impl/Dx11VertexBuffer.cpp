@@ -1,7 +1,6 @@
 #include "Dx11VertexBuffer.hpp"
 
 #include <Peanut/Core/Assert.hpp>
-#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
 #include "Dx11EnumConversions.hpp"
 

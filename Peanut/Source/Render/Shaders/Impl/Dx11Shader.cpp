@@ -2,7 +2,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
-#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
+#include <Window/RenderContextImpl/Dx11RenderContext.hpp>
 
 #include <fstream>
 #include <sstream>
@@ -77,7 +77,7 @@ Dx11Shader::Dx11Shader(const ShaderSources& sources, std::string name)
 
 void Dx11Shader::InitShaders(const ShaderSources& sources)
 {
-	auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
+	auto* device = Dx11RenderContext::GetCurrentContext().GetDevice();
 
 	m_vertexShaderBlob = CompileShader(sources.VertexSource, "vs_5_0");
 	HRESULT res = device->CreateVertexShader(

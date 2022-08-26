@@ -1,6 +1,6 @@
 #include "Dx11TextureSampler.hpp"
 
-#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
+#include <Window/RenderContextImpl/Dx11RenderContext.hpp>
 #include "Dx11EnumConversions.hpp"
 
 #include <d3d11.h>
@@ -21,7 +21,7 @@ namespace pn {
 		desc.MinLOD = settings.GetMinLod();
 		desc.MaxLOD = settings.GetMaxLod();
 
-		auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
+		auto* device = Dx11RenderContext::GetCurrentContext().GetDevice();
 		HRESULT res = device->CreateSamplerState(&desc, &m_handle);
 		
 		PN_CORE_ASSERT(res == S_OK, "Unable to create texture sampler state");

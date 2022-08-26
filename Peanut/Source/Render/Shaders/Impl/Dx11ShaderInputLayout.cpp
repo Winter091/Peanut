@@ -1,6 +1,6 @@
 #include "Dx11ShaderInputLayout.hpp"
 
-#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
+#include <Window/RenderContextImpl/Dx11RenderContext.hpp>
 #include <Render/Shaders/Impl/Dx11Shader.hpp>
 #include <Render/Buffers/Impl/Dx11EnumConversions.hpp>
 
@@ -45,7 +45,7 @@ Dx11ShaderInputLayout::Dx11ShaderInputLayout(const std::vector<std::shared_ptr<V
         }
     }
 
-    auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
+    auto* device = Dx11RenderContext::GetCurrentContext().GetDevice();
     auto* dx11Shader = static_cast<Dx11Shader*>(shader.get());
 
     HRESULT res = device->CreateInputLayout(

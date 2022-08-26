@@ -1,6 +1,5 @@
 #include "Dx11IndexBuffer.hpp"
 
-#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
 #include <Render/Buffers/Impl/Dx11EnumConversions.hpp>
 

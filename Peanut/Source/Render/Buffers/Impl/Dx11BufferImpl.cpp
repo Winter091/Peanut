@@ -2,7 +2,7 @@
 #include "Dx11BufferImpl.hpp"
 
 #include <Peanut/Core/Assert.hpp>
-#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
+#include <Window/RenderContextImpl/Dx11RenderContext.hpp>
 #include "Dx11EnumConversions.hpp"
 
 #include <d3d11.h>
@@ -24,7 +24,7 @@ void Dx11BufferImpl::Init(const D3D11_BUFFER_DESC& desc, const void* data)
 {
 	PN_CORE_ASSERT(!m_handle, "Buffer is already initialized");
 
-	auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
+	auto* device = Dx11RenderContext::GetCurrentContext().GetDevice();
 	HRESULT res = 0;
 
 	if (!data) {
@@ -47,7 +47,7 @@ void* Dx11BufferImpl::Map()
 	PN_CORE_ASSERT(m_handle, "Buffer is not initialized");
 	PN_PROFILE_FUNCTION();
 
-	auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+	auto* deviceContext = Dx11RenderContext::GetCurrentContext().GetDeviceContext();
 
 	D3D11_MAPPED_SUBRESOURCE mappedBuffer;
 	HRESULT res = deviceContext->Map(m_handle, 0, BufferMapAccessToDxMap(m_mapAccess), 0, &mappedBuffer);
@@ -60,7 +60,7 @@ void Dx11BufferImpl::Unmap()
 	PN_CORE_ASSERT(m_handle, "Buffer is already initialized");
 	PN_PROFILE_FUNCTION();
 
-	auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+	auto* deviceContext = Dx11RenderContext::GetCurrentContext().GetDeviceContext();
 	deviceContext->Unmap(m_handle, 0);
 }
 

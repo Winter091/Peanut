@@ -12,10 +12,6 @@
 namespace pn
 {
 
-
-Dx11GLFWRenderContext* Dx11GLFWRenderContext::s_currentContext = nullptr;
-
-
 static ComPtr<IDXGIAdapter> GetPrimaryAdapter()
 {
     ComPtr<IDXGIFactory1> factory;
@@ -84,16 +80,12 @@ static DXGI_SWAP_CHAIN_DESC GetSwapChainDesc(HWND window, int windowWidth, int w
 static ComPtr<ID3D11RenderTargetView> CreateRenderTargetView(ID3D11Device* device, IDXGISwapChain* swapChain)
 {
     ComPtr<ID3D11Texture2D> backBufferPtr;
-    HRESULT hr = swapChain->GetBuffer(0, IID_ID3D11Texture2D, (void**)backBufferPtr.GetAddressOf());
-    if (FAILED(hr)) {
-        PN_CORE_ASSERT(false, "IDXGISwapChain::GetBuffer() failed");
-    }
+    HRESULT result = swapChain->GetBuffer(0, IID_ID3D11Texture2D, (void**)backBufferPtr.GetAddressOf());
+    PN_CORE_ASSERT(result == S_OK, "IDXGISwapChain::GetBuffer() failed");
 
     ComPtr<ID3D11RenderTargetView> renderTargetView;
-    hr = device->CreateRenderTargetView(backBufferPtr.Get(), nullptr, renderTargetView.GetAddressOf());
-    if (FAILED(hr)) {
-        PN_CORE_ASSERT(false, "ID3D11Device::CreateRenderTargetView() failed");
-    }
+    result = device->CreateRenderTargetView(backBufferPtr.Get(), nullptr, renderTargetView.GetAddressOf());
+    PN_CORE_ASSERT(result == S_OK, "ID3D11Device::CreateRenderTargetView() failed");
 
     return renderTargetView;
 }
@@ -117,9 +109,7 @@ static ComPtr<ID3D11Texture2D> CreateDepthStencilBufferTexture(ID3D11Device* dev
 
     ComPtr<ID3D11Texture2D> texture;
     HRESULT result = device->CreateTexture2D(&textureDesc, nullptr, texture.GetAddressOf());
-    if (FAILED(result)) {
-        PN_CORE_ASSERT(false, "Failed to create depth buffer texture");
-    }
+    PN_CORE_ASSERT(result == S_OK, "Failed to create depth buffer texture");
 
     return texture;
 }
@@ -150,9 +140,7 @@ static ComPtr<ID3D11DepthStencilState> CreateDepthStencilState(ID3D11Device* dev
 
     ComPtr<ID3D11DepthStencilState> state;
     HRESULT result = device->CreateDepthStencilState(&depthStencilDesc, state.GetAddressOf());
-    if (FAILED(result)) {
-        PN_CORE_ASSERT(false, "Failed to create depth stencil state");
-    }
+    PN_CORE_ASSERT(result == S_OK, "Failed to create depth stencil state");
 
     return state;
 }
@@ -169,9 +157,7 @@ static ComPtr<ID3D11DepthStencilView> CreateDepthStencilView(ID3D11Device* devic
 
     ComPtr<ID3D11DepthStencilView> view;
     HRESULT result = device->CreateDepthStencilView(depthStencilTexture, &depthStencilViewDesc, view.GetAddressOf());
-    if (FAILED(result)) {
-        PN_CORE_ASSERT(false, "Failed to create depth stencil view");
-    }
+    PN_CORE_ASSERT(result == S_OK, "Failed to create depth stencil view");
 
     return view;
 }
@@ -206,6 +192,8 @@ void Dx11GLFWRenderContext::PostWindowSetup(Window& window)
     CreateDeviceAndSwapChain(win32Window, window.GetWidth(), window.GetHeight(), useDebugContext);
 
     m_renderTargetView = CreateRenderTargetView(m_device.Get(), m_swapChain.Get());
+    Dx11RenderContext::SetRenderTargetView(m_renderTargetView.Get());
+    
     InitDepthBuffer(window.GetWidth(), window.GetHeight());
 
     SetCurrentContext(window);
@@ -244,9 +232,10 @@ void Dx11GLFWRenderContext::CreateDeviceAndSwapChain(HWND window, int windowWidt
         m_deviceContext.GetAddressOf()
     );
 
-    if (result != S_OK) {
-        PN_CORE_ASSERT(false, "Unable to create swap chain!");
-    }
+    PN_CORE_ASSERT(result == S_OK, "Unable to create swap chain!");
+
+    Dx11RenderContext::SetDevice(m_device.Get());
+    Dx11RenderContext::SetDeviceContext(m_deviceContext.Get());
 }
 
 
@@ -262,6 +251,7 @@ void Dx11GLFWRenderContext::RecreateDepthTexture(int windowWidth, int windowHeig
 {
     m_depthStencilBufferTexture = CreateDepthStencilBufferTexture(m_device.Get(), windowWidth, windowHeight);
     m_depthStencilView = CreateDepthStencilView(m_device.Get(), m_depthStencilBufferTexture.Get());
+    Dx11RenderContext::SetDepthStencilView(m_depthStencilView.Get());
 }
 
 void Dx11GLFWRenderContext::OnWindowResize(Window& window)
@@ -270,12 +260,12 @@ void Dx11GLFWRenderContext::OnWindowResize(Window& window)
     {
         m_renderTargetView.Reset();
 
-        HRESULT hr = m_swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
-        if (FAILED(hr)) {
-            PN_CORE_ASSERT(false, "IDXGISwapChain::ResizeBuffers() failed");
-        }
+        HRESULT result = m_swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+        PN_CORE_ASSERT(result == S_OK, "IDXGISwapChain::ResizeBuffers() failed");
 
         m_renderTargetView = CreateRenderTargetView(m_device.Get(), m_swapChain.Get());
+        Dx11RenderContext::SetRenderTargetView(m_renderTargetView.Get());
+        
         RecreateDepthTexture(window.GetWidth(), window.GetHeight());
     }
     m_deviceContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
@@ -283,7 +273,7 @@ void Dx11GLFWRenderContext::OnWindowResize(Window& window)
 
 void Dx11GLFWRenderContext::SetCurrentContext(Window& /*window*/)
 {
-    s_currentContext = this;
+    Dx11RenderContext::SetCurrentContext(this);
 }
 
 void Dx11GLFWRenderContext::SetSwapInterval(int interval)
@@ -294,12 +284,6 @@ void Dx11GLFWRenderContext::SetSwapInterval(int interval)
 void Dx11GLFWRenderContext::SwapBuffers(Window& /*window*/)
 {
     m_swapChain->Present(m_swapInterval, 0);
-}
-
-Dx11GLFWRenderContext& Dx11GLFWRenderContext::GetCurrentContext()
-{
-    PN_CORE_ASSERT(s_currentContext, "Trying to get context, but it's not set");
-    return *s_currentContext;
 }
 
 }

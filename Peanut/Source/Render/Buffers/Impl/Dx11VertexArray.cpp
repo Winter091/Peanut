@@ -3,7 +3,7 @@
 
 #include <Peanut/Core/Assert.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
-#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
+#include <Window/RenderContextImpl/Dx11RenderContext.hpp>
 #include <Render/Shaders/Impl/Dx11Shader.hpp>
 #include <Render/Shaders/Impl/Dx11ShaderInputLayout.hpp>
 #include "Dx11EnumConversions.hpp"

@@ -2,7 +2,7 @@
 
 #include <Peanut/Core/TimeProfiler.hpp>
 #include <Peanut/Render/Textures/TextureLoad.hpp>
-#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
+#include <Window/RenderContextImpl/Dx11RenderContext.hpp>
 #include "Dx11EnumConversions.hpp"
 
 #include <d3d11.h>
@@ -58,7 +58,7 @@ namespace pn {
 		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		desc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
-		auto* device = Dx11GLFWRenderContext::GetCurrentContext().GetDevice();
+		auto* device = Dx11RenderContext::GetCurrentContext().GetDevice();
 		HRESULT res = device->CreateTexture2D(&desc, nullptr, &m_handle);
 		PN_CORE_ASSERT(res == S_OK, "Unable to create 2d texture");
 
@@ -68,7 +68,7 @@ namespace pn {
 		if (data) {
 			SetLevelData(data, 0);
 			if (settings.GenerateMipmaps) {
-				auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+				auto* deviceContext = Dx11RenderContext::GetCurrentContext().GetDeviceContext();
 				deviceContext->GenerateMips(m_view);
 			}
 		}
@@ -81,7 +81,7 @@ namespace pn {
 	{
 		SetLevelData(data, 0, size, offset);
 
-		auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+		auto* deviceContext = Dx11RenderContext::GetCurrentContext().GetDeviceContext();
 		deviceContext->GenerateMips(m_view);
 	}
 
@@ -102,7 +102,7 @@ namespace pn {
 		region.front = 0;
 		region.back = 1;
 
-		auto* deviceContext = Dx11GLFWRenderContext::GetCurrentContext().GetDeviceContext();
+		auto* deviceContext = Dx11RenderContext::GetCurrentContext().GetDeviceContext();
 		deviceContext->UpdateSubresource(m_handle, level, &region, data, sz.x * m_numChannels, 0);
 	}
 
