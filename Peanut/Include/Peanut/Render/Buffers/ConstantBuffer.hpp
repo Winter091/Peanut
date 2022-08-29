@@ -14,7 +14,7 @@ namespace pn {
         ConstantBuffer() = default;
         ConstantBuffer(const ConstantBuffer&) = delete;
         ConstantBuffer& operator=(const ConstantBuffer&) = delete;
-        virtual ~ConstantBuffer() = default;
+        ~ConstantBuffer() override = default;
 
         static std::shared_ptr<ConstantBuffer> Create(BufferMapAccess access, uint32_t size, const void* data = nullptr);
     };

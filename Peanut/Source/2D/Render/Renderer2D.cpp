@@ -38,7 +38,7 @@ namespace pn {
 
     struct Renderer2DData
     {
-        RectPerInstanceData* RectanglePerInstanceDataPtr;
+        RectPerInstanceData* RectanglePerInstanceDataPtr = nullptr;
         std::shared_ptr<VertexBuffer> RectanglePerInstanceBuffer;
         std::shared_ptr<ConstantBuffer> CameraConstantBuffer;
         std::shared_ptr<VertexArray> RectangleVertexArray;
@@ -94,7 +94,7 @@ namespace pn {
                 Flush();
                 StartBatch();
             }
-            index = s_data->NumTextures;
+            index = static_cast<int32_t>(s_data->NumTextures);
             s_data->Textures[index] = texture;
             s_data->NumTextures++;
         }

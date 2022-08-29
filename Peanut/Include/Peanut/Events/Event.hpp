@@ -20,11 +20,11 @@ namespace pn {
         void SetIsProcessed(bool value) { m_isProcessed |= value; }
         bool GetIsProcessed() const { return m_isProcessed; }
 
-        template <EventType T, typename Fn>
+        template <typename TEvent, typename Fn>
         void Dispatch(Fn&& function)
         {
-            if (GetType() == T) {
-                SetIsProcessed(function(*this));
+            if (GetType() == TEvent::GetStaticType()) {
+                SetIsProcessed(function(static_cast<TEvent&>(*this)));
             }
         }
 

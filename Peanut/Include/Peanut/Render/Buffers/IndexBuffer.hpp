@@ -20,7 +20,7 @@ namespace pn {
         IndexBuffer() = default;
         IndexBuffer(const IndexBuffer&) = delete;
         IndexBuffer& operator=(const IndexBuffer&) = delete;
-        virtual ~IndexBuffer() = default;
+        ~IndexBuffer() override = default;
 
         virtual uint32_t GetIndexCount() const = 0;
         virtual IndexBufferDataFormat GetDataFormat() const = 0;

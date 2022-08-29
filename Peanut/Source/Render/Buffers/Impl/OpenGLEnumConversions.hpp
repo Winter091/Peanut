@@ -15,7 +15,7 @@ namespace pn {
         switch (access) {
             case BufferMapAccess::NoAccess:     return 0u;
             case BufferMapAccess::Read:         return GL_MAP_READ_BIT;
-            case BufferMapAccess::Write:        return GL_MAP_WRITE_BIT;
+            case BufferMapAccess::Write:
             case BufferMapAccess::WriteDiscard: return GL_MAP_WRITE_BIT;
             case BufferMapAccess::ReadWrite:    return GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
             default: break;

@@ -26,11 +26,13 @@ namespace pn {
 	{
 	public:
 		TextureLoadResult(std::unique_ptr<uint8_t> data, uint32_t dataSize, uint32_t width, uint32_t height)
+			: m_data(std::move(data))
+			, m_dataSize(dataSize)
+			, m_width(width)
+			, m_height(height)
 		{
-			m_data = std::move(data);
-			m_dataSize = dataSize;
-			m_width = width;
-			m_height = height;
+			PN_CORE_ASSERT(m_data, "Pointer to data cannot be nullptr");
+			PN_CORE_ASSERT(width && height, "Texture width or/and height cannnot be 0");
 		}
 
 		void* GetData() const { return static_cast<void*>(m_data.get()); }

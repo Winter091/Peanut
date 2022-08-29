@@ -14,7 +14,7 @@ namespace pn {
 
         bool operator==(const Texture& other) const override { return OpenGLTexture::operator==(other); }
 
-        void SetSampler(const std::shared_ptr<TextureSampler>& sampler) { m_sampler = sampler; }
+        void SetSampler(const std::shared_ptr<TextureSampler>& sampler) override { m_sampler = sampler; }
         std::shared_ptr<TextureSampler> GetSampler() const override { return m_sampler; }
 
         uint32_t GetNumMipmaps() const override { return m_numLevels; }

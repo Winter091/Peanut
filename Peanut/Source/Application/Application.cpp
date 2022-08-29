@@ -1,7 +1,6 @@
 #include <Peanut/Application/Application.hpp>
 
 #include <Core/MethodBinding.hpp>
-#include <Peanut/Events/WindowEvents.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
 #include <Peanut/Core/TimeProfiler.hpp>
 
@@ -48,14 +47,13 @@ namespace pn
         PN_PROFILE_FUNCTION();
 
         m_eventQueue.Push(event);
-        event.Dispatch<EventType::WindowSizeChanged>(PN_BIND_METHOD_CALL(OnWindowResize));
+        event.Dispatch<WindowSizeChangedEvent>(PN_BIND_METHOD_CALL(OnWindowResize));
     }
 
-    bool Application::OnWindowResize(Event& event)
+    bool Application::OnWindowResize(WindowSizeChangedEvent& resizeEvent)
     {
         PN_PROFILE_FUNCTION();
 
-        auto& resizeEvent = static_cast<WindowSizeChangedEvent&>(event);
         m_window->OnResize(resizeEvent.GetWidth(), resizeEvent.GetHeight());
         RenderCommand::SetViewport(0, 0, m_window->GetWidth(), m_window->GetHeight());
         return true;

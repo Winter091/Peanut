@@ -19,7 +19,7 @@ namespace pn {
 
         void* Map() override { return OpenGLBufferImpl::Map(); }
         void Unmap() override { OpenGLBufferImpl::Unmap(); }
-        void SetData(const void* data, size_t offset = 0, size_t size = 0) { OpenGLBufferImpl::SetData(data, offset, size); }
+        void SetData(const void* data, size_t offset = 0, size_t size = 0) override { OpenGLBufferImpl::SetData(data, offset, size); }
 
         const std::shared_ptr<BufferLayout>& GetLayout() const override { return m_layout; }
 

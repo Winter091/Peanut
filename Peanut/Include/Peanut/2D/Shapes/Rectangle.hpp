@@ -25,7 +25,7 @@ namespace pn {
         const glm::vec2& GetSize() const { return m_size; }
         void SetSize(const glm::vec2& size);
 
-        virtual const glm::u8vec4& GetColor() const override { return m_color; }
+        const glm::u8vec4& GetColor() const override { return m_color; }
         void SetColor(const glm::u8vec4& color) override;
 
         bool HasTexture() const override { return m_texture != nullptr; }

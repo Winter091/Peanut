@@ -1,4 +1,4 @@
-#version 450 core
+#version 460 core
 
 layout (location = 0) in uint a_vertexIndex;
 layout (location = 1) in mat4 a_modelMatrix;

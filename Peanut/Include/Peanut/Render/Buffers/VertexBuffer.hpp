@@ -21,7 +21,7 @@ namespace pn {
         VertexBuffer() = default;
         VertexBuffer(const VertexBuffer&) = delete;
         VertexBuffer& operator=(const VertexBuffer&) = delete;
-        virtual ~VertexBuffer() = default;
+        ~VertexBuffer() override = default;
 
         virtual const std::shared_ptr<BufferLayout>& GetLayout() const = 0;
 

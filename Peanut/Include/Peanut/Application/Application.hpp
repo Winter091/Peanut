@@ -3,6 +3,7 @@
 #include <Peanut/Window/Window.hpp>
 #include <Peanut/Window/WindowSettings.hpp>
 #include <Peanut/Events/EventQueue.hpp>
+#include <Peanut/Events/WindowEvents.hpp>
 #include "CommandLineArgs.hpp"
 #include <memory>
 
@@ -34,7 +35,7 @@ namespace pn {
         void MainOnEvent(Event& event);
         void MainOnUpdate();
         void SendEvents();
-        bool OnWindowResize(Event& event);
+        bool OnWindowResize(WindowSizeChangedEvent& resizeEvent);
     };
 
 }

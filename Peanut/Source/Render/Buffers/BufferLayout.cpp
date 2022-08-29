@@ -11,7 +11,6 @@ namespace pn {
         , Type(type)
         , Count(count)
     {
-        PN_CORE_ASSERT(index >= 0, "Buffer layout element index cannot be less than zero");
         PN_CORE_ASSERT(count >= 1 && count <= 4, "Buffer layout element: invalid count: {}", count);
     }
 
