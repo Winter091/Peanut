@@ -74,8 +74,9 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
 void SandboxApp::OnEvent(pn::Event& event)
 {
-    (void)event;    
-    // PN_CORE_TRACE("Event: {}", event.ToString());
+    if (event.GetType() == pn::EventType::WindowSizeChanged) {
+        m_camera->SetAspectRatio(GetWindow().GetAspectRatio());
+    }
 }
 
 void SandboxApp::OnUpdate()

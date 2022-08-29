@@ -14,12 +14,11 @@ namespace pn {
         GLFWWindow& operator=(const GLFWWindow&) = delete;
         ~GLFWWindow() override;
 
+        RenderContext& GetRenderContext() override { return *m_data.renderContext; }
         void MakeContextCurrent() override;
         void SetEventCallbackFunc(const EventCallbackFunc& func) override;
         void Update() override;
         bool ShouldClose() const override;
-
-        void OnResize(int newWidth, int newHeight) override;
 
         void* GetNativeHandle() const override;
         int GetWidth() const override { return m_data.width; }
@@ -41,6 +40,9 @@ namespace pn {
         // m_data will be available using glfwGetWindowUserPointer(),
         // it's required while setting up callbacks
         struct WindowData {
+            Window* thisPtr;
+            std::unique_ptr<RenderContext> renderContext; 
+
             GLFWwindow* glfwHandle;
 
             int width;

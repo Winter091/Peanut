@@ -15,18 +15,20 @@ namespace pn {
     {
         PN_PROFILE_FUNCTION();
 
+        m_data.thisPtr = this;
+        m_data.renderContext = RenderContext::Create();
         m_data.width =  static_cast<int>(settings.Width);
         m_data.height = static_cast<int>(settings.Height);
         m_data.title = settings.Title;
 
         OnWindowCreate();
 
-        GetRenderContext().PreWindowSetup();
+        m_data.renderContext->PreWindowSetup();
         {
             m_data.glfwHandle = glfwCreateWindow(m_data.width, m_data.height, m_data.title.c_str(), nullptr, nullptr);
             PN_CORE_ASSERT(m_data.glfwHandle, "Unable to create GLFW window!");
         }
-        GetRenderContext().PostWindowSetup(*this);
+        m_data.renderContext->PostWindowSetup(*this);
     
         SetupGlfwCallbacks();
         SetSwapInterval(static_cast<int>(settings.SwapInterval));
@@ -122,6 +124,7 @@ namespace pn {
             
                 data->width = width;
                 data->height = height;
+                data->renderContext->OnWindowResize(*data->thisPtr);
 
                 WindowSizeChangedEvent event(width, height);
                 data->eventCallbackFunc(event);
@@ -170,13 +173,6 @@ namespace pn {
     bool GLFWWindow::ShouldClose() const
     {
         return static_cast<bool>(glfwWindowShouldClose(m_data.glfwHandle));
-    }
-
-    void GLFWWindow::OnResize(int newWidth, int newHeight)
-    {
-        m_data.width = newWidth;
-        m_data.height = newHeight;
-        GetRenderContext().OnWindowResize(*this);
     }
 
     void* GLFWWindow::GetNativeHandle() const 
