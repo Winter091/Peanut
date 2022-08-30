@@ -13,6 +13,19 @@
 
 namespace pn {
 
+    struct WindowSizeSettings
+    {
+    public:
+        uint32_t Width;
+        uint32_t Height;
+        bool IsFullScreen;
+
+    public:
+        WindowSizeSettings& SetWidth(uint32_t width) { Width = width; return *this; }
+        WindowSizeSettings& SetHeight(uint32_t height) { Height = height; return *this; }
+        WindowSizeSettings& SetIsFullScreen(bool isFullScreen) { IsFullScreen = isFullScreen; return *this; }
+    };
+
     class Window 
     {
     public:
@@ -38,6 +51,9 @@ namespace pn {
         virtual int GetWidth() const = 0;
         virtual int GetHeight() const = 0;
         virtual float GetAspectRatio() const = 0;
+        virtual bool GetIsFullScreen() const = 0;
+
+        virtual void SetSize(const WindowSizeSettings& settings) = 0;
     
         virtual const std::string& GetTitle() const = 0;
         virtual void SetTitle(const std::string& title) = 0;

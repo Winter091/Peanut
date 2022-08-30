@@ -244,7 +244,7 @@ namespace pn {
         Dx11RenderContext::SetDepthStencilView(m_depthStencilView.Get());
     }
 
-    void Dx11GLFWRenderContext::OnWindowResize(Window& window)
+    void Dx11GLFWRenderContext::OnWindowResize(const WindowSizeSettings& settings)
     {
         m_deviceContext->OMSetRenderTargets(0, nullptr, nullptr);
         {
@@ -256,9 +256,11 @@ namespace pn {
             m_renderTargetView = CreateRenderTargetView(m_device.Get(), m_swapChain.Get());
             Dx11RenderContext::SetRenderTargetView(m_renderTargetView.Get());
         
-            RecreateDepthTexture(window.GetWidth(), window.GetHeight());
+            RecreateDepthTexture(settings.Width, settings.Height);
         }
         m_deviceContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
+
+        m_swapChain->SetFullscreenState(settings.IsFullScreen, nullptr);
     }
 
     void Dx11GLFWRenderContext::SetCurrentContext(Window& /*window*/)

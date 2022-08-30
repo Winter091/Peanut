@@ -76,6 +76,26 @@ void SandboxApp::OnEvent(pn::Event& event)
 {
     if (event.GetType() == pn::EventType::WindowSizeChanged) {
         m_camera->SetAspectRatio(GetWindow().GetAspectRatio());
+        return;
+    } 
+    
+    if (event.GetType() == pn::EventType::KeyPressed) {
+        auto& keyPressedEvent = static_cast<pn::KeyPressedEvent&>(event);
+        auto& window = GetWindow();
+
+        if (keyPressedEvent.GetKeyCode() == pn::KeyCode::Enter && window.IsKeyPressed(pn::KeyCode::LeftAlt)) {
+            if (window.GetIsFullScreen()) {
+                window.SetSize(pn::WindowSizeSettings()
+                    .SetWidth(1280)
+                    .SetHeight(720)
+                    .SetIsFullScreen(false));
+            } else {
+                window.SetSize(pn::WindowSizeSettings()
+                    .SetWidth(1920)
+                    .SetHeight(1080)
+                    .SetIsFullScreen(true));
+            }
+        }
     }
 }
 
@@ -125,8 +145,9 @@ pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
         PN_CLIENT_DEBUG("   Arg {}: {}", i, args[i]);
     }
 
-    return new SandboxApp(WindowSettings()
+    return new SandboxApp(pn::WindowSettings()
         .SetTitle("Sandbox Application")
         .SetWidth(1280).SetHeight(720)
-        .UseVsync(true));
+        .UseFullScreen(false)
+        .UseVsync(false));
 }

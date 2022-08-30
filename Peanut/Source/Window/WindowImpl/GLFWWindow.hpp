@@ -24,6 +24,9 @@ namespace pn {
         int GetWidth() const override { return m_data.width; }
         int GetHeight() const override { return m_data.height; }
         float GetAspectRatio() const override { return static_cast<float>(m_data.width) / static_cast<float>(m_data.height); }
+        bool GetIsFullScreen() const override { return m_data.isFullScreen; }
+
+        void SetSize(const WindowSizeSettings& settings) override;
 
         const std::string& GetTitle() const override { return m_data.title; }
         void SetTitle(const std::string& title) override;
@@ -49,6 +52,10 @@ namespace pn {
             int height;
             int swapInterval;
             std::string title;
+            bool isFullScreen;
+
+            int prevWindowedXPos = 100;
+            int prevWindowedYPos = 100;
 
             EventCallbackFunc eventCallbackFunc;
         } m_data;

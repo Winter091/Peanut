@@ -24,7 +24,7 @@ namespace pn {
         void SetCurrentContext(Window& window) override;
         void SetSwapInterval(int interval) override;
         void SwapBuffers(Window& window) override;
-        void OnWindowResize(Window& window) override;
+        void OnWindowResize(const WindowSizeSettings& settings) override;
 
     private:
         void CreateDeviceAndSwapChain(HWND window, int windowWidth, int windowHeight, bool createDebugContext);

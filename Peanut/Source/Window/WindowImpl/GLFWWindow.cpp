@@ -20,12 +20,22 @@ namespace pn {
         m_data.width =  static_cast<int>(settings.Width);
         m_data.height = static_cast<int>(settings.Height);
         m_data.title = settings.Title;
+        m_data.isFullScreen = settings.IsFullScreen;
 
         OnWindowCreate();
 
         m_data.renderContext->PreWindowSetup();
         {
-            m_data.glfwHandle = glfwCreateWindow(m_data.width, m_data.height, m_data.title.c_str(), nullptr, nullptr);
+            GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+            GLFWmonitor* fullscreenMonitor = settings.IsFullScreen ? primaryMonitor : nullptr;
+
+            const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
+            glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+            glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+            glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+            glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+            m_data.glfwHandle = glfwCreateWindow(m_data.width, m_data.height, m_data.title.c_str(), fullscreenMonitor, nullptr);
             PN_CORE_ASSERT(m_data.glfwHandle, "Unable to create GLFW window!");
         }
         m_data.renderContext->PostWindowSetup(*this);
@@ -124,7 +134,10 @@ namespace pn {
             
                 data->width = width;
                 data->height = height;
-                data->renderContext->OnWindowResize(*data->thisPtr);
+                data->renderContext->OnWindowResize(pn::WindowSizeSettings()
+                    .SetWidth(width)
+                    .SetHeight(height)
+                    .SetIsFullScreen(data->thisPtr->GetIsFullScreen()));
 
                 WindowSizeChangedEvent event(width, height);
                 data->eventCallbackFunc(event);
@@ -178,6 +191,37 @@ namespace pn {
     void* GLFWWindow::GetNativeHandle() const 
     {
         return reinterpret_cast<void*>(m_data.glfwHandle);
+    }
+
+    void GLFWWindow::SetSize(const WindowSizeSettings& settings)
+    {
+        if (settings.IsFullScreen == m_data.isFullScreen) {
+            glfwSetWindowSize(m_data.glfwHandle, settings.Width, settings.Height);
+        } else {
+            GLFWmonitor* primaryMonitor = nullptr;
+            int prevXPos = 0, prevYPos = 0, refreshRate = GLFW_DONT_CARE;
+            
+            if (settings.IsFullScreen) {
+                primaryMonitor = glfwGetPrimaryMonitor();
+                refreshRate = glfwGetVideoMode(primaryMonitor)->refreshRate;
+                glfwGetWindowPos(m_data.glfwHandle, &m_data.prevWindowedXPos, &m_data.prevWindowedYPos);
+            } else {
+                prevXPos = m_data.prevWindowedXPos;
+                prevYPos = m_data.prevWindowedYPos;
+            }
+
+            glfwSetWindowMonitor(m_data.glfwHandle, primaryMonitor, prevXPos, prevYPos, settings.Width, settings.Height, GLFW_DONT_CARE);//refreshRate);
+        }
+
+        SetSwapInterval(m_data.swapInterval);
+
+        m_data.width = settings.Width;
+        m_data.height = settings.Height;
+        m_data.isFullScreen = settings.IsFullScreen;
+        m_data.renderContext->OnWindowResize(settings);
+
+        WindowSizeChangedEvent event(m_data.width, m_data.height);
+        m_data.eventCallbackFunc(event);
     }
 
     void GLFWWindow::SetTitle(const std::string& title) 

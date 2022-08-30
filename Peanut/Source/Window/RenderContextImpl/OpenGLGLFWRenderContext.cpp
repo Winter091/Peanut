@@ -155,7 +155,7 @@ namespace pn {
         glfwSwapBuffers(handle);
     }
 
-    void OpenGLGLFWRenderContext::OnWindowResize(Window& /*window*/)
+    void OpenGLGLFWRenderContext::OnWindowResize(const WindowSizeSettings& /*settings*/)
     {
     }
 
