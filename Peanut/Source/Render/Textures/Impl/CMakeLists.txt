@@ -1,6 +1,7 @@
 if (PN_RENDERING_DX11)
     target_sources(
         Peanut PRIVATE
+        Dx11DepthStencilTexture.cpp
         Dx11Texture2D.cpp
         Dx11TextureSampler.cpp
     )

@@ -32,6 +32,7 @@
 #include "Render/Commands/RenderCommand.hpp"
 #include "Render/Shaders/Shader.hpp"
 #include "Render/Shaders/ShaderInputLayout.hpp"
+#include "Render/Textures/DepthStencilTexture.hpp"
 #include "Render/Textures/Texture.hpp"
 #include "Render/Textures/Texture2D.hpp"
 #include "Render/Textures/TextureLoad.hpp"
