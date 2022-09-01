@@ -26,14 +26,7 @@ namespace pn {
 
         m_data.renderContext->PreWindowSetup();
         {
-            GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
-            GLFWmonitor* fullscreenMonitor = settings.IsFullScreen ? primaryMonitor : nullptr;
-
-            const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
-            glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-            glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-            glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-            glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+            GLFWmonitor* fullscreenMonitor = settings.IsFullScreen ? glfwGetPrimaryMonitor() : nullptr;
 
             m_data.glfwHandle = glfwCreateWindow(m_data.width, m_data.height, m_data.title.c_str(), fullscreenMonitor, nullptr);
             PN_CORE_ASSERT(m_data.glfwHandle, "Unable to create GLFW window!");
@@ -137,7 +130,7 @@ namespace pn {
                 data->renderContext->OnWindowResize(pn::WindowSizeSettings()
                     .SetWidth(width)
                     .SetHeight(height)
-                    .SetIsFullScreen(data->thisPtr->GetIsFullScreen()));
+                    .SetIsFullScreen(data->isFullScreen));
 
                 WindowSizeChangedEvent event(width, height);
                 data->eventCallbackFunc(event);
@@ -199,18 +192,14 @@ namespace pn {
             glfwSetWindowSize(m_data.glfwHandle, settings.Width, settings.Height);
         } else {
             GLFWmonitor* primaryMonitor = nullptr;
-            int prevXPos = 0, prevYPos = 0, refreshRate = GLFW_DONT_CARE;
+            int refreshRate = GLFW_DONT_CARE;
             
             if (settings.IsFullScreen) {
                 primaryMonitor = glfwGetPrimaryMonitor();
                 refreshRate = glfwGetVideoMode(primaryMonitor)->refreshRate;
-                glfwGetWindowPos(m_data.glfwHandle, &m_data.prevWindowedXPos, &m_data.prevWindowedYPos);
-            } else {
-                prevXPos = m_data.prevWindowedXPos;
-                prevYPos = m_data.prevWindowedYPos;
             }
 
-            glfwSetWindowMonitor(m_data.glfwHandle, primaryMonitor, prevXPos, prevYPos, settings.Width, settings.Height, GLFW_DONT_CARE);//refreshRate);
+            glfwSetWindowMonitor(m_data.glfwHandle, primaryMonitor, 100, 100, settings.Width, settings.Height, refreshRate);
         }
 
         SetSwapInterval(m_data.swapInterval);

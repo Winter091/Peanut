@@ -46,28 +46,18 @@ namespace pn {
 
         swapChainDesc.BufferDesc.Width = windowWidth;
         swapChainDesc.BufferDesc.Height = windowHeight;
-
-        // TODO: vsync
         swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
         swapChainDesc.BufferDesc.RefreshRate.Denominator = 0;
-
         swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
         swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
         swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-
         swapChainDesc.SampleDesc.Count = 1;
         swapChainDesc.SampleDesc.Quality = 0;
-
         swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         swapChainDesc.BufferCount = 2;
-
         swapChainDesc.OutputWindow = window;
-
-        // TODO: fullscreen mode
         swapChainDesc.Windowed = true;
-
         swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-
         swapChainDesc.Flags = 0;
 
         return swapChainDesc;
@@ -118,7 +108,7 @@ namespace pn {
         depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
         depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
-        depthStencilDesc.StencilEnable = false;
+        depthStencilDesc.StencilEnable = true;
         depthStencilDesc.StencilReadMask = 0xFF;
         depthStencilDesc.StencilWriteMask = 0xFF;
 
@@ -178,21 +168,18 @@ namespace pn {
         useDebugContext = true;
 #endif
 
-        GLFWwindow* glfwWindow = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
-        HWND win32Window = glfwGetWin32Window(glfwWindow);
-
-        CreateDeviceAndSwapChain(win32Window, window.GetWidth(), window.GetHeight(), useDebugContext);
+        CreateDeviceAndSwapChain(window, useDebugContext);
 
         m_renderTargetView = CreateRenderTargetView(m_device.Get(), m_swapChain.Get());
         Dx11RenderContext::SetRenderTargetView(m_renderTargetView.Get());
-    
+
         InitDepthBuffer(window.GetWidth(), window.GetHeight());
 
         SetCurrentContext(window);
         m_deviceContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
     }
 
-    void Dx11GLFWRenderContext::CreateDeviceAndSwapChain(HWND window, int windowWidth, int windowHeight, bool createDebugContext)
+    void Dx11GLFWRenderContext::CreateDeviceAndSwapChain(const Window& window, bool createDebugContext)
     {
         ComPtr<IDXGIAdapter> adapter = GetPrimaryAdapter();
         PrintAdapterInfo(adapter.Get());
@@ -208,7 +195,10 @@ namespace pn {
 
         D3D_FEATURE_LEVEL dxVersion = D3D_FEATURE_LEVEL_11_1;
 
-        DXGI_SWAP_CHAIN_DESC swapChainDesc = GetSwapChainDesc(window, windowWidth, windowHeight);
+        GLFWwindow* glfwWindow = reinterpret_cast<GLFWwindow*>(window.GetNativeHandle());
+        HWND win32Window = glfwGetWin32Window(glfwWindow);
+
+        DXGI_SWAP_CHAIN_DESC swapChainDesc = GetSwapChainDesc(win32Window, window.GetWidth(), window.GetHeight());
 
         HRESULT result = D3D11CreateDeviceAndSwapChain(
             adapter.Get(), D3D_DRIVER_TYPE_UNKNOWN,
@@ -224,6 +214,8 @@ namespace pn {
         );
 
         PN_CORE_ASSERT(result == S_OK, "Unable to create swap chain!");
+
+        m_swapChain->SetFullscreenState(window.GetIsFullScreen(), nullptr);
 
         Dx11RenderContext::SetDevice(m_device.Get());
         Dx11RenderContext::SetDeviceContext(m_deviceContext.Get());
@@ -246,6 +238,7 @@ namespace pn {
 
     void Dx11GLFWRenderContext::OnWindowResize(const WindowSizeSettings& settings)
     {
+        m_swapChain->SetFullscreenState(false, nullptr);
         m_deviceContext->OMSetRenderTargets(0, nullptr, nullptr);
         {
             m_renderTargetView.Reset();
@@ -259,7 +252,6 @@ namespace pn {
             RecreateDepthTexture(settings.Width, settings.Height);
         }
         m_deviceContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
-
         m_swapChain->SetFullscreenState(settings.IsFullScreen, nullptr);
     }
 

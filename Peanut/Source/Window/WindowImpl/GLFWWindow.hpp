@@ -54,9 +54,6 @@ namespace pn {
             std::string title;
             bool isFullScreen;
 
-            int prevWindowedXPos = 100;
-            int prevWindowedYPos = 100;
-
             EventCallbackFunc eventCallbackFunc;
         } m_data;
 
