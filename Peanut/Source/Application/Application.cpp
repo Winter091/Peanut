@@ -54,8 +54,7 @@ namespace pn
     {
         PN_PROFILE_FUNCTION();
 
-        m_window->OnResize(resizeEvent.GetWidth(), resizeEvent.GetHeight());
-        RenderCommand::SetViewport(0, 0, m_window->GetWidth(), m_window->GetHeight());
+        RenderCommand::SetViewport(0, 0, resizeEvent.GetWidth(), resizeEvent.GetHeight());
         return true;
     }
 

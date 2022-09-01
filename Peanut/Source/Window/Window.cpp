@@ -5,14 +5,8 @@
 
 namespace pn {
 
-    // Static members
     WindowProvider Window::s_windowProvider;
     bool Window::s_isInitialized = false;
-
-    Window::Window()
-        : m_renderContext(RenderContext::Create())
-    {
-    }
 
     void Window::Init()
     {
