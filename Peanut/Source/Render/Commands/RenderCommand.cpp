@@ -93,6 +93,12 @@ namespace pn {
         s_renderCommandImpl->DrawIndexedInstanced(vertexArray, count, instanceCount);
     }
 
+    void RenderCommand::BindFramebuffer(const std::shared_ptr<Framebuffer>& framebuffer)
+    {
+        PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
+        s_renderCommandImpl->BindFramebuffer(framebuffer);
+    }
+
     void RenderCommand::BindShader(const std::shared_ptr<Shader>& shader)
     {
         PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");

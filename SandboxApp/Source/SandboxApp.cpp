@@ -70,6 +70,26 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
             m_rectangles.push_back(rect);
         }
     }    
+
+    auto depthTexture = pn::DepthStencilTexture::Create(pn::DepthStencilTextureSettings()
+        .SetSize(1280, 720)
+        .UseDepth(true)
+        .SetDepthFormat(pn::DepthFormat::Float32)
+        .UseStencil(false));
+
+    auto colorTexture = pn::Texture2D::Create(
+        nullptr, 
+        pn::Texture2DSettings()
+            .UseFormat(pn::TextureFormat::RGBA)
+            .SetNumLevels(1)
+            .SetSize({ 1280, 720 })
+            .DoGenerateMipmaps(false));
+
+    auto framebuffer = pn::Framebuffer::Create(pn::FramebufferSettings()
+        .AddColorTexture(colorTexture)
+        .SetDepthStencilTexture(depthTexture));
+
+    pn::RenderCommand::BindFramebuffer(pn::Framebuffer::Default);
 }
 
 void SandboxApp::OnEvent(pn::Event& event)

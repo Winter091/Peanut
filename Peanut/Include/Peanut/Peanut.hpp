@@ -30,6 +30,7 @@
 #include "Render/Buffers/VertexArray.hpp"
 #include "Render/Buffers/VertexBuffer.hpp"
 #include "Render/Commands/RenderCommand.hpp"
+#include "Render/Framebuffers/Framebuffer.hpp"
 #include "Render/Shaders/Shader.hpp"
 #include "Render/Shaders/ShaderInputLayout.hpp"
 #include "Render/Textures/DepthStencilTexture.hpp"

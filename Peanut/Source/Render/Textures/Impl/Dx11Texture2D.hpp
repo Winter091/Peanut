@@ -5,6 +5,7 @@
 
 struct ID3D11Texture2D;
 struct ID3D11ShaderResourceView;
+struct ID3D11RenderTargetView;
 
 namespace pn {
 
@@ -25,12 +26,15 @@ namespace pn {
         const std::string& GetName() const override { return m_name; }
         const glm::u32vec2& GetSize() const override { return m_size; }
 
+        ID3D11RenderTargetView* GetNativeRenderTargetViewPtr() const { return m_renderTargetView; }
+
         void SetData(const void* data, const glm::u32vec2& size = { 0, 0 }, const glm::u32vec2& offset = { 0, 0 }) override;
         void SetLevelData(const void* data, uint32_t level, const glm::u32vec2& size = { 0, 0 }, const glm::u32vec2& offset = { 0, 0 }) override;
 
     private:
         ID3D11Texture2D* m_handle = nullptr;
         ID3D11ShaderResourceView* m_view = nullptr;
+        ID3D11RenderTargetView* m_renderTargetView = nullptr;
         std::string m_name;
         glm::u32vec2 m_size;
         std::shared_ptr<TextureSampler> m_sampler;

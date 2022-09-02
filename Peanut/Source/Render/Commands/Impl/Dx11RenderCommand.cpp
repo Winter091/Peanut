@@ -8,6 +8,7 @@
 #include <Render/Buffers/Impl/Dx11IndexBuffer.hpp>
 #include <Render/Buffers/Impl/Dx11EnumConversions.hpp>
 #include <Render/Buffers/Impl/Dx11ConstantBuffer.hpp>
+#include <Render/Framebuffers/Impl/Dx11Framebuffer.hpp>
 #include <Render/Shaders/Impl/Dx11ShaderInputLayout.hpp>
 #include <Render/Shaders/Impl/Dx11Shader.hpp>
 #include <Render/Textures/Impl/Dx11Texture.hpp>
@@ -151,6 +152,23 @@ namespace pn {
                 IndexBufferFormatToDx11Format(indexBuffer->GetDataFormat()),
                 0);
         }
+    }
+
+    void Dx11RenderCommand::BindFramebuffer(const std::shared_ptr<Framebuffer>& framebuffer)
+    {
+        auto* deviceContext = Dx11RenderContext::GetCurrentContext().GetDeviceContext();
+        
+        if (framebuffer == nullptr) {
+            // TODO: Get default framebuffer from current context
+            PN_CORE_ASSERT(false, "Binding default framebuffer is not implemented");
+            return;
+        }
+
+        auto& dx11Framebuffer = static_cast<Dx11Framebuffer&>(*framebuffer);
+        auto numRednerTargetViews = dx11Framebuffer.GetNumRenderTargetViews();
+        auto renderTargetViews = dx11Framebuffer.GetRenderTargetViewNativePointers();
+        auto depthStencilView = dx11Framebuffer.GetDepthStencilViewNativePointer();
+        deviceContext->OMSetRenderTargets(numRednerTargetViews, renderTargetViews, depthStencilView);
     }
 
     void Dx11RenderCommand::BindShader(const std::shared_ptr<Shader>& shader)

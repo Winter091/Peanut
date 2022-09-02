@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Peanut/Render/Buffers/VertexArray.hpp>
+#include <Peanut/Render/Framebuffers/Framebuffer.hpp>
 #include <Peanut/Render/RenderAPI.hpp>
 #include <glm/vec4.hpp>
 
@@ -26,6 +27,7 @@ namespace pn {
         virtual void DrawInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount) = 0;
         virtual void DrawIndexedInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount) = 0;
 
+        virtual void BindFramebuffer(const std::shared_ptr<Framebuffer>& framebuffer) = 0;
         virtual void BindShader(const std::shared_ptr<Shader>& shader) = 0;
         virtual void BindConstantBuffers(const std::shared_ptr<ConstantBuffer>* constantBuffers, size_t amount, uint32_t startSlot = 0) = 0;
         virtual void BindTextures(const std::shared_ptr<Texture>* textures, size_t amount, uint32_t startSlot = 0) = 0;

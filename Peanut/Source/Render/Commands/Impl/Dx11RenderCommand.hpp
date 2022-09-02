@@ -22,6 +22,7 @@ namespace pn {
         void DrawInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount) override;
         void DrawIndexedInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount) override;
 
+        void BindFramebuffer(const std::shared_ptr<Framebuffer>& framebuffer) override;
         void BindShader(const std::shared_ptr<Shader>& shader) override;
         void BindConstantBuffers(const std::shared_ptr<ConstantBuffer>* constantBuffers, size_t amount, uint32_t startSlot = 0) override;
         void BindTextures(const std::shared_ptr<Texture>* textures, size_t amount, uint32_t startSlot = 0) override;

@@ -65,6 +65,9 @@ namespace pn {
 		res = device->CreateShaderResourceView(m_handle, nullptr, &m_view);
 		PN_CORE_ASSERT(res == S_OK, "Unable to create 2d texture shader resource view");
 
+		res = device->CreateRenderTargetView(m_handle, nullptr, &m_renderTargetView);
+		PN_CORE_ASSERT(res == S_OK, "Unable to create 2d texture render target view");
+
 		if (data) {
 			SetLevelData(data, 0);
 			if (settings.GenerateMipmaps) {
