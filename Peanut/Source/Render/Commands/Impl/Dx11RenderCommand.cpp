@@ -43,30 +43,20 @@ namespace pn {
         deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 1);
     }
 
-    void Dx11RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height)
+    void Dx11RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height, uint32_t totalHeight)
     {
-        Application& app = Application::GetInstance();
-
-        D3D11_VIEWPORT viewport;
-
-        //TODO: Remove this temp testing code
-        //TODO: Don't use window width
-        if (width == 1280) {
-            viewport.TopLeftX = 0;
-            viewport.TopLeftY = 0;
-            viewport.Width = 1280;
-            viewport.Height = 720;
-            viewport.MinDepth = 0.0f;
-            viewport.MaxDepth = 1.0f;
-        } else {
-            viewport.TopLeftX = static_cast<float>(leftX);
-            viewport.TopLeftY = static_cast<float>(app.GetWindow().GetHeight() - bottomY - height);
-            viewport.Width = static_cast<float>(width);
-            viewport.Height = static_cast<float>(height);
-            viewport.MinDepth = 0.0f;
-            viewport.MaxDepth = 1.0f;
+        if (totalHeight == 0) {
+            Application& app = Application::GetInstance();
+            totalHeight = app.GetWindow().GetHeight();
         }
 
+        D3D11_VIEWPORT viewport;
+        viewport.TopLeftX = static_cast<float>(leftX);
+        viewport.TopLeftY = static_cast<float>(totalHeight - bottomY - height);
+        viewport.Width = static_cast<float>(width);
+        viewport.Height = static_cast<float>(height);
+        viewport.MinDepth = 0.0f;
+        viewport.MaxDepth = 1.0f;
 
         auto& context = Dx11RenderContext::GetCurrentContext();
         auto* deviceContext = context.GetDeviceContext();

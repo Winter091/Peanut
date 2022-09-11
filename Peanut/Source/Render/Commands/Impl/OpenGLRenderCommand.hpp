@@ -12,7 +12,7 @@ namespace pn {
         void SetClearColor(const glm::vec4& color) override;
         void Clear() override;
 
-        void SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height) override;    
+        void SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height, uint32_t totalHeight) override;
 
         void Draw(std::shared_ptr<VertexArray>& vertexArray, uint32_t count) override;
         void DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count) override;

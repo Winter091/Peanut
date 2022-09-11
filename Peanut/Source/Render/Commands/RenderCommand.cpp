@@ -61,10 +61,10 @@ namespace pn {
         return s_renderCommandImpl->Clear();
     }
 
-    void RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height)
+    void RenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height, uint32_t totalHeight)
     {
         PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
-        s_renderCommandImpl->SetViewport(leftX, bottomY, width, height);
+        s_renderCommandImpl->SetViewport(leftX, bottomY, width, height, totalHeight);
     }
 
     void RenderCommand::Draw(std::shared_ptr<VertexArray>& vertexArray, uint32_t count)
@@ -79,15 +79,13 @@ namespace pn {
         s_renderCommandImpl->DrawIndexed(vertexArray, count);
     }
 
-    void RenderCommand::DrawInstanced(
-        std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
+    void RenderCommand::DrawInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
     {
         PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
         s_renderCommandImpl->DrawInstanced(vertexArray, count, instanceCount);
     }
 
-    void RenderCommand::DrawIndexedInstanced(
-        std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
+    void RenderCommand::DrawIndexedInstanced(std::shared_ptr<VertexArray>& vertexArray, uint32_t count, uint32_t instanceCount)
     {
         PN_CORE_ASSERT(s_isInitialized, "RenderCommand has to be initialized before usage");
         s_renderCommandImpl->DrawIndexedInstanced(vertexArray, count, instanceCount);

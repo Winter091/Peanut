@@ -163,7 +163,7 @@ void SandboxApp::OnUpdate()
             pn::RenderCommand::BindFramebuffer(m_framebuffer);
 
             glm::u32vec2 textureSize = m_framebuffer->GetColorTextures()[0]->GetSize();
-            pn::RenderCommand::SetViewport(0, 0, textureSize.x, textureSize.y);
+            pn::RenderCommand::SetViewport(0, 0, textureSize.x, textureSize.y, textureSize.y);
 
             pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
             pn::RenderCommand::Clear();

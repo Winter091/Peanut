@@ -24,7 +24,7 @@ namespace pn {
         static void SetClearColor(const glm::vec4& color);
         static void Clear();
 
-        static void SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height);
+        static void SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height, uint32_t totalHeight = 0);
     
         static void Draw(std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0);
         static void DrawIndexed(std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0);

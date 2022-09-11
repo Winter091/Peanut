@@ -23,8 +23,9 @@ namespace pn {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void OpenGLRenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height)
+    void OpenGLRenderCommand::SetViewport(int32_t leftX, int32_t bottomY, uint32_t width, uint32_t height, uint32_t totalHeight)
     {
+        (void)totalHeight;
         glViewport(leftX, bottomY, width, height);
     }
 
