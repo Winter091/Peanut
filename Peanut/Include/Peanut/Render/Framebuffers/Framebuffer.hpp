@@ -28,6 +28,8 @@ namespace pn {
 		Framebuffer& operator=(const Framebuffer&) = delete;
 		virtual ~Framebuffer() = default;
 
+		virtual const std::vector<std::shared_ptr<Texture2D>>& GetColorTextures() const = 0;
+
 		static std::shared_ptr<Framebuffer> Create(const FramebufferSettings& settings, const std::string& name = "");
 
 		static inline const std::shared_ptr<Framebuffer> Default = nullptr;

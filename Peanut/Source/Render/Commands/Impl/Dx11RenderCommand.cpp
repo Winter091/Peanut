@@ -13,6 +13,7 @@
 #include <Render/Shaders/Impl/Dx11Shader.hpp>
 #include <Render/Textures/Impl/Dx11Texture.hpp>
 #include <Render/Textures/Impl/Dx11TextureSampler.hpp>
+#include <Window/RenderContextImpl/Dx11GLFWRenderContext.hpp>
 
 #include <vector>
 
@@ -47,12 +48,25 @@ namespace pn {
         Application& app = Application::GetInstance();
 
         D3D11_VIEWPORT viewport;
-        viewport.TopLeftX = static_cast<float>(leftX);
-        viewport.TopLeftY = static_cast<float>(app.GetWindow().GetHeight() - bottomY - height);
-        viewport.Width = static_cast<float>(width);
-        viewport.Height = static_cast<float>(height);
-        viewport.MinDepth = 0.0f;
-        viewport.MaxDepth = 1.0f;
+
+        //TODO: Remove this temp testing code
+        //TODO: Don't use window width
+        if (width == 1280) {
+            viewport.TopLeftX = 0;
+            viewport.TopLeftY = 0;
+            viewport.Width = 1280;
+            viewport.Height = 720;
+            viewport.MinDepth = 0.0f;
+            viewport.MaxDepth = 1.0f;
+        } else {
+            viewport.TopLeftX = static_cast<float>(leftX);
+            viewport.TopLeftY = static_cast<float>(app.GetWindow().GetHeight() - bottomY - height);
+            viewport.Width = static_cast<float>(width);
+            viewport.Height = static_cast<float>(height);
+            viewport.MinDepth = 0.0f;
+            viewport.MaxDepth = 1.0f;
+        }
+
 
         auto& context = Dx11RenderContext::GetCurrentContext();
         auto* deviceContext = context.GetDeviceContext();
@@ -156,19 +170,7 @@ namespace pn {
 
     void Dx11RenderCommand::BindFramebuffer(const std::shared_ptr<Framebuffer>& framebuffer)
     {
-        auto* deviceContext = Dx11RenderContext::GetCurrentContext().GetDeviceContext();
-        
-        if (framebuffer == nullptr) {
-            // TODO: Get default framebuffer from current context
-            PN_CORE_ASSERT(false, "Binding default framebuffer is not implemented");
-            return;
-        }
-
-        auto& dx11Framebuffer = static_cast<Dx11Framebuffer&>(*framebuffer);
-        auto numRednerTargetViews = dx11Framebuffer.GetNumRenderTargetViews();
-        auto renderTargetViews = dx11Framebuffer.GetRenderTargetViewNativePointers();
-        auto depthStencilView = dx11Framebuffer.GetDepthStencilViewNativePointer();
-        deviceContext->OMSetRenderTargets(numRednerTargetViews, renderTargetViews, depthStencilView);
+        static_cast<Dx11GLFWRenderContext&>(Dx11RenderContext::GetCurrentContext()).BindFramebuffer(static_cast<Dx11Framebuffer*>(framebuffer.get()));
     }
 
     void Dx11RenderCommand::BindShader(const std::shared_ptr<Shader>& shader)

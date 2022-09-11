@@ -13,6 +13,8 @@ namespace pn {
 		Dx11Framebuffer(const FramebufferSettings& settings, const std::string& name);
 		~Dx11Framebuffer() override = default;
 
+		const std::vector<std::shared_ptr<Texture2D>>& GetColorTextures() const override { return m_colorTextures; }
+
 		uint32_t GetNumRenderTargetViews() const { return static_cast<uint32_t>(m_colorTextures.size()); }
 		ID3D11RenderTargetView** GetRenderTargetViewNativePointers() const { return m_cachedRenderTargetViewRawPointers; }
 		ID3D11DepthStencilView* GetDepthStencilViewNativePointer() const { return m_cachedDepthStencilViewRawPointer; }

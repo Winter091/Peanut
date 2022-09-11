@@ -39,12 +39,20 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
     m_camera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
         .SetZoom(1.0f)
-        .SetAspectRatio(GetWindow().GetAspectRatio())
         .SetPosition({ 0.0f, 0.0f, 1.0f })
         .SetDirection({ 0.0f, 0.0f, -1.0f })
         .SetBoundaries(pn::OrthoCameraBoundaries()
             .SetCenter({ 0.0f, 0.0f })
             .SetWidth(15.0f).SetHeight(15.0f)));
+
+    m_texCamera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
+        .SetZoom(1.0f)
+        .SetAspectRatio(1.0f)
+        .SetPosition({ 0.0f, 0.0f, 1.0f })
+        .SetDirection({ 0.0f, 0.0f, -1.0f })
+        .SetBoundaries(pn::OrthoCameraBoundaries()
+            .SetCenter({ 0.0f, 0.0f })
+            .SetWidth(1600).SetHeight(900)));
 
     auto sampler = pn::TextureSampler::Create(pn::TextureSamplerSettings()
         .SetFilter(pn::TextureFilter::MinAnisotropicMagAnisotropicMipAnisotropic)
@@ -71,25 +79,31 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
         }
     }    
 
-    auto depthTexture = pn::DepthStencilTexture::Create(pn::DepthStencilTextureSettings()
-        .SetSize(1280, 720)
-        .UseDepth(true)
-        .SetDepthFormat(pn::DepthFormat::Float32)
-        .UseStencil(false));
+    glm::u32vec2 fbSize = { 1280, 720 }; 
+
+    m_texRectangle.SetSize({1280.0f, 720.0f});
+    // TODO: fix origin
+    m_texRectangle.SetOrigin({.5f, .5f});
+    //m_texRectangle.SetPosition({ GetWindow().GetWidth() / 2.0f, GetWindow().GetHeight() / 2.0f });
 
     auto colorTexture = pn::Texture2D::Create(
         nullptr, 
         pn::Texture2DSettings()
             .UseFormat(pn::TextureFormat::RGBA)
             .SetNumLevels(1)
-            .SetSize({ 1280, 720 })
-            .DoGenerateMipmaps(false));
+            .SetSize(fbSize)
+            .DoGenerateMipmaps(false)
+            .SetSampler(sampler));
 
-    auto framebuffer = pn::Framebuffer::Create(pn::FramebufferSettings()
+    auto depthTexture = pn::DepthStencilTexture::Create(pn::DepthStencilTextureSettings()
+        .SetSize(fbSize.x, fbSize.y)
+        .UseDepth(true)
+        .SetDepthFormat(pn::DepthFormat::Float32)
+        .UseStencil(false));
+
+    m_framebuffer = pn::Framebuffer::Create(pn::FramebufferSettings()
         .AddColorTexture(colorTexture)
         .SetDepthStencilTexture(depthTexture));
-
-    pn::RenderCommand::BindFramebuffer(pn::Framebuffer::Default);
 }
 
 void SandboxApp::OnEvent(pn::Event& event)
@@ -125,9 +139,10 @@ void SandboxApp::OnUpdate()
 
     {
         pn::Window& window = GetWindow();
-        glm::vec3 pos = m_camera->GetPosition();
-        float zoom = m_camera->GetZoom();
-        float delta = 0.15f;
+        auto& camera = m_camera;
+        glm::vec3 pos = camera->GetPosition();
+        float zoom = camera->GetZoom();
+        float delta = 0.2f;
         float zoomDelta = 0.01f;
 
         if (window.IsKeyPressed(pn::KeyCode::W)) { pos.y += delta * zoom; }
@@ -137,12 +152,18 @@ void SandboxApp::OnUpdate()
         if (window.IsKeyPressed(pn::KeyCode::PageUp)) { zoom -= zoomDelta; }
         if (window.IsKeyPressed(pn::KeyCode::PageDown)) { zoom += zoomDelta; }
 
-        m_camera->SetPosition(pos);
-        m_camera->SetZoom(zoom);
+        camera->SetPosition(pos);
+        camera->SetZoom(zoom);
     }
 
     {
-        pn::RenderCommand::SetClearColor({ 0.05f, 0.05f, 0.05f, 1.0f });
+        ///*
+        pn::RenderCommand::BindFramebuffer(m_framebuffer);
+        // TODO: Getter for framebuffer size
+        m_camera->SetAspectRatio(16.0f / 9.0f);
+        pn::RenderCommand::SetViewport(0, 0, 1280, 720);
+
+        pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
         pn::RenderCommand::Clear();
 
         pn::Renderer2D::BeginScene(*m_camera);
@@ -152,8 +173,21 @@ void SandboxApp::OnUpdate()
             }
         }
         pn::Renderer2D::EndScene();
-    }
+        //*/
 
+        pn::RenderCommand::BindFramebuffer(pn::Framebuffer::Default);
+        pn::RenderCommand::SetViewport(0, 0, GetWindow().GetWidth(), GetWindow().GetHeight());
+
+        pn::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
+        pn::RenderCommand::Clear();
+
+        pn::Renderer2D::BeginScene(*m_texCamera);
+        {
+            m_texRectangle.SetTexture(m_framebuffer->GetColorTextures()[0]);
+            pn::Renderer2D::DrawRectangle(m_texRectangle);
+        }
+        pn::Renderer2D::EndScene();
+    }
 }
 
 pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
@@ -167,7 +201,7 @@ pn::Application* pn::Application::CreateApplication(const CommandLineArgs& args)
 
     return new SandboxApp(pn::WindowSettings()
         .SetTitle("Sandbox Application")
-        .SetWidth(1280).SetHeight(720)
+        .SetWidth(1600).SetHeight(900)
         .UseFullScreen(false)
-        .UseVsync(false));
+        .UseVsync(true));
 }

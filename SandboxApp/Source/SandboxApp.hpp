@@ -16,4 +16,9 @@ public:
 private:
     std::vector<pn::Rectangle> m_rectangles;
     std::shared_ptr<pn::OrthoCamera> m_camera;
+
+    pn::Rectangle m_texRectangle;
+    std::shared_ptr<pn::OrthoCamera> m_texCamera;
+
+    std::shared_ptr<pn::Framebuffer> m_framebuffer;
 };

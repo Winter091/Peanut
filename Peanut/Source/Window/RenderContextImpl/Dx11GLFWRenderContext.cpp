@@ -255,6 +255,20 @@ namespace pn {
         m_swapChain->SetFullscreenState(settings.IsFullScreen, nullptr);
     }
 
+    void Dx11GLFWRenderContext::BindFramebuffer(Dx11Framebuffer* framebuffer)
+    {
+        if (framebuffer == nullptr) {
+            Dx11RenderContext::SetRenderTargetView(m_renderTargetView.Get());
+            Dx11RenderContext::SetDepthStencilView(m_depthStencilView.Get());
+            m_deviceContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
+            return;
+        }
+
+        Dx11RenderContext::SetRenderTargetView(*framebuffer->GetRenderTargetViewNativePointers());
+        Dx11RenderContext::SetDepthStencilView(framebuffer->GetDepthStencilViewNativePointer());
+        m_deviceContext->OMSetRenderTargets(1, framebuffer->GetRenderTargetViewNativePointers(), framebuffer->GetDepthStencilViewNativePointer());
+    }
+
     void Dx11GLFWRenderContext::SetCurrentContext(Window& /*window*/)
     {
         Dx11RenderContext::SetCurrentContext(this);

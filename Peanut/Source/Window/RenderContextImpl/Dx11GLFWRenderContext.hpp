@@ -3,6 +3,7 @@
 #include <Peanut/Window/RenderContext.hpp>
 #include <Peanut/Core/Log.hpp>
 #include "Dx11RenderContext.hpp"
+#include <Render/Framebuffers/Impl/Dx11Framebuffer.hpp>
 
 #include <d3d11.h>
 
@@ -25,6 +26,8 @@ namespace pn {
         void SetSwapInterval(int interval) override;
         void SwapBuffers(Window& window) override;
         void OnWindowResize(const WindowSizeSettings& settings) override;
+
+        void BindFramebuffer(Dx11Framebuffer* framebuffer);
 
     private:
         void CreateDeviceAndSwapChain(const Window& window, bool createDebugContext);

@@ -45,7 +45,7 @@ namespace pn {
 		void SetCurrentContext(Dx11RenderContext* context) { s_currentContext = context; }
 		void SetDevice(ID3D11Device* device) { m_device = device; }
 		void SetDeviceContext(ID3D11DeviceContext* deviceContext) { m_deviceContext = deviceContext; }
-		void SetRenderTargetView(ID3D11RenderTargetView* renderTargetView) { m_renderTargetView = renderTargetView;}
+		void SetRenderTargetView(ID3D11RenderTargetView* renderTargetView) { m_renderTargetView = renderTargetView; }
 		void SetDepthStencilView(ID3D11DepthStencilView* depthStencilView) { m_depthStencilView = depthStencilView; }
 
 	private:

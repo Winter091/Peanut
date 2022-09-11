@@ -130,7 +130,7 @@ namespace pn {
 		glm::vec4 m_borderColor = glm::vec4(0.0f);
 		float m_lodBias = 0.0f;
 		float m_minLod = 0.0f;
-		float m_maxLod = std::numeric_limits<float>::max();
+		float m_maxLod = (::std::numeric_limits<float>::max)();
 	};
 
 	class TextureSampler
