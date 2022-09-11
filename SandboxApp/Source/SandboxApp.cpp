@@ -37,8 +37,11 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 {
     PN_PROFILE_FUNCTION();
 
+    glm::u32vec2 fbSize = { 1280, 720 };
+
     m_camera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
         .SetZoom(1.0f)
+        .SetAspectRatio((float)fbSize.x / fbSize.y)
         .SetPosition({ 0.0f, 0.0f, 1.0f })
         .SetDirection({ 0.0f, 0.0f, -1.0f })
         .SetBoundaries(pn::OrthoCameraBoundaries()
@@ -47,12 +50,11 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 
     m_texCamera = std::make_shared<pn::OrthoCamera>(pn::OrthoCameraSettings()
         .SetZoom(1.0f)
-        .SetAspectRatio(1.0f)
         .SetPosition({ 0.0f, 0.0f, 1.0f })
         .SetDirection({ 0.0f, 0.0f, -1.0f })
         .SetBoundaries(pn::OrthoCameraBoundaries()
-            .SetCenter({ 0.0f, 0.0f })
-            .SetWidth(1600).SetHeight(900)));
+            .SetLeft(0.0f).SetRight((float)GetWindow().GetWidth())
+            .SetBottom(0.0f).SetTop((float)GetWindow().GetHeight())));
 
     auto sampler = pn::TextureSampler::Create(pn::TextureSamplerSettings()
         .SetFilter(pn::TextureFilter::MinAnisotropicMagAnisotropicMipAnisotropic)
@@ -79,12 +81,10 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
         }
     }    
 
-    glm::u32vec2 fbSize = { 1280, 720 }; 
-
     m_texRectangle.SetSize({1280.0f, 720.0f});
     // TODO: fix origin
-    m_texRectangle.SetOrigin({.5f, .5f});
-    //m_texRectangle.SetPosition({ GetWindow().GetWidth() / 2.0f, GetWindow().GetHeight() / 2.0f });
+    m_texRectangle.SetOrigin({0.5f, 0.5f});
+    m_texRectangle.SetPosition({ GetWindow().GetWidth() / 2.0f, GetWindow().GetHeight() / 2.0f });
 
     auto colorTexture = pn::Texture2D::Create(
         nullptr, 
@@ -109,7 +109,9 @@ SandboxApp::SandboxApp(const pn::WindowSettings& settings)
 void SandboxApp::OnEvent(pn::Event& event)
 {
     if (event.GetType() == pn::EventType::WindowSizeChanged) {
-        m_camera->SetAspectRatio(GetWindow().GetAspectRatio());
+        m_texCamera->SetBoundaries(pn::OrthoCameraBoundaries()
+            .SetLeft(0.0f).SetRight((float)GetWindow().GetWidth())
+            .SetBottom(0.0f).SetTop((float)GetWindow().GetHeight()));
         return;
     } 
     
@@ -157,36 +159,38 @@ void SandboxApp::OnUpdate()
     }
 
     {
-        ///*
-        pn::RenderCommand::BindFramebuffer(m_framebuffer);
-        // TODO: Getter for framebuffer size
-        m_camera->SetAspectRatio(16.0f / 9.0f);
-        pn::RenderCommand::SetViewport(0, 0, 1280, 720);
-
-        pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
-        pn::RenderCommand::Clear();
-
-        pn::Renderer2D::BeginScene(*m_camera);
         {
-            for (const auto& rect : m_rectangles) {
-                pn::Renderer2D::DrawRectangle(rect);
+            pn::RenderCommand::BindFramebuffer(m_framebuffer);
+
+            glm::u32vec2 textureSize = m_framebuffer->GetColorTextures()[0]->GetSize();
+            pn::RenderCommand::SetViewport(0, 0, textureSize.x, textureSize.y);
+
+            pn::RenderCommand::SetClearColor({ 0.5f, 0.3f, 0.2f, 1.0f });
+            pn::RenderCommand::Clear();
+
+            pn::Renderer2D::BeginScene(*m_camera);
+            {
+                for (const auto& rect : m_rectangles) {
+                    pn::Renderer2D::DrawRectangle(rect);
+                }
             }
+            pn::Renderer2D::EndScene();
         }
-        pn::Renderer2D::EndScene();
-        //*/
 
-        pn::RenderCommand::BindFramebuffer(pn::Framebuffer::Default);
-        pn::RenderCommand::SetViewport(0, 0, GetWindow().GetWidth(), GetWindow().GetHeight());
-
-        pn::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
-        pn::RenderCommand::Clear();
-
-        pn::Renderer2D::BeginScene(*m_texCamera);
         {
-            m_texRectangle.SetTexture(m_framebuffer->GetColorTextures()[0]);
-            pn::Renderer2D::DrawRectangle(m_texRectangle);
+            pn::RenderCommand::BindFramebuffer(pn::Framebuffer::Default);
+            pn::RenderCommand::SetViewport(0, 0, GetWindow().GetWidth(), GetWindow().GetHeight());
+
+            pn::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
+            pn::RenderCommand::Clear();
+
+            pn::Renderer2D::BeginScene(*m_texCamera);
+            {
+                m_texRectangle.SetTexture(m_framebuffer->GetColorTextures()[0]);
+                pn::Renderer2D::DrawRectangle(m_texRectangle);
+            }
+            pn::Renderer2D::EndScene();
         }
-        pn::Renderer2D::EndScene();
     }
 }
 
