@@ -7,6 +7,7 @@
 #include <Peanut/Render/Shaders/Shader.hpp>
 #include <Peanut/Render/Shaders/ShaderInputLayout.hpp>
 #include <Peanut/Render/Commands/RenderCommand.hpp>
+#include <Window/RenderContextImpl/Dx11RenderContext.hpp>
 
 #include <Peanut/Core/StoragePath.hpp>
 
@@ -34,6 +35,8 @@ namespace pn {
     struct CameraShaderData
     {
         glm::mat4 ViewProjMatrix;
+        uint32_t DoFlipTexCoords;
+        uint8_t Alignment[12];
     };
 
     struct Renderer2DData
@@ -155,7 +158,12 @@ namespace pn {
         PN_CORE_ASSERT(s_isInitialized, "Renderer2D is not initialized");
         PN_PROFILE_FUNCTION();
 
-        s_data->CameraConstantBuffer->SetData(&camera.GetViewProjectionMatrix());
+        CameraShaderData* data = static_cast<CameraShaderData*>(s_data->CameraConstantBuffer->Map());
+        {
+            data->ViewProjMatrix = camera.GetViewProjectionMatrix();
+            data->DoFlipTexCoords = Dx11RenderContext::GetCurrentContext().NeedToFlipYCoord();
+        }
+        s_data->CameraConstantBuffer->Unmap();
 
         RenderCommand::BindConstantBuffers(&s_data->CameraConstantBuffer, 1);
         RenderCommand::BindShader(s_data->RectangleShader);

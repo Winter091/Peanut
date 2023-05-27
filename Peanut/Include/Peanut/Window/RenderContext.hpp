@@ -23,6 +23,10 @@ namespace pn {
         virtual void SwapBuffers(Window& window) = 0;
         virtual void OnWindowResize(const WindowSizeSettings& settings) = 0;
 
+        virtual bool NeedToFlipYCoord() const {
+            return false;
+        };
+
     protected:
         RenderContext() = default;
     };

@@ -199,7 +199,6 @@ namespace pn {
         HWND win32Window = glfwGetWin32Window(glfwWindow);
 
         DXGI_SWAP_CHAIN_DESC swapChainDesc = GetSwapChainDesc(win32Window, window.GetWidth(), window.GetHeight());
-
         HRESULT result = D3D11CreateDeviceAndSwapChain(
             adapter.Get(), D3D_DRIVER_TYPE_UNKNOWN,
             nullptr,
@@ -257,6 +256,8 @@ namespace pn {
 
     void Dx11GLFWRenderContext::BindFramebuffer(Dx11Framebuffer* framebuffer)
     {
+        m_IsDefaultFramebufferBound = (framebuffer == nullptr);
+        
         if (framebuffer == nullptr) {
             Dx11RenderContext::SetRenderTargetView(m_renderTargetView.Get());
             Dx11RenderContext::SetDepthStencilView(m_depthStencilView.Get());

@@ -27,6 +27,11 @@ namespace pn {
         void SwapBuffers(Window& window) override;
         void OnWindowResize(const WindowSizeSettings& settings) override;
 
+        virtual bool NeedToFlipYCoord() const override
+        {
+            return m_IsDefaultFramebufferBound;
+        }
+
         void BindFramebuffer(Dx11Framebuffer* framebuffer);
 
     private:
@@ -46,6 +51,8 @@ namespace pn {
         ComPtr<ID3D11DepthStencilView> m_depthStencilView = nullptr;
 
         int m_swapInterval;
+
+        bool m_IsDefaultFramebufferBound = true;
     };
 
 }

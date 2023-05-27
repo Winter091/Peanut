@@ -9,6 +9,7 @@ struct VSInput
 cbuffer Matrices : register(b0)
 {
     row_major float4x4 ViewProjMatrix;
+    uint DoFlipTexCoords;
 }
 
 struct VSOutput
@@ -46,6 +47,9 @@ VSOutput main(VSInput Input)
     Output.Color = color;
     
     Output.TexCoord = texCoords[Input.VertexIndex];
+    if (DoFlipTexCoords) {
+        Output.TexCoord.y = 1.0 - Output.TexCoord.y;
+    }
     Output.TexIndex = Input.TexIndex;
     
     return Output;
