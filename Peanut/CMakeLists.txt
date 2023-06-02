@@ -42,8 +42,12 @@ endif()
 target_link_libraries(
     Peanut PRIVATE 
     glfw
-    spdlog
     stb
+)
+
+target_link_libraries(
+    Peanut PUBLIC
+    spdlog
 )
 
 target_include_directories(
